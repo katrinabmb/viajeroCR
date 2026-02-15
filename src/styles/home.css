@@ -291,6 +291,10 @@
     .card-continent-title{
         font-size: 1rem !important;
     }
+    .card-destination{
+        height: 15vh;
+        min-width: 0;
+    }
     .card-continent-overlay{
         border-radius: 5px !important;
     }
