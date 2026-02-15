@@ -1,0 +1,6 @@
+# All user agents are allowed to access the entire site
+User-agent: *
+Disallow:
+
+# Sitemap location
+Sitemap: /sitemap.xml

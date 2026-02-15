@@ -1,0 +1,91 @@
+/* Footer styles with higher specificity to override Material-UI */
+.proyectoDe{
+    color: #FFF !important;
+    text-align: center !important;
+    font-family: "bukra" !important;
+    font-size: 1.5rem !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+}
+
+.derechos-UP{
+    color: #FFF !important;
+    text-align: center !important;
+    font-family: "bukra" !important;
+    font-size: 1.5rem !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    text-transform: uppercase !important;
+    line-height: 1.5 !important;
+}
+
+.derechos{
+    color: #FFF !important;
+    text-align: center !important;
+    font-family: "bukra" !important;
+    font-size: 1.2rem !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+}
+
+.disclaimer{
+    color: #FFF !important;
+    text-align: center !important;
+    font-family: "bukra" !important;
+    font-size: 0.9rem !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    width: 80% !important;
+    line-height: 30px !important;
+}
+
+.politicaslink{
+    color: #FFF !important;
+    text-align: center !important;
+    font-family: "bukra" !important;
+    font-size: 1rem !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    text-decoration: none !important;
+    display: block !important;
+    margin: 10px 0 !important;
+}
+
+.politicaslink:hover {
+    color: #ffffff80 !important;
+    text-decoration: underline !important;
+}
+
+/* Override Material-UI Typography styles */
+.MuiTypography-root.proyectoDe,
+.MuiTypography-root.derechos-UP,
+.MuiTypography-root.derechos,
+.MuiTypography-root.disclaimer {
+    color: #FFF !important;
+    font-family: "bukra" !important;
+}
+
+@media (max-width: 600px) {
+    .proyectoDe{
+        font-size: 1.2rem !important;
+        width: 80% !important;
+        line-height: 1.2rem !important;
+    }
+    .derechos{
+        font-size: 1.2rem !important;
+    }
+    .disclaimer{
+        font-size: 0.6rem !important;
+        line-height: 1rem !important;
+        text-align: center !important;
+    }
+    .derechos-UP{
+        font-size: 1.2rem !important;
+        font-family: "bukra" !important;
+    }
+    .politicaslink{
+        font-size: 0.9rem !important;
+    }
+}

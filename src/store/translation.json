@@ -1,0 +1,16 @@
+{
+    "en": {
+      "type" : "en",
+      "buttonText" : "/images/spanish.svg"
+     
+     
+    
+  },
+
+    "es": {
+      "type" : "es",
+      "buttonText" : "/images/Ingles.svg"
+     
+  
+    }
+  }

@@ -1,0 +1,333 @@
+.seccion1-container{
+    height: 95vh;
+    overflow: hidden;
+    position: relative;
+}
+
+[id]{
+    scroll-margin-top: 8rem;
+}
+
+.seccion1-track{
+    height: 100%;
+    display: flex;
+    transition: transform 1.5s ease;
+}
+
+.seccion1-slide{
+    min-width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.seccion1-title{
+    font-family: "bukra" !important;
+    font-size: 5rem !important;
+    font-weight: 900 !important;
+    color: #fff !important;
+}
+.seccion1-subtitle{
+    font-family: "bukra" !important;
+    font-size: 2rem !important;
+    font-weight: 500 !important;
+    color: #fff !important;
+}
+
+.seccion2-marquee{
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem 0;
+    --logo-size: clamp(120px, 12vw, 551px);
+    --logo-gap: clamp(20px, 2vw, 101px);
+}
+
+.seccion2-track{
+    display: inline-flex;
+    align-items: center;
+    gap: var(--logo-gap);
+    width: max-content;
+    animation: seccion2-scroll 55s linear infinite;
+    will-change: transform;
+    -webkit-animation: seccion2-scroll 55s linear infinite;
+}
+
+.seccion2-item{
+    flex: 0 0 auto;
+    width: var(--logo-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.seccion2-logo{
+    height: 64px;
+    width: 100%;
+    max-width: 180px;
+    object-fit: contain;
+}
+
+.seccion2-title{
+    font-family: "bukra" !important;
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+    color: #fff !important;
+    text-align: left;
+    text-transform: uppercase;
+    /* width: 100%; */
+    /* border-bottom: 2px solid #C39D65; */
+    padding-left:11rem !important;
+}
+
+
+.seccion3-row{
+    width: 50%;
+}
+
+.card-continent{
+    position: relative;
+    flex: 1 1 0;
+    width: 100%;
+    min-width: 0360px;
+    height: 35vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    &:hover{
+        transform: scale(1.05);
+    }
+}
+
+.card-continent-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    border-radius: 10px;
+    &:hover{
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+}
+
+.card-continent-title{
+    font-family: "bukra" !important;
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+    color: #fff !important;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 3.058px 9.173px 35.926px rgb(0, 0, 0);
+}
+.seccion3-title{
+    font-family: "bukra" !important;
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+    color: #fff !important;
+    text-align: left;
+    text-transform: uppercase;
+    width: 80%;
+    border-bottom: 2px solid #C39D65;
+}
+.card-destination{
+    position: relative;
+    width: 100%;
+    min-width: 360px;
+    height: 15vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+}
+
+.card-destination-title{
+    font-family: "bukra" !important;
+    font-size: 1rem !important;
+    font-weight: 900 !important;
+    color: #fff !important;
+    text-align: center;
+    text-shadow: 3.058px 9.173px 35.926px rgb(0, 0, 0);
+}
+
+.service-title{
+    font-family: "bukra" !important;
+    font-size: 1.5rem !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.service-title2{
+    font-family: "bukra" !important;
+    font-size: 1.5rem !important;
+    font-weight: 900 !important;
+    color: #fff !important;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.service-description{
+    font-family: "bukra" !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    text-align: left;
+}
+@keyframes seccion2-scroll{
+    0%{
+        transform: translateX(0);
+    }
+    100%{
+        transform: translateX(-50%);
+    }
+}
+.card-salida-grupal{
+    position: relative;
+    width: 30%;
+    min-width: 260px;
+    height: 35rem;
+    border-radius: 10px;
+    border-radius: 2rem;
+    overflow: hidden;
+    padding-bottom: 2rem;
+    background-color: #c39d655b;
+    
+}
+.card-salida-grupal-image{
+    width: 100%;
+    height: 12rem;
+    object-fit: cover;
+}
+.card-salida-grupal-title{
+    font-family: "bukra" !important;
+    font-size: 1rem !important;
+    font-weight: 900 !important;
+    color: #fff !important;
+    text-align: center;
+    text-transform: uppercase;
+}
+.card-salida-grupal-description{
+    font-family: "bukra" !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;    
+    color: #fff !important;
+    text-align: center;
+}
+.card-salida-grupal-fechas{
+    font-family: "bukra" !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    text-align: center;
+}
+.card-salida-grupal-precio{
+    font-family: "bukra" !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    text-align: center;
+}
+.card-salida-grupal-button{
+    background-color: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    color: #ffffff !important;
+    text-align: center !important;
+    font-family: "bukra" !important;
+    font-size: 0.75569rem !important;
+    padding: 0.75rem 1rem !important;
+    border: 1px solid #ffffff !important;
+    text-decoration: none !important;
+    text-transform: uppercase !important;
+}
+
+.card-salida-grupal-button:hover{
+    background-color: #ffffff !important;
+    color: #1A1A1A !important;
+}
+
+@media (max-width: 600px) {
+    .seccion1-container{
+        height: 80vh;
+    }
+    .seccion1-title{
+        font-size: 2rem !important;
+    }
+    .seccion1-subtitle{
+        font-size: 1rem !important;
+    }
+    .seccion2-title{
+        font-size: 1.2rem !important;
+        padding-left: 1rem !important;
+    }
+    .seccion2-marquee{
+        padding: 0.5rem 0 !important;
+    }
+    .seccion2-item{
+        width: 100px !important;
+    }
+    .seccion2-logo{
+        height: 40px !important;
+    }
+    .seccion3-title{
+        font-size: 1.2rem !important;
+        padding-left: 0rem !important;
+    }
+    .card-continent{
+        width: 100%;
+        min-width: 0;
+        height: 15vh;
+    }
+    .card-continent-title{
+        font-size: 1rem !important;
+    }
+    .card-continent-overlay{
+        border-radius: 5px !important;
+    }
+    .seccion3-row{
+        width: 100%;
+    }
+    .service-title{
+        font-size: 0.8rem !important;
+    }
+    .service-title2{
+        font-size: 0.8rem !important;
+    }
+    .service-description{
+        font-size: 0.65rem !important;
+    }
+    .card-salida-grupal{
+        position: relative;
+        width: 30%;
+        min-width: 300px;
+        height: 30rem;
+        border-radius: 10px;
+        border-radius: 2rem;
+        overflow: hidden;
+        padding-bottom: 2rem;
+        background-color: #c39d655b;
+        
+    }
+    .card-salida-grupal-image{
+        width: 100%;
+        height: 12rem;
+        object-fit: cover;
+    }
+    .card-salida-grupal-title{
+        font-size: 0.8rem !important;
+    }
+    .card-salida-grupal-description{
+        font-size: 0.65rem !important;
+    }
+   
+}
