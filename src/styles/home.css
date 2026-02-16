@@ -335,3 +335,26 @@
     }
    
 }
+
+@media (min-width: 1200px) and (max-width: 1599px) {
+    .card-continent{
+        width: 100%;
+        min-width: 200px;
+        height: 18vh;
+    }
+    .card-continent-title{
+        font-size: 1.5rem !important;
+    }
+    .card-destination{
+        height: 18vh;
+        min-width: 200px;
+    }
+    .service-title{
+    font-size: 1.2rem !important;
+    }
+    .service-title2{
+        font-size: 1.2rem !important;
+    }
+
+ 
+}

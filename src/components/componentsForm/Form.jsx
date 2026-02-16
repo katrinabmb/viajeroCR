@@ -22,6 +22,7 @@ const SERVICES_OPTIONS = [
 const Form = ({ onClose }) => {
     const isMobile = useMediaQuery('(max-width: 600px)');
     const isTablet = useMediaQuery('(min-width: 601px) and (max-width: 1024px)');
+    const computer = useMediaQuery('(min-width: 1025px) and (max-width: 1599px)');
     const [openSending] = useState(false);
     const [formData, setFormData] = useState({
       name: "",
@@ -84,7 +85,7 @@ const Form = ({ onClose }) => {
               position:"fixed",
               backgroundColor: "#000",
               borderRadius: "20px",
-              width: isMobile || isTablet ? "90%" : "30%",
+              width: isMobile || isTablet ? "90%" : (computer ? "45%" : "30%"),
               paddingTop: isMobile || isTablet ? "6%" : "4%",
               paddingBottom: isMobile || isTablet ? "5%" : "4%",
               height: isMobile || isTablet ? "auto" : "80%",

@@ -3,18 +3,19 @@ import PropTypes from "prop-types";
 
 const CardService = ({ image, title, title2, description }) => {
   const isMobile = useMediaQuery('(max-width: 600px)');
+  const computer = useMediaQuery('(min-width: 1025px) and (max-width: 1599px)');
   return (
     <Stack
       direction="row"
       alignItems="flex-start"
       justifyContent="center"
       spacing={2}
-      style={{ width: isMobile ? "100%" : "70%", height: isMobile ? "150px" : "220px" }}
+      style={{ width: isMobile ? "100%" : computer ? "90%" : "70%", height: isMobile ? "150px" : "220px" }}
     >
       <img
         src={image}
         alt={title}
-        style={{ width: isMobile ? "50px" : "120px", height: isMobile ? "50px" : "120px" }}
+        style={{ width: isMobile ? "50px" : computer ? "70px" : "120px", height: isMobile ? "50px" : computer ? "70px" : "120px" }}
       />
       <Stack
         direction="column"
