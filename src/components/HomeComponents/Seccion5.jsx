@@ -2,10 +2,11 @@ import { Stack, Typography, useMediaQuery } from "@mui/material"
 import PropTypes from "prop-types";
 
 const CardSalidaGrupal = ({ title, description, fechas, precio, image, itinerario }) => {
+  const isMobile = useMediaQuery('(max-width: 600px)');
     return (
-        <Stack direction="column" alignItems="center" justifyContent="space-between" spacing={3} className="card-salida-grupal">
+        <Stack direction="column" alignItems="center" justifyContent= "space-between" spacing={3} className="card-salida-grupal">
             <img src={image} alt={title} className="card-salida-grupal-image" />
-            <Stack direction="column" alignItems="center" justifyContent="space-between" spacing={3} style={{ height: "15rem", padding:"0 1rem" }}>
+            <Stack direction="column" alignItems="center" justifyContent={isMobile ? "center" : "space-between"} spacing={isMobile ? 2 : 3} style={{ height: isMobile ? "10rem" : "15rem", padding:"0 1rem"}}>
             <Typography className="card-salida-grupal-title">{title}</Typography>
             <Typography className="card-salida-grupal-description">{description}</Typography>
             <Typography className="card-salida-grupal-fechas">{fechas}</Typography>
