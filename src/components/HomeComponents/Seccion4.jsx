@@ -10,7 +10,7 @@ const CardService = ({ image, title, title2, description }) => {
       alignItems="center"
       justifyContent="center"
       spacing={2}
-      style={{ width: isMobile ? "100%" : computer ? "90%" : "70%", height: isMobile ? "150px" : "220px" }}
+      style={{ width: isMobile ? "100%" : computer ? "90%" : "70%", height: isMobile ? "80px" : "220px" }}
     >
       <img
         src={image}

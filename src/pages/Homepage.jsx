@@ -32,7 +32,7 @@ const Homepage = () => {
       {formOpen && <Form onClose={() => setFormOpen(false)} />}
       <a
         className="btnWA"
-        href="#"
+        href="https://wa.me/50683429727"
         target="_blank"
         rel="noopener noreferrer"
       >

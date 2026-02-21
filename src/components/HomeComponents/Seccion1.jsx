@@ -104,6 +104,7 @@ const Seccion1 = ({ id }) => {
 
   return (
     <Box id={id} className="seccion1-container">
+        
         <Box
             className="seccion1-track"
             style={{
@@ -119,7 +120,14 @@ const Seccion1 = ({ id }) => {
                     className="seccion1-slide"
                     style={{ backgroundImage: `url(${item.image})` }}
                 >
-                    <Stack direction="column" justifyContent="center" alignItems="flex-start" style={{paddingLeft: isMobile ? "2rem" : "7rem", paddingTop: isMobile ? "5rem" : "6em"}}>
+                    <Box className="seccion1-overlay" />
+                    <Stack
+                        className="seccion1-slide-content"
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="flex-start"
+                        style={{paddingLeft: isMobile ? "2rem" : "7rem", paddingTop: isMobile ? "5rem" : "6em"}}
+                    >
                     <Typography className="seccion1-title">{item.title}</Typography>
                     <Typography className="seccion1-subtitle">{item.subtitle}</Typography>
 
