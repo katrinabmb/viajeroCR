@@ -125,7 +125,7 @@ const Seccion1 = ({ id }) => {
                         className="seccion1-slide-content"
                         direction="column"
                         justifyContent="center"
-                        alignItems="flex-start"
+                        alignItems={isMobile ? "center" : "flex-start"}
                         style={{paddingLeft: isMobile ? "2rem" : "7rem", paddingTop: isMobile ? "5rem" : "6em"}}
                     >
                     <Typography className="seccion1-title">{item.title}</Typography>

@@ -8,7 +8,7 @@ const CardService = ({ image, title, title2, description }) => {
     <Stack
       direction="row"
       alignItems="center"
-      justifyContent="center"
+      justifyContent={isMobile ? "flex-start" : "center"}
       spacing={2}
       style={{ width: isMobile ? "100%" : computer ? "90%" : "70%", height: isMobile ? "80px" : "220px" }}
     >
@@ -121,7 +121,7 @@ const Seccion4 = ({ id }) => {
           spacing={0}
           alignItems="center"
           justifyContent="center"
-          style={{ width: isMobile ? "100%" : "90%" }}
+          style={{ width: isMobile ? "100%" : "90%", paddingLeft: isMobile ? "2rem" : "0" }}
         >
           {row.map((service) => (
             <Stack
