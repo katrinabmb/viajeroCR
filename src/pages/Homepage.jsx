@@ -30,6 +30,14 @@ const Homepage = () => {
     <>
       <Navbar onContactClick={() => setFormOpen((prev) => !prev)} />
       {formOpen && <Form onClose={() => setFormOpen(false)} />}
+      <a
+        className="btnWA"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img src="/images/WA.svg" style={{ width: "50%" }} alt="WA" />
+      </a>
       <Seccion1 id="inicio"/>
       <Afiliados id="aliados"/>
       <Seccion3 id="destinos"/>

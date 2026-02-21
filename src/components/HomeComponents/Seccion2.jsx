@@ -87,7 +87,6 @@ const Seccion2 = ({ id }) => {
         },
         
     ]
-    const marqueeLogos = [...logos, ...logos]
 
   return (
     <Stack id={id} direction="column" alignItems="flex-start" justifyContent="center" spacing={4} style={{width: "100%", padding: "2% 0", backgroundColor: "#000"}}>
@@ -96,9 +95,13 @@ const Seccion2 = ({ id }) => {
 <div style={{width: "100%", height: "2px", backgroundColor: "#C39D65"}}></div>
  <Stack className="seccion2-marquee" direction="row" alignItems="center">
         <Stack className="seccion2-track" direction="row" alignItems="center">
-            {marqueeLogos.map((logo, index) => (
-                <Stack className="seccion2-item" key={`${logo.id}-${index}`}>
-                    <img className="seccion2-logo" src={logo.image} alt={`logo-${logo.id}`} loading="lazy" />
+            {[0, 1].map((dup) => (
+                <Stack className="seccion2-group" direction="row" alignItems="center" key={`partners-group-${dup}`}>
+                    {logos.map((logo) => (
+                        <Stack className="seccion2-item" key={`${logo.id}-${dup}`}>
+                            <img className="seccion2-logo" src={logo.image} alt={`logo-${logo.id}`} loading="lazy" />
+                        </Stack>
+                    ))}
                 </Stack>
             ))}
         </Stack>

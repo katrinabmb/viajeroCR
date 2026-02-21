@@ -7,7 +7,7 @@ const CardService = ({ image, title, title2, description }) => {
   return (
     <Stack
       direction="row"
-      alignItems="flex-start"
+      alignItems="center"
       justifyContent="center"
       spacing={2}
       style={{ width: isMobile ? "100%" : computer ? "90%" : "70%", height: isMobile ? "150px" : "220px" }}
@@ -22,7 +22,6 @@ const CardService = ({ image, title, title2, description }) => {
         alignItems="flex-start"
         justifyContent="flex-start"
         spacing={3}
-        style={{ height: "100%" }}
       >
         <Stack
           direction="row"
@@ -72,7 +71,7 @@ const Seccion4 = ({ id }) => {
       title2: "100% a la medida",
       description:
         "Si busca la mejor opción para viajar por el mundo, le ofrezco los mejores circuitos, de la mano de grandes socios comerciales.",
-      image: "images/servicios/circuitosporelmundo.svg",
+      image: "images/servicios/paquetespersonalizados.svg",
     },
     {
       id: 4,
@@ -81,6 +80,22 @@ const Seccion4 = ({ id }) => {
       description:
         "Te recomendaremos las mejores opciones de hotel dentro de tu presupuesto",
       image: "images/servicios/hotel.svg",
+    },
+    {
+      id: 5,
+      title: "Viajes a eventos",
+      title2: "internacionales",
+      description:
+        "Si busca la mejor opción para viajar por el mundo, le ofrezco los mejores circuitos, de la mano de grandes socios comerciales.",
+      image: "images/servicios/eventos.svg",
+    },
+    {
+      id: 6,
+      title: "Asesoria express",
+      title2: "y personalizada",
+      description:
+        "Te recomendaremos las mejores opciones de hotel dentro de tu presupuesto",
+      image: "images/servicios/express.svg",
     }
   ];
   const rowSize = 2;
@@ -95,7 +110,7 @@ const Seccion4 = ({ id }) => {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      spacing={isMobile ? 2 : 4}
+      spacing={isMobile ? 1 : 4}
       style={{ paddingBottom: "4rem", backgroundColor: "#000" }}
     >
       <Typography className="seccion3-title">Servicios</Typography>

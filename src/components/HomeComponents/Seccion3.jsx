@@ -21,7 +21,10 @@ const CardContinent = ({ image, title, onClick }) => {
 const CardDestination = ({ image, title }) => {
   return (
     <Stack className="card-destination" alignItems="center" justifyContent="center" style={{ backgroundImage: `url(${image})` }}>
+
+      <Box className="card-continent-overlay">
       <Typography className="card-destination-title">{title}</Typography>
+        </Box>
     </Stack>
   );
 };

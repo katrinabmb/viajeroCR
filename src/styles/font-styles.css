@@ -2,3 +2,8 @@
     font-family: 'bukra';
     src: url('../fonts/bukra.ttf') format('truetype');
 }
+html, body, #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
