@@ -23,14 +23,14 @@
 }
 .seccion1-title{
     font-family: "bukra" !important;
-    font-size: 5rem !important;
+    font-size: 3rem !important;
     font-weight: 900 !important;
     color: #fff !important;
 }
 .seccion1-subtitle{
     font-family: "bukra" !important;
-    font-size: 2rem !important;
-    font-weight: 500 !important;
+    font-size: 3rem !important;
+    font-weight: 400 !important;
     color: #fff !important;
 }
 
@@ -73,11 +73,11 @@
     font-size: 2rem !important;
     font-weight: 900 !important;
     color: #fff !important;
-    text-align: left;
+    text-align: center;
     text-transform: uppercase;
-    /* width: 100%; */
+    width: 100%;
     /* border-bottom: 2px solid #C39D65; */
-    padding-left:11rem !important;
+    /* padding-left:11rem !important; */
 }
 
 
@@ -133,9 +133,9 @@
     font-size: 2rem !important;
     font-weight: 900 !important;
     color: #fff !important;
-    text-align: left;
+    text-align: center;
     text-transform: uppercase;
-    width: 80%;
+    width: 100%;
     border-bottom: 2px solid #C39D65;
 }
 .card-destination{
@@ -200,18 +200,18 @@
     border-radius: 2rem;
     overflow: hidden;
     padding-bottom: 2rem;
-    background-color: #c39d655b;
+    background-color: #5050507c;
     
 }
 .card-salida-grupal-image{
     width: 100%;
-    height: 12rem;
+    height: 16rem;
     object-fit: cover;
 }
 .card-salida-grupal-title{
     font-family: "bukra" !important;
-    font-size: 1rem !important;
-    font-weight: 900 !important;
+    font-size: 1.5rem !important;
+    font-weight: 1000 !important;
     color: #fff !important;
     text-align: center;
     text-transform: uppercase;
@@ -225,8 +225,8 @@
 }
 .card-salida-grupal-fechas{
     font-family: "bukra" !important;
-    font-size: 1rem !important;
-    font-weight: 400 !important;
+    font-size: 1.2rem !important;
+    font-weight: 900 !important;
     color: #fff !important;
     text-align: center;
 }

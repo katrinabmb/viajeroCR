@@ -294,7 +294,7 @@ const Seccion3 = ({ id }) => {
     },
     {
       id: 3,
-      image: "/images/continents/ASIAyOCEANIA.jpg",
+      image: "/images/africa/AFRICA4.jpg",
       title: "Africa",
       destinations: [
         {
@@ -336,7 +336,7 @@ const Seccion3 = ({ id }) => {
     },
     {
       id: 4,
-      image: "/images/continents/AFRICA.jpg",
+      image: "/images/continents/ASIAyOCEANIA.jpg",
       title: "Asia y Oceania",
       destinations: [
         {

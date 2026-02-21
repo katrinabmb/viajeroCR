@@ -14,7 +14,6 @@ const Navbar = ({ onContactClick }) => {
         { to: "/#aliados", label: "ALIADOS" },
         { to: "/#destinos", label: "DESTINOS" },
         { to: "/#servicios", label: "SERVICIOS" },
-        { to: "/#proveedores", label: "PROVEEDORES" },
         { to: "/#salidas-grupales", label: "SALIDAS GRUPALES" },
       ],
       []

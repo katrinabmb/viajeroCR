@@ -30,6 +30,8 @@ const Form = ({ onClose }) => {
       phone: "",
       departureDate: "",
       returnDate: "",
+      daysQuantity: "",
+      peopleQuantity: "",
       serviceInterest: "",
       inquiry: "",
     });
@@ -83,7 +85,7 @@ const Form = ({ onClose }) => {
             spacing={isMobile || isTablet ? 2 : 1}
             style={{
               position:"fixed",
-              backgroundColor: "#000",
+              backgroundColor: "#505050",
               borderRadius: "20px",
               width: isMobile || isTablet ? "90%" : (computer ? "45%" : "30%"),
               paddingTop: isMobile || isTablet ? "6%" : "4%",
@@ -318,11 +320,11 @@ const Form = ({ onClose }) => {
                 <div style={{ position: "relative", width: "50%" }}>
                   <input
                     type="number"
-                    name="childrenQuantity"
+                    name="daysQuantity"
                     className="contactoDate"
-                    value={formData.childrenQuantity}
+                    value={formData.daysQuantity}
                     onChange={handleInputChange}
-                    placeholder="Cantidad de niños"
+                    placeholder="Cantidad de dias"
                     required
                   />
                 </div>
@@ -352,7 +354,7 @@ const Form = ({ onClose }) => {
                 <div style={{ position: "relative" }}>
                   <textarea
                     name="inquiry"
-                    placeholder="Comentarios"
+                    placeholder="Destinos / Detalles"
                     className="textareaInput"
                     value={formData.inquiry}
                     onChange={handleInputChange}

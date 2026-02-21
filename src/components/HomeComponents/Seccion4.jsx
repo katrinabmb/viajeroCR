@@ -34,7 +34,7 @@ const CardService = ({ image, title, title2, description }) => {
           <Typography className="service-title">{title}</Typography>
           <Typography className="service-title2">{title2}</Typography>
         </Stack>
-        <Typography className="service-description">{description}</Typography>
+        {/* <Typography className="service-description">{description}</Typography> */}
       </Stack>
     </Stack>
   );

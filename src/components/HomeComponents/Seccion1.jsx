@@ -6,44 +6,44 @@ const slides = [
     {
         id: 1,
         image: '/images/SliderPrinc1.jpg',
-        title: 'Slide 1',
-        subtitle: 'Subtitle 1'
+        title: 'Viajes creados con logica, experiencia',
+        subtitle: 'y pasión por el detalle'
     },
     {
         id: 2,
         image: '/images/SliderPrinc2.jpg',
-        title: 'Slide 2',
-        subtitle: 'Subtitle 2'
+        title: 'Viajes creados con logica, experiencia',
+        subtitle: 'y pasión por el detalle'
     },
     {
         id: 3,
         image: '/images/SliderPrinc3.jpg',
-        title: 'Slide 3',
-        subtitle: 'Subtitle 3'
+        title: 'Viajes creados con logica, experiencia',
+        subtitle: 'y pasión por el detalle'
     },
     {
         id: 4,
         image: '/images/SliderPrinc4.jpg',
-        title: 'Slide 4',
-        subtitle: 'Subtitle 4'
+        title: 'Viajes creados con logica, experiencia',
+        subtitle: 'y pasión por el detalle'
     },
     {
         id: 5,
         image: '/images/SliderPrinc5.jpg',
-        title: 'Slide 5',
-        subtitle: 'Subtitle 5'
+        title: 'Viajes creados con logica, experiencia',
+        subtitle: 'y pasión por el detalle'
     },
     {
         id: 6,
         image: '/images/SliderPrinc6.jpg',
-        title: 'Slide 6',
-        subtitle: 'Subtitle 6'
+        title: 'Viajes creados con logica, experiencia',
+        subtitle: 'y pasión por el detalle'
     },
     {
         id: 7,
         image: '/images/SliderPrinc7.jpg',
-        title: 'Slide 7',
-        subtitle: 'Subtitle 7'
+        title: 'Viajes creados con logica, experiencia',
+        subtitle: 'y pasión por el detalle'
     }
 ]
 

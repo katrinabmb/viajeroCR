@@ -40,17 +40,17 @@ const Seccion5 = ({ id }) => {
             title: "Chile Bolivia Top",
             description: "Desierto de Atacama, Salar de Uyuni, Dunas Concón, Viña, Santiago y más.",
             fechas: "01 MAY 2026 - 10 MAY 2026",
-            precio: "$2.950",
-            image: "images/america/AMERICA1.jpg",
+            precio: "DESDE $2.950",
+            image: "images/america/AMERICA2.jpg",
             itinerario: "docs/GRUPAL-ATA-UYU-MAYO-2026.pdf"
         },
         {
             id: 2,
             title: "LO MEJOR DE PERÚ",
-            description: "Cusco, Machu Picchu, Humantay, Vinicunca, Puno, Lago Titicaca, Taquile y más. Buenos Aires, El Calafate, Perito Moreno, Torres del Paine, Chaltén, Ushuaia.",
+            description: "Cusco, Machu Picchu, Humantay, Vinicunca, Puno, Lago Titicaca, Taquile y más.",
             fechas: "20 AGO 2026 al 29 AGO 2026",
-            precio: "$2.600",
-            image: "images/america/AMERICA7.jpg",
+            precio: "DESDE $2.600",
+            image: "images/america/AMERICA10.jpg",
             itinerario: "docs/GRUPAL-PERU-AGO-2026.pdf"
         },
         {
@@ -58,7 +58,7 @@ const Seccion5 = ({ id }) => {
             title: "PATAGONIA ARGENTINA",
             description: "Buenos Aires, El Calafate, Perito Moreno, Torres del Paine, Chaltén, Ushuaia.",
             fechas: "15 OCT 2026 - 24 OCT 2026",
-            precio: "$3.350",
+            precio: "DESDE $3.350",
             image: "images/america/AMERICA9.jpg",
             itinerario: "docs/GRUPAL-ARG-OCT-2026.pdf"
         }
