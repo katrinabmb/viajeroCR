@@ -99,6 +99,7 @@
     font-weight: 900 !important;
     color: #fff !important;
     text-shadow: 3.058px 9.173px 35.926px rgb(0, 0, 0);
+    text-align: left !important;
 }
 .seccion1-subtitle{
     font-family: "bukra" !important;
@@ -106,6 +107,7 @@
     font-weight: 400 !important;
     color: #fff !important;
     text-shadow: 3.058px 9.173px 35.926px rgb(0, 0, 0);
+    text-align: left !important;
 }
 
 .seccion2-marquee{
@@ -362,10 +364,12 @@
         height: 80vh;
     }
     .seccion1-title{
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
+        text-align: center !important;
     }
     .seccion1-subtitle{
         font-size: 1rem !important;
+        text-align: center !important;
     }
     .seccion2-title{
         font-size: 1.2rem !important;
@@ -401,10 +405,10 @@
         width: 100%;
     }
     .service-title{
-        font-size: 0.7rem !important;
+        font-size: 0.6rem !important;
     }
     .service-title2{
-        font-size: 0.7rem !important;
+        font-size: 0.6rem !important;
     }
     .service-description{
         font-size: 0.65rem !important;
