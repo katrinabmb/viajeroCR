@@ -110,8 +110,8 @@ const Seccion4 = ({ id }) => {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      spacing={isMobile ? 1 : 4}
-      style={{ paddingBottom: "4rem", backgroundColor: "#000" }}
+      spacing={isMobile ? 0 : 0}
+      style={{ paddingBottom: isMobile ? "1rem" : "4rem", backgroundColor: "#000",}}
     >
       <Typography className="seccion3-title">Servicios</Typography>
       {serviceRows.map((row, rowIndex) => (

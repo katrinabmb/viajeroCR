@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { Box, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, Dialog, Grid, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const CardContinent = ({ image, title, onClick }) => {
   return (
@@ -18,11 +19,23 @@ const CardContinent = ({ image, title, onClick }) => {
   );
 };
 
-const CardDestination = ({ image, title }) => {
+const CardDestination = ({ image, title, onClick }) => {
   return (
-    <Stack className="card-destination" alignItems="center" justifyContent="center" style={{ backgroundImage: `url(${image})` }}>
+    <Stack
+      className="card-destination"
+      alignItems="center"
+      justifyContent="center"
+      style={{ backgroundImage: `url(${image})`, cursor: "pointer" }}
+      title={title}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onClick?.(e);
+      }}
+    >
 
-      <Box className="card-continent-overlay">
+      <Box className="card-destination-overlay">
       <Typography className="card-destination-title">{title}</Typography>
         </Box>
     </Stack>
@@ -401,10 +414,22 @@ const Seccion3 = ({ id }) => {
     },
   ];
   const [selectedContinentId, setSelectedContinentId] = useState(null);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+  const [dialogImageSrc, setDialogImageSrc] = useState(null);
   const selectedContinent = continents.find((continent) => continent.id === selectedContinentId);
   const continentRows = isMobile
     ? continents.map((c) => [c])
     : [continents];
+
+  const handleOpenImageDialog = (imageSrc) => {
+    setDialogImageSrc(imageSrc);
+    setIsImageDialogOpen(true);
+  };
+
+  const handleCloseImageDialog = () => {
+    setIsImageDialogOpen(false);
+    setDialogImageSrc(null);
+  };
 
   return (
     <Stack id={id} direction="column" alignItems="center" justifyContent="center" spacing={4} style={{paddingBottom: "4rem", backgroundColor: "#000"}}>
@@ -450,11 +475,57 @@ const Seccion3 = ({ id }) => {
             md={4}
             lg={3}
           >
-            <CardDestination image={destination.image} title={destination.title} />
+            <CardDestination
+              image={destination.image}
+              title={destination.title}
+              onClick={() => handleOpenImageDialog(destination.image)}
+            />
           </Grid>
         ))}
       </Grid>
 
+      <Dialog
+        open={isImageDialogOpen}
+        onClose={handleCloseImageDialog}
+        maxWidth={false}
+        PaperProps={{
+          sx: {
+            backgroundColor: "transparent",
+            boxShadow: "none",
+            overflow: "hidden",
+          },
+        }}
+      >
+        {dialogImageSrc ? (
+          <Box sx={{ position: "relative" }}>
+            <IconButton
+              onClick={handleCloseImageDialog}
+              aria-label="Cerrar"
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                color: "#fff",
+                backgroundColor: "rgba(0,0,0,0.45)",
+                "&:hover": { backgroundColor: "rgba(0,0,0,0.65)" },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <Box
+              component="img"
+              src={dialogImageSrc}
+              alt=""
+              sx={{
+                display: "block",
+                maxWidth: "90vw",
+                maxHeight: "90vh",
+                objectFit: "contain",
+              }}
+            />
+          </Box>
+        ) : null}
+      </Dialog>
     </Stack>
   );
 };

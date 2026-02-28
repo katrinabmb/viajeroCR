@@ -88,9 +88,9 @@ const Form = ({ onClose }) => {
               backgroundColor: "#505050",
               borderRadius: "20px",
               width: isMobile || isTablet ? "90%" : (computer ? "45%" : "30%"),
-              paddingTop: isMobile || isTablet ? "6%" : "4%",
-              paddingBottom: isMobile || isTablet ? "5%" : "4%",
-              height: isMobile || isTablet ? "auto" : "80%",
+              paddingTop: isMobile || isTablet ? "6%" : "2%",
+              paddingBottom: isMobile || isTablet ? "5%" : "2%",
+              height: isMobile || isTablet ? "auto" : "auto",
               top: isMobile || isTablet ? "5%" : "50%",
               left: isMobile || isTablet ? "5%" : "50%",
               transform: isMobile || isTablet ? "translate(0%, 0%)" : "translate(-50%, -50%)",
@@ -129,11 +129,11 @@ const Form = ({ onClose }) => {
             >
               ×
             </button>
-            <img
+            {/* <img
               src={isMobile || isTablet ? "/images/logoNew.svg" : "/images/logoNew.svg"}
               alt="logo"
               style={{ width: isMobile || isTablet ? "18%" : "150px", height: "auto" }}
-            />
+            /> */}
             {/* Contenedor del variante de formulario */}
             <Stack
               alignItems="center"

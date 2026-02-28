@@ -6,44 +6,44 @@ const slides = [
     {
         id: 1,
         image: '/images/SliderPrinc1.jpg',
-        title: 'Viajes creados con lógica, experiencia',
-        subtitle: 'y pasión por el detalle'
+        title: '¡Viajes creados con lógica, experiencia',
+        subtitle: 'y pasión por el detalle!'
     },
     {
         id: 2,
         image: '/images/SliderPrinc2.jpg',
-        title: 'Viajes creados con lógica, experiencia',
-        subtitle: 'y pasión por el detalle'
+        title: '¡Viajes creados con lógica, experiencia',
+        subtitle: 'y pasión por el detalle!'
     },
     {
         id: 3,
         image: '/images/SliderPrinc3.jpg',
-        title: 'Viajes creados con lógica, experiencia',
-        subtitle: 'y pasión por el detalle'
+        title: '¡Viajes creados con lógica, experiencia',
+        subtitle: 'y pasión por el detalle!'
     },
     {
         id: 4,
         image: '/images/SliderPrinc4.jpg',
-        title: 'Viajes creados con lógica, experiencia',
-        subtitle: 'y pasión por el detalle'
+        title: '¡Viajes creados con lógica, experiencia',
+        subtitle: 'y pasión por el detalle!'
     },
     {
         id: 5,
         image: '/images/SliderPrinc5.jpg',
-        title: 'Viajes creados con lógica, experiencia',
-        subtitle: 'y pasión por el detalle'
+        title: '¡Viajes creados con lógica, experiencia',
+        subtitle: 'y pasión por el detalle!'
     },
     {
         id: 6,
         image: '/images/SliderPrinc6.jpg',
-        title: 'Viajes creados con lógica, experiencia',
-        subtitle: 'y pasión por el detalle'
+        title: '¡Viajes creados con lógica, experiencia',
+        subtitle: 'y pasión por el detalle!'
     },
     {
         id: 7,
         image: '/images/SliderPrinc7.jpg',
-        title: 'Viajes creados con lógica, experiencia',
-        subtitle: 'y pasión por el detalle'
+        title: '¡Viajes creados con lógica, experiencia',
+        subtitle: 'y pasión por el detalle!'
     }
 ]
 
@@ -120,13 +120,13 @@ const Seccion1 = ({ id }) => {
                     className="seccion1-slide"
                     style={{ backgroundImage: `url(${item.image})` }}
                 >
-                    <Box className="seccion1-overlay" />
+                    <Box className="seccion1-overlay"/>
                     <Stack
                         className="seccion1-slide-content"
                         direction="column"
                         justifyContent="center"
-                        alignItems={isMobile ? "center" : "flex-start"}
-                        style={{paddingLeft: isMobile ? "2rem" : "7rem", paddingTop: isMobile ? "5rem" : "6em"}}
+                        alignItems={isMobile ? "center" : "center"}
+                        style={{paddingTop: isMobile ? "5rem" : "6em", width: "100%"}}
                     >
                     <Typography className="seccion1-title">{item.title}</Typography>
                     <Typography className="seccion1-subtitle">{item.subtitle}</Typography>

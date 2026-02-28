@@ -41,7 +41,7 @@ const Afiliados = ({ id }) => {
   return (
     <Stack id={id} direction="column" alignItems="flex-start" justifyContent="center" spacing={4} style={{width: "100%", padding: isMobile ? "8% 0" : "2% 0", backgroundColor: "#000"}}>
 
-<Typography className="seccion2-title">Reserva tus servicios aqui</Typography>
+<Typography className="seccion2-title">Reserva tus servicios aquí</Typography>
 <div style={{width: "100%", height: "2px", backgroundColor: "#C39D65"}}></div>
  <Stack className="seccion2-marquee" direction="row" alignItems="center">
         <Stack className="seccion2-track" direction="row" alignItems="center">
