@@ -71,7 +71,7 @@ const Seccion5 = ({ id }) => {
       alignItems="center"
       justifyContent="center"
       spacing={4}
-      style={{ paddingBottom: "4rem", backgroundColor: "#000" }}
+      style={{ paddingBottom: "4rem", backgroundColor: "#000", borderBottom: "2px solid #C39D65" }}
     >
       <Typography className="seccion3-title">Salidas Grupales</Typography>
 

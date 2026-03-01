@@ -10,6 +10,7 @@ import Seccion4 from "../components/HomeComponents/Seccion4";
 import Seccion5 from "../components/HomeComponents/Seccion5";
 import Footer from "../components/global/Footer";
 import { useLocation } from "react-router-dom";
+import Testimonios from "../components/HomeComponents/Testimonios";
 
 const Homepage = () => {
   const [formOpen, setFormOpen] = useState(false);
@@ -44,6 +45,7 @@ const Homepage = () => {
       <Seccion4 id="servicios"/>
       <Seccion2 id="proveedores"/>
       <Seccion5 id="salidas-grupales"/>
+      <Testimonios id="testimonios"/>
       <Footer />
     </>
   );
