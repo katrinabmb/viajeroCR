@@ -15,6 +15,7 @@ const Navbar = ({ onContactClick }) => {
         { to: "/#destinos", label: "DESTINOS" },
         { to: "/#servicios", label: "SERVICIOS" },
         { to: "/#salidas-grupales", label: "SALIDAS GRUPALES" },
+        { to: "/#testimonios", label: "TESTIMONIOS" },
       ],
       []
     );
