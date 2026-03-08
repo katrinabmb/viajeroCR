@@ -216,8 +216,8 @@ try {
     $mail->Port = 587;
     $mail->CharSet = 'UTF-8';
 
-    $mail->setFrom('info@viajerocr.com', 'Viajero CR');
-    $mail->addAddress('info@viajerocr.com', 'Viajero CR');
+    $mail->setFrom('info@viajerocr.com', 'Viajero CR web');
+    $mail->addAddress('info@viajerocr.com', 'Viajero CR web');
     $mail->addReplyTo($safeEmail, $safeName);
 
     $mail->isHTML(true);
