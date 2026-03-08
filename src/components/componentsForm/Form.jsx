@@ -18,12 +18,14 @@ const SERVICES_OPTIONS = [
   "visas",
 ];
 
+const CONTACT_API_URL = "https://send-form.viajerocr.com/send-form.php";
+
 // eslint-disable-next-line react/prop-types
 const Form = ({ onClose }) => {
     const isMobile = useMediaQuery('(max-width: 600px)');
     const isTablet = useMediaQuery('(min-width: 601px) and (max-width: 1024px)');
     const computer = useMediaQuery('(min-width: 1025px) and (max-width: 1599px)');
-    const [openSending] = useState(false);
+    const [openSending, setOpenSending] = useState(false);
     const [formData, setFormData] = useState({
       name: "",
       email: "",
@@ -63,6 +65,92 @@ const Form = ({ onClose }) => {
           ...prevData,
           [name]: value
         }));
+      }
+    };
+
+    const resetForm = () => {
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        departureDate: "",
+        returnDate: "",
+        daysQuantity: "",
+        peopleQuantity: "",
+        serviceInterest: "",
+        inquiry: "",
+      });
+    };
+
+    const validateFormData = () => {
+      const requiredFields = [
+        "name",
+        "email",
+        "phone",
+        "departureDate",
+        "returnDate",
+        "daysQuantity",
+        "peopleQuantity",
+        "serviceInterest",
+        "inquiry",
+      ];
+
+      const hasMissingField = requiredFields.some((field) => !String(formData[field] ?? "").trim());
+      if (hasMissingField) {
+        return "Todos los campos son obligatorios.";
+      }
+
+      const departureDate = new Date(formData.departureDate);
+      const returnDate = new Date(formData.returnDate);
+      if (Number.isNaN(departureDate.getTime()) || Number.isNaN(returnDate.getTime())) {
+        return "Las fechas seleccionadas no son válidas.";
+      }
+
+      if (returnDate < departureDate) {
+        return "La fecha de regreso no puede ser menor que la fecha de salida.";
+      }
+
+      const peopleQuantity = Number(formData.peopleQuantity);
+      const daysQuantity = Number(formData.daysQuantity);
+      if (!Number.isInteger(peopleQuantity) || peopleQuantity <= 0) {
+        return "La cantidad de personas debe ser mayor que 0.";
+      }
+      if (!Number.isInteger(daysQuantity) || daysQuantity <= 0) {
+        return "La cantidad de días debe ser mayor que 0.";
+      }
+
+      return null;
+    };
+
+    const handleSend = async () => {
+      const validationError = validateFormData();
+      if (validationError) {
+        alert(validationError);
+        return;
+      }
+
+      setOpenSending(true);
+      try {
+        const response = await fetch(CONTACT_API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const responseData = await response.json();
+        if (!response.ok || !responseData?.success) {
+          throw new Error(responseData?.message || "No se pudo enviar la solicitud.");
+        }
+
+        alert("Solicitud enviada correctamente. Pronto te contactaremos.");
+        resetForm();
+        handleClose();
+      } catch (error) {
+        alert(error.message || "Ocurrió un error al enviar la solicitud.");
+      } finally {
+        setOpenSending(false);
       }
     };
 
@@ -385,9 +473,7 @@ const Form = ({ onClose }) => {
                 </div>
 
                 <Stack alignItems="center" justifyContent="center" spacing={2}>
-                  <Button className="button-form" 
-                  // onClick={handleSend}
-                  >
+                  <Button className="button-form" onClick={handleSend} disabled={openSending}>
                     Enviar
                     </Button>
                   <Stack direction="row" spacing={1} alignItems="center">

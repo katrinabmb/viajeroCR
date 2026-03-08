@@ -1,0 +1,8 @@
+{
+  "name": "viajerocr/api",
+  "description": "Mail endpoint for Viajero CR",
+  "type": "project",
+  "require": {
+    "phpmailer/phpmailer": "^6.10"
+  }
+}
