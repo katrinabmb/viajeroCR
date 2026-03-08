@@ -16,7 +16,7 @@ const Acercade = ({ id }) => {
 
       <Stack direction={isMobile ? "column" : "row"} alignItems="center" justifyContent="center" spacing={isMobile ? 4 : 18}
       >
-        <img src="/images/viajerocr.jpeg" alt="Viajero CR" className="acercade-image" />
+        <img src="/images/viajerocr2.jpeg" alt="Viajero CR" className="acercade-image" />
 
 
         <Stack direction="column" alignItems="center" justifyContent="center" spacing={2} style={{ width: isMobile ? "80%" : "40%" }}>
