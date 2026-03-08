@@ -467,6 +467,20 @@
     height: auto;
     object-fit: cover;
 }
+
+.acercade-image{
+    width: 25rem;
+    height: 25rem;
+    object-fit: cover;
+    border-radius: 150px;
+}
+.acercade-descripcion{
+    font-family: "bukra" !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    text-align: justify;
+}
 @media (max-width: 600px) {
     .btnWA{
         right: 16px !important;
@@ -582,6 +596,17 @@
         width: 90%;
         height: auto;
         object-fit: cover;
+    }
+    .acercade-image{
+        width: 15rem;
+        height: 15rem;
+    }
+    .acercade-descripcion{
+        font-family: "bukra" !important;
+        font-size: 0.8rem !important;
+        font-weight: 400 !important;
+        color: #fff !important;
+        text-align: justify;
     }
    
    
