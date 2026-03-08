@@ -1,6 +1,7 @@
 import { Backdrop, Button, CircularProgress, Stack, Typography, useMediaQuery } from "@mui/material"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import CountryCode from "./CountryCode";
 import "./form.css";
 // import { sendFormApi } from "../../store/thunks";
@@ -39,6 +40,21 @@ const calculateTripDays = (departureDateValue, returnDateValue) => {
 
   return String(Math.round(diffInMilliseconds / MILLISECONDS_PER_DAY));
 };
+
+const showFormAlert = ({ icon, title, text }) =>
+  Swal.fire({
+    icon,
+    title,
+    text,
+    confirmButtonText: "Entendido",
+    customClass: {
+      popup: "viajero-swal-popup",
+      title: "viajero-swal-title",
+      htmlContainer: "viajero-swal-text",
+      confirmButton: "viajero-swal-confirm",
+    },
+    buttonsStyling: false,
+  });
 
 // eslint-disable-next-line react/prop-types
 const Form = ({ onClose }) => {
@@ -153,7 +169,11 @@ const Form = ({ onClose }) => {
     const handleSend = async () => {
       const validationError = validateFormData();
       if (validationError) {
-        alert(validationError);
+        await showFormAlert({
+          icon: "warning",
+          title: "Revisemos tu solicitud",
+          text: validationError,
+        });
         return;
       }
 
@@ -186,11 +206,19 @@ const Form = ({ onClose }) => {
           throw new Error(responseData?.message || `No se pudo enviar la solicitud. HTTP ${response.status}`);
         }
 
-        alert("Solicitud enviada correctamente. Pronto te contactaremos.");
+        await showFormAlert({
+          icon: "success",
+          title: "Hemos recibido tu solicitud",
+          text: "Gracias por escribirnos. Un agente de Viajero CR web te contactará muy pronto con toda la información.",
+        });
         resetForm();
         handleClose();
       } catch (error) {
-        alert(error.message || "OcurriÃ³ un error al enviar la solicitud.");
+        await showFormAlert({
+          icon: "error",
+          title: "No pudimos completar el envío",
+          text: error.message || "Ocurrió un error al enviar la solicitud.",
+        });
       } finally {
         setOpenSending(false);
       }
@@ -556,6 +584,8 @@ const Form = ({ onClose }) => {
 }
 
 export default Form
+
+
 
 
 

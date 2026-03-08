@@ -234,3 +234,42 @@
   
    
 }
+
+.viajero-swal-popup {
+    border-radius: 16px !important;
+    border: 1px solid rgba(195, 157, 101, 0.45) !important;
+    background: #2f2f2f !important;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45) !important;
+    font-family: "bukra" !important;
+}
+
+.viajero-swal-title {
+    color: #ffffff !important;
+    font-family: "bukra" !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+}
+
+.viajero-swal-text {
+    color: #f1f1f1 !important;
+    font-family: "bukra" !important;
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+}
+
+.viajero-swal-confirm {
+    border: 1px solid #c39d65 !important;
+    border-radius: 999px !important;
+    background: #c39d65 !important;
+    color: #ffffff !important;
+    font-family: "bukra" !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    padding: 10px 22px !important;
+    transition: background-color 0.2s ease, transform 0.2s ease !important;
+}
+
+.viajero-swal-confirm:hover {
+    background: #a98754 !important;
+    transform: translateY(-1px);
+}
