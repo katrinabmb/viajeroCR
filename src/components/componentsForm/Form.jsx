@@ -62,6 +62,7 @@ const Form = ({ onClose }) => {
     const isTablet = useMediaQuery('(min-width: 601px) and (max-width: 1024px)');
     const computer = useMediaQuery('(min-width: 1025px) and (max-width: 1599px)');
     const [openSending, setOpenSending] = useState(false);
+    const [isFormVisible, setIsFormVisible] = useState(true);
     const [formData, setFormData] = useState({
       name: "",
       email: "",
@@ -169,11 +170,14 @@ const Form = ({ onClose }) => {
     const handleSend = async () => {
       const validationError = validateFormData();
       if (validationError) {
+        setOpenSending(false);
+        setIsFormVisible(false);
         await showFormAlert({
           icon: "warning",
           title: "Revisemos tu solicitud",
           text: validationError,
         });
+        setIsFormVisible(true);
         return;
       }
 
@@ -206,19 +210,24 @@ const Form = ({ onClose }) => {
           throw new Error(responseData?.message || `No se pudo enviar la solicitud. HTTP ${response.status}`);
         }
 
+        setOpenSending(false);
+        setIsFormVisible(false);
         await showFormAlert({
           icon: "success",
           title: "Hemos recibido tu solicitud",
-          text: "Gracias por escribirnos. Un agente de Viajero CR web te contactar� muy pronto con toda la informaci�n.",
+          text: "Gracias por escribirnos. Un agente de Viajero CR web te contactará muy pronto con toda la información.",
         });
         resetForm();
         handleClose();
       } catch (error) {
+        setOpenSending(false);
+        setIsFormVisible(false);
         await showFormAlert({
           icon: "error",
-          title: "No pudimos completar el env�o",
-          text: error.message || "Ocurri� un error al enviar la solicitud.",
+          title: "No pudimos completar el envío",
+          text: error.message || "Ocurrió un error al enviar la solicitud.",
         });
+        setIsFormVisible(true);
       } finally {
         setOpenSending(false);
       }
@@ -243,6 +252,7 @@ const Form = ({ onClose }) => {
             spacing={isMobile || isTablet ? 2 : 1}
             style={{
               position:"fixed",
+              display: isFormVisible ? "flex" : "none",
               backgroundColor: "#505050",
               borderRadius: "20px",
               width: isMobile || isTablet ? "90%" : (computer ? "45%" : "30%"),
@@ -309,7 +319,7 @@ const Form = ({ onClose }) => {
                     </Typography>
                     <Typography className="title-form-cursive" component="h1">
                     
-                    Experiencias Unicas
+                    Experiencias Únicas
                     </Typography>
                 </Stack>
                 
@@ -482,7 +492,7 @@ const Form = ({ onClose }) => {
                     className="contactoDate"
                     value={formData.daysQuantity}
                     onChange={handleInputChange}
-                    placeholder="Cantidad de dias"
+                    placeholder="Cantidad de días"
                     readOnly
                     required
                   />
@@ -498,7 +508,7 @@ const Form = ({ onClose }) => {
                     required
                   >
                     <option value="" disabled>
-                      Servicios de Interes
+                      Servicios de interés
                     </option>
                     {SERVICES_OPTIONS.map((service) => (
                       <option key={service} value={service}>
@@ -570,7 +580,7 @@ const Form = ({ onClose }) => {
                       />
                     </svg>
                     <Typography className="bottom-form">
-                      Su informacion es 100% confidencial
+                      Su información es 100% confidencial
                     </Typography>
                   </Stack>
                 </Stack>
@@ -584,6 +594,14 @@ const Form = ({ onClose }) => {
 }
 
 export default Form
+
+
+
+
+
+
+
+
 
 
 
