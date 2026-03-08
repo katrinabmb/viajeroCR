@@ -19,6 +19,26 @@ const SERVICES_OPTIONS = [
 ];
 
 const CONTACT_API_URL = "https://send-form.viajerocr.com/send-form.php";
+const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+
+const calculateTripDays = (departureDateValue, returnDateValue) => {
+  if (!departureDateValue || !returnDateValue) {
+    return "";
+  }
+
+  const departureDate = new Date(`${departureDateValue}T00:00:00`);
+  const returnDate = new Date(`${returnDateValue}T00:00:00`);
+  if (Number.isNaN(departureDate.getTime()) || Number.isNaN(returnDate.getTime())) {
+    return "";
+  }
+
+  const diffInMilliseconds = returnDate.getTime() - departureDate.getTime();
+  if (diffInMilliseconds <= 0) {
+    return "";
+  }
+
+  return String(Math.round(diffInMilliseconds / MILLISECONDS_PER_DAY));
+};
 
 // eslint-disable-next-line react/prop-types
 const Form = ({ onClose }) => {
@@ -61,10 +81,18 @@ const Form = ({ onClose }) => {
       } else {
         // Aquí se maneja como un evento HTML estándar
         const { name, value } = eventOrValue.target;
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: value
-        }));
+        setFormData((prevData) => {
+          const nextFormData = {
+            ...prevData,
+            [name]: value,
+          };
+
+          if (name === "departureDate" || name === "returnDate") {
+            nextFormData.daysQuantity = calculateTripDays(nextFormData.departureDate, nextFormData.returnDate);
+          }
+
+          return nextFormData;
+        });
       }
     };
 
@@ -131,17 +159,31 @@ const Form = ({ onClose }) => {
 
       setOpenSending(true);
       try {
+        const computedDaysQuantity = calculateTripDays(formData.departureDate, formData.returnDate);
+        const payload = {
+          ...formData,
+          daysQuantity: computedDaysQuantity || formData.daysQuantity,
+        };
+
         const response = await fetch(CONTACT_API_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(payload),
         });
 
-        const responseData = await response.json();
+        const rawResponse = await response.text();
+        let responseData = null;
+        if (rawResponse) {
+          try {
+            responseData = JSON.parse(rawResponse);
+          } catch {
+            responseData = null;
+          }
+        }
         if (!response.ok || !responseData?.success) {
-          throw new Error(responseData?.message || "No se pudo enviar la solicitud.");
+          throw new Error(responseData?.message || `No se pudo enviar la solicitud. HTTP ${response.status}`);
         }
 
         alert("Solicitud enviada correctamente. Pronto te contactaremos.");
@@ -413,6 +455,7 @@ const Form = ({ onClose }) => {
                     value={formData.daysQuantity}
                     onChange={handleInputChange}
                     placeholder="Cantidad de dias"
+                    readOnly
                     required
                   />
                 </div>
@@ -513,3 +556,9 @@ const Form = ({ onClose }) => {
 }
 
 export default Form
+
+
+
+
+
+

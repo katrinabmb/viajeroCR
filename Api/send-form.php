@@ -5,6 +5,54 @@ declare(strict_types=1);
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
+ob_start();
+
+function writeApiLog(string $type, array $context = []): void
+{
+    $logPath = __DIR__ . '/error.log';
+    $timestamp = date('Y-m-d H:i:s');
+    $serializedContext = json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $line = "[{$timestamp}] {$type} {$serializedContext}" . PHP_EOL;
+    @file_put_contents($logPath, $line, FILE_APPEND | LOCK_EX);
+}
+
+register_shutdown_function(static function (): void {
+    $error = error_get_last();
+    if ($error === null) {
+        return;
+    }
+
+    $isFatal = in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true);
+    if (!$isFatal) {
+        return;
+    }
+
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+    }
+
+    ob_clean();
+    writeApiLog('FATAL', [
+        'message' => $error['message'] ?? 'UNKNOWN_FATAL_ERROR',
+        'file' => $error['file'] ?? null,
+        'line' => $error['line'] ?? null,
+    ]);
+    echo json_encode([
+        'success' => false,
+        'data' => null,
+        'message' => 'Error fatal en el servidor.',
+        'error' => $error['message'] ?? 'UNKNOWN_FATAL_ERROR',
+    ], JSON_UNESCAPED_UNICODE);
+});
+
+set_error_handler(static function (int $severity, string $message, string $file, int $line): bool {
+    throw new ErrorException($message, 0, $severity, $file, $line);
+});
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -44,6 +92,9 @@ $rawBody = file_get_contents('php://input');
 $payload = json_decode($rawBody, true);
 
 if (!is_array($payload)) {
+    writeApiLog('INVALID_PAYLOAD', [
+        'raw' => $rawBody,
+    ]);
     http_response_code(400);
     echo json_encode([
         'success' => false,
@@ -78,6 +129,9 @@ $required = [
 
 foreach ($required as $field => $value) {
     if ($value === '') {
+        writeApiLog('VALIDATION_ERROR', [
+            'field' => $field,
+        ]);
         http_response_code(422);
         echo json_encode([
             'success' => false,
@@ -90,6 +144,10 @@ foreach ($required as $field => $value) {
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    writeApiLog('VALIDATION_ERROR', [
+        'field' => 'email',
+        'email' => $email,
+    ]);
     http_response_code(422);
     echo json_encode([
         'success' => false,
@@ -101,6 +159,11 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 if (!ctype_digit($daysQuantity) || (int)$daysQuantity <= 0 || !ctype_digit($peopleQuantity) || (int)$peopleQuantity <= 0) {
+    writeApiLog('VALIDATION_ERROR', [
+        'field' => 'daysQuantity_or_peopleQuantity',
+        'daysQuantity' => $daysQuantity,
+        'peopleQuantity' => $peopleQuantity,
+    ]);
     http_response_code(422);
     echo json_encode([
         'success' => false,
@@ -163,6 +226,11 @@ try {
     $mail->AltBody = $textBody;
     $mail->send();
 
+    writeApiLog('MAIL_SENT', [
+        'email' => $safeEmail,
+        'serviceInterest' => $serviceInterest,
+    ]);
+
     http_response_code(200);
     echo json_encode([
         'success' => true,
@@ -170,7 +238,12 @@ try {
         'message' => 'Correo enviado correctamente.',
         'error' => null,
     ], JSON_UNESCAPED_UNICODE);
-} catch (Exception $exception) {
+} catch (Throwable $exception) {
+    writeApiLog('MAIL_ERROR', [
+        'message' => $exception->getMessage(),
+        'email' => $safeEmail ?? null,
+        'serviceInterest' => $serviceInterest ?? null,
+    ]);
     http_response_code(500);
     echo json_encode([
         'success' => false,
@@ -180,3 +253,5 @@ try {
     ], JSON_UNESCAPED_UNICODE);
 }
 
+restore_error_handler();
+ob_end_flush();
