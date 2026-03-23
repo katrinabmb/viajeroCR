@@ -4,29 +4,33 @@ import PropTypes from "prop-types";
 const CardService = ({ image, title, title2, description }) => {
   const isMobile = useMediaQuery('(max-width: 600px)');
   const computer = useMediaQuery('(min-width: 1025px) and (max-width: 1599px)');
+  const iconSize = isMobile ? 42 : computer ? 62 : 72;
   return (
     <Stack
       direction="row"
       alignItems="center"
-      justifyContent={isMobile ? "flex-start" : "center"}
-      spacing={2}
-      style={{ width: isMobile ? "100%" : computer ? "90%" : "70%", height: isMobile ? "80px" : "220px" }}
+      justifyContent="center"
+      spacing={1.25}
+      style={{ width: "100%", maxWidth: isMobile ? "100%" : "460px", height: isMobile ? "72px" : computer ? "122px" : "130px" }}
     >
-      <img
-        src={image}
-        alt={title}
-        style={{ width: isMobile ? "50px" : computer ? "70px" : "120px", height: isMobile ? "50px" : computer ? "70px" : "120px" }}
-      />
+      <Stack style={{ width: `${iconSize}px`, minWidth: `${iconSize}px` }} alignItems="center" justifyContent="center">
+        <img
+          src={image}
+          alt={title}
+          style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
+        />
+      </Stack>
       <Stack
         direction="column"
         alignItems="flex-start"
         justifyContent="flex-start"
-        spacing={3}
+        spacing={0}
+        style={{ minWidth: isMobile ? "220px" : computer ? "280px" : "320px" }}
       >
         <Stack
           direction="row"
           alignItems="center"
-          justifyContent="center"
+          justifyContent="flex-start"
           spacing={1}
           style={{ borderBottom: "1px solid #C39D65" }}
         >
@@ -98,50 +102,49 @@ const Seccion4 = ({ id }) => {
       image: "images/servicios/express.svg",
     }
   ];
-  const rowSize = 2;
-  const serviceRows = [];
-
-  for (let i = 0; i < services.length; i += rowSize) {
-    serviceRows.push(services.slice(i, i + rowSize));
-  }
   return (
     <Stack
       id={id}
       direction="column"
       alignItems="center"
       justifyContent="center"
-      spacing={isMobile ? 0 : 0}
-      style={{ paddingBottom: isMobile ? "1rem" : "4rem", backgroundColor: "#000",}}
+      spacing={0}
+      style={{ padding: isMobile ? "0 0.75rem 0.5rem" : "0 2.5rem 1.25rem", backgroundColor: "#000" }}
     >
-      <Typography className="seccion3-title">Servicios</Typography>
-      {serviceRows.map((row, rowIndex) => (
-        <Stack
-          key={`services-row-${rowIndex}`}
-          direction={isMobile ? "column" : "row"}
-          spacing={0}
-          alignItems="center"
-          justifyContent="center"
-          style={{ width: isMobile ? "100%" : "90%", paddingLeft: isMobile ? "2rem" : "0" }}
-        >
-          {row.map((service) => (
-            <Stack
-              key={service.id}
-              direction="column"
-              alignItems="center"
-              justifyContent="center"
-              spacing={2}
-              style={{ width: "80%" }}
-            >
-              <CardService
-                image={service.image}
-                title={service.title}
-                title2={service.title2}
-                description={service.description}
-              />
-            </Stack>
-          ))}
-        </Stack>
-      ))}
+      <Typography
+        className="seccion3-title"
+        style={{ width: isMobile ? "100%" : "90%", paddingTop: 0, paddingBottom: isMobile ? "0.5rem" : "0.75rem", textAlign: "center" }}
+      >
+        Servicios
+      </Typography>
+      <Stack
+        style={{
+          width: isMobile ? "100%" : "90%",
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(2, minmax(320px, 460px))",
+          justifyContent: "center",
+          columnGap: isMobile ? "0px" : "140px",
+          rowGap: "0px",
+        }}
+      >
+        {services.map((service) => (
+          <Stack
+            key={service.id}
+            direction="column"
+            alignItems="center"
+            justifyContent="flex-start"
+            spacing={0}
+            style={{ width: "100%" }}
+          >
+            <CardService
+              image={service.image}
+              title={service.title}
+              title2={service.title2}
+              description={service.description}
+            />
+          </Stack>
+        ))}
+      </Stack>
     </Stack>
   );
 };
