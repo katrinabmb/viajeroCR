@@ -20,26 +20,6 @@ const SERVICES_OPTIONS = [
 ];
 
 const CONTACT_API_URL = "https://send-form.viajerocr.com/send-form.php";
-const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
-
-const calculateTripDays = (departureDateValue, returnDateValue) => {
-  if (!departureDateValue || !returnDateValue) {
-    return "";
-  }
-
-  const departureDate = new Date(`${departureDateValue}T00:00:00`);
-  const returnDate = new Date(`${returnDateValue}T00:00:00`);
-  if (Number.isNaN(departureDate.getTime()) || Number.isNaN(returnDate.getTime())) {
-    return "";
-  }
-
-  const diffInMilliseconds = returnDate.getTime() - departureDate.getTime();
-  if (diffInMilliseconds <= 0) {
-    return "";
-  }
-
-  return String(Math.round(diffInMilliseconds / MILLISECONDS_PER_DAY));
-};
 
 const showFormAlert = ({ icon, title, text }) =>
   Swal.fire({
@@ -67,8 +47,7 @@ const Form = ({ onClose }) => {
       name: "",
       email: "",
       phone: "",
-      departureDate: "",
-      returnDate: "",
+      approximateTravelDates: "",
       daysQuantity: "",
       peopleQuantity: "",
       serviceInterest: "",
@@ -98,18 +77,10 @@ const Form = ({ onClose }) => {
       } else {
         // Aquí se maneja como un evento HTML estándar
         const { name, value } = eventOrValue.target;
-        setFormData((prevData) => {
-          const nextFormData = {
-            ...prevData,
-            [name]: value,
-          };
-
-          if (name === "departureDate" || name === "returnDate") {
-            nextFormData.daysQuantity = calculateTripDays(nextFormData.departureDate, nextFormData.returnDate);
-          }
-
-          return nextFormData;
-        });
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
       }
     };
 
@@ -118,8 +89,7 @@ const Form = ({ onClose }) => {
         name: "",
         email: "",
         phone: "",
-        departureDate: "",
-        returnDate: "",
+        approximateTravelDates: "",
         daysQuantity: "",
         peopleQuantity: "",
         serviceInterest: "",
@@ -132,9 +102,6 @@ const Form = ({ onClose }) => {
         "name",
         "email",
         "phone",
-        "departureDate",
-        "returnDate",
-        "daysQuantity",
         "peopleQuantity",
         "serviceInterest",
         "inquiry",
@@ -145,23 +112,9 @@ const Form = ({ onClose }) => {
         return "Todos los campos son obligatorios.";
       }
 
-      const departureDate = new Date(formData.departureDate);
-      const returnDate = new Date(formData.returnDate);
-      if (Number.isNaN(departureDate.getTime()) || Number.isNaN(returnDate.getTime())) {
-        return "Las fechas seleccionadas no son válidas.";
-      }
-
-      if (returnDate < departureDate) {
-        return "La fecha de regreso no puede ser menor que la fecha de salida.";
-      }
-
       const peopleQuantity = Number(formData.peopleQuantity);
-      const daysQuantity = Number(formData.daysQuantity);
       if (!Number.isInteger(peopleQuantity) || peopleQuantity <= 0) {
         return "La cantidad de personas debe ser mayor que 0.";
-      }
-      if (!Number.isInteger(daysQuantity) || daysQuantity <= 0) {
-        return "La cantidad de días debe ser mayor que 0.";
       }
 
       return null;
@@ -183,10 +136,10 @@ const Form = ({ onClose }) => {
 
       setOpenSending(true);
       try {
-        const computedDaysQuantity = calculateTripDays(formData.departureDate, formData.returnDate);
         const payload = {
           ...formData,
-          daysQuantity: computedDaysQuantity || formData.daysQuantity,
+          daysQuantity: String(formData.daysQuantity ?? "").trim() || "0",
+          approximateTravelDates: String(formData.approximateTravelDates ?? "").trim(),
         };
 
         const response = await fetch(CONTACT_API_URL, {
@@ -447,30 +400,16 @@ const Form = ({ onClose }) => {
                     />
                   </svg>
                 </div>
-                <Stack direction="row" alignItems="center" justifyContent="center" spacing={2} style={{ width: "100%"}}>
- {/* input Fecha salida */}
- <div style={{ position: "relative", width: "50%" }}>
+                <div style={{ position: "relative", width: "100%" }}>
                   <input
-                    type="date"
-                    name="departureDate"
-                    className="contactoDate"
-                    value={formData.departureDate}
+                    type="text"
+                    name="approximateTravelDates"
+                    className="contactoInput"
+                    value={formData.approximateTravelDates}
                     onChange={handleInputChange}
-                    required
+                    placeholder="Fechas aproximadas (ej: 1 semana, diciembre, referencia)"
                   />
                 </div>
-                {/* input Fecha regreso */}
-                <div style={{ position: "relative", width: "50%" }}>
-                  <input
-                    type="date"
-                    name="returnDate"
-                    className="contactoDate"
-                    value={formData.returnDate}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="center" spacing={2} style={{ width: "100%"}}>
  {/* input Cantidad de personas */}
  <div style={{ position: "relative", width: "50%" }}>
@@ -487,14 +426,12 @@ const Form = ({ onClose }) => {
                 {/* input Fecha regreso */}
                 <div style={{ position: "relative", width: "50%" }}>
                   <input
-                    type="number"
+                    type="text"
                     name="daysQuantity"
                     className="contactoDate"
                     value={formData.daysQuantity}
                     onChange={handleInputChange}
-                    placeholder="Cantidad de días"
-                    readOnly
-                    required
+                    placeholder="Cantidad de días (opcional)"
                   />
                 </div>
                 </Stack>

@@ -108,6 +108,7 @@ if (!is_array($payload)) {
 $name = trim((string)($payload['name'] ?? ''));
 $email = trim((string)($payload['email'] ?? ''));
 $phone = trim((string)($payload['phone'] ?? ''));
+$approximateTravelDates = trim((string)($payload['approximateTravelDates'] ?? ''));
 $departureDate = trim((string)($payload['departureDate'] ?? ''));
 $returnDate = trim((string)($payload['returnDate'] ?? ''));
 $daysQuantity = trim((string)($payload['daysQuantity'] ?? ''));
@@ -115,13 +116,22 @@ $peopleQuantity = trim((string)($payload['peopleQuantity'] ?? ''));
 $serviceInterest = trim((string)($payload['serviceInterest'] ?? ''));
 $inquiry = trim((string)($payload['inquiry'] ?? ''));
 
+if ($approximateTravelDates === '' && ($departureDate !== '' || $returnDate !== '')) {
+    if ($departureDate !== '' && $returnDate !== '') {
+        $approximateTravelDates = "{$departureDate} a {$returnDate}";
+    } else {
+        $approximateTravelDates = $departureDate !== '' ? $departureDate : $returnDate;
+    }
+}
+
+if ($daysQuantity === '') {
+    $daysQuantity = '0';
+}
+
 $required = [
     'name' => $name,
     'email' => $email,
     'phone' => $phone,
-    'departureDate' => $departureDate,
-    'returnDate' => $returnDate,
-    'daysQuantity' => $daysQuantity,
     'peopleQuantity' => $peopleQuantity,
     'serviceInterest' => $serviceInterest,
     'inquiry' => $inquiry,
@@ -158,17 +168,16 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-if (!ctype_digit($daysQuantity) || (int)$daysQuantity <= 0 || !ctype_digit($peopleQuantity) || (int)$peopleQuantity <= 0) {
+if (!ctype_digit($peopleQuantity) || (int)$peopleQuantity <= 0) {
     writeApiLog('VALIDATION_ERROR', [
-        'field' => 'daysQuantity_or_peopleQuantity',
-        'daysQuantity' => $daysQuantity,
+        'field' => 'peopleQuantity',
         'peopleQuantity' => $peopleQuantity,
     ]);
     http_response_code(422);
     echo json_encode([
         'success' => false,
         'data' => null,
-        'message' => 'Cantidad de personas y días deben ser números mayores que 0.',
+        'message' => 'La cantidad de personas debe ser un número mayor que 0.',
         'error' => 'VALIDATION_ERROR',
     ], JSON_UNESCAPED_UNICODE);
     exit;
@@ -177,6 +186,7 @@ if (!ctype_digit($daysQuantity) || (int)$daysQuantity <= 0 || !ctype_digit($peop
 $safeName = str_replace(["\r", "\n"], '', $name);
 $safeEmail = str_replace(["\r", "\n"], '', $email);
 $safePhone = str_replace(["\r", "\n"], '', $phone);
+$safeApproximateTravelDates = str_replace(["\r", "\n"], '', $approximateTravelDates);
 
 $subject = 'Nueva solicitud web - Viajes Personalizados';
 $htmlBody = '
@@ -185,8 +195,7 @@ $htmlBody = '
   <tr><td><strong>Nombre completo</strong></td><td>' . htmlspecialchars($safeName, ENT_QUOTES, 'UTF-8') . '</td></tr>
   <tr><td><strong>Correo</strong></td><td>' . htmlspecialchars($safeEmail, ENT_QUOTES, 'UTF-8') . '</td></tr>
   <tr><td><strong>Teléfono</strong></td><td>' . htmlspecialchars($safePhone, ENT_QUOTES, 'UTF-8') . '</td></tr>
-  <tr><td><strong>Fecha de salida</strong></td><td>' . htmlspecialchars($departureDate, ENT_QUOTES, 'UTF-8') . '</td></tr>
-  <tr><td><strong>Fecha de regreso</strong></td><td>' . htmlspecialchars($returnDate, ENT_QUOTES, 'UTF-8') . '</td></tr>
+  <tr><td><strong>Fechas aproximadas de viaje</strong></td><td>' . htmlspecialchars($safeApproximateTravelDates !== '' ? $safeApproximateTravelDates : 'No especificadas', ENT_QUOTES, 'UTF-8') . '</td></tr>
   <tr><td><strong>Cantidad de personas</strong></td><td>' . htmlspecialchars($peopleQuantity, ENT_QUOTES, 'UTF-8') . '</td></tr>
   <tr><td><strong>Cantidad de días</strong></td><td>' . htmlspecialchars($daysQuantity, ENT_QUOTES, 'UTF-8') . '</td></tr>
   <tr><td><strong>Servicio de interés</strong></td><td>' . htmlspecialchars($serviceInterest, ENT_QUOTES, 'UTF-8') . '</td></tr>
@@ -198,8 +207,7 @@ $textBody = "Nueva solicitud desde viajerocr.com\n"
     . "Nombre completo: {$safeName}\n"
     . "Correo: {$safeEmail}\n"
     . "Teléfono: {$safePhone}\n"
-    . "Fecha de salida: {$departureDate}\n"
-    . "Fecha de regreso: {$returnDate}\n"
+    . "Fechas aproximadas de viaje: " . ($safeApproximateTravelDates !== '' ? $safeApproximateTravelDates : 'No especificadas') . "\n"
     . "Cantidad de personas: {$peopleQuantity}\n"
     . "Cantidad de días: {$daysQuantity}\n"
     . "Servicio de interés: {$serviceInterest}\n"
