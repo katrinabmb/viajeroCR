@@ -3,22 +3,35 @@ import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRound
 import { Avatar, IconButton, Stack, Typography, useMediaQuery } from "@mui/material";
 import PropTypes from "prop-types";
 
-const CardTestimonio = ({ destino, name, testimonio }) => {
+const CardTestimonio = ({ destino, name, testimonio, photo }) => {
   return (
     <Stack
       direction="column"
       alignItems="flex-start"
-      justifyContent="space-around"
-      spacing={2}
+      justifyContent="space-between"
+      spacing={1.25}
       className="card-testimonio"
     >
-      <Avatar sx={{ bgcolor: "#C39D65" }}>{name.charAt(0)}</Avatar>
+      <Avatar
+        src={photo}
+        alt={name}
+        className="card-testimonio-avatar"
+        sx={{ bgcolor: "#C39D65" }}
+      >
+        {name.charAt(0)}
+      </Avatar>
 
-      <Typography className="card-testimonio-destino">Destino: {destino}</Typography>
+      <Typography className="card-testimonio-destino">
+        <span className="card-testimonio-label">Destino:</span>{" "}
+        <span className="card-testimonio-value">{destino}</span>
+      </Typography>
       <Typography className="card-testimonio-testimonio">
         {testimonio}
       </Typography>
-      <Typography className="card-testimonio-name">Autor: {name}</Typography>
+      <Typography className="card-testimonio-name">
+        <span className="card-testimonio-label">Autor:</span>{" "}
+        <span className="card-testimonio-value">{name}</span>
+      </Typography>
     </Stack>
   );
 };
@@ -27,6 +40,7 @@ CardTestimonio.propTypes = {
   destino: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   testimonio: PropTypes.string.isRequired,
+  photo: PropTypes.string,
 };
 
 const Testimonios = ({ id }) => {
@@ -225,6 +239,7 @@ const Testimonios = ({ id }) => {
                   destino={testimonio.destino}
                   name={testimonio.name}
                   testimonio={testimonio.testimonio}
+                  photo={testimonio.photo}
                 />
               </div>
             ))}
