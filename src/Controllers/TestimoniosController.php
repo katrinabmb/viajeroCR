@@ -25,7 +25,7 @@ final class TestimoniosController
     public function publicData(): void
     {
         $db = Database::connection();
-        $config = $db->query('SELECT title, image_1_path, image_2_path FROM tbl_testimonios_config WHERE id_config = 1 LIMIT 1')->fetch(PDO::FETCH_ASSOC);
+        $config = $db->query('SELECT title FROM tbl_testimonios_config WHERE id_config = 1 LIMIT 1')->fetch(PDO::FETCH_ASSOC);
         $items = $db->query(
             'SELECT id_testimonio, destino, author_name, testimonio, photo_path, sort_order
              FROM tbl_testimonio_item
@@ -44,7 +44,7 @@ final class TestimoniosController
     {
         Auth::requireUser();
         $db = Database::connection();
-        $config = $db->query('SELECT title, image_1_path, image_2_path FROM tbl_testimonios_config WHERE id_config = 1 LIMIT 1')->fetch(PDO::FETCH_ASSOC);
+        $config = $db->query('SELECT title FROM tbl_testimonios_config WHERE id_config = 1 LIMIT 1')->fetch(PDO::FETCH_ASSOC);
         $items = $db->query(
             'SELECT id_testimonio, destino, author_name, testimonio, photo_path, is_active, sort_order, created_at, updated_at
              FROM tbl_testimonio_item
@@ -86,38 +86,19 @@ final class TestimoniosController
         Auth::requireUser();
         $payload = json_decode(file_get_contents('php://input') ?: '', true);
         $title = trim((string) ($payload['title'] ?? ''));
-        $tmp1 = trim((string) ($payload['temp_image_1_key'] ?? ''));
-        $tmp2 = trim((string) ($payload['temp_image_2_key'] ?? ''));
         if ($title === '') {
             Response::json(['success' => false, 'message' => 'title requerido.', 'code' => 'VALIDATION_ERROR'], 422);
         }
 
         $db = Database::connection();
-        $row = $db->query('SELECT image_1_path, image_2_path FROM tbl_testimonios_config WHERE id_config = 1 LIMIT 1')->fetch(PDO::FETCH_ASSOC);
-        $img1 = is_array($row) ? (string) ($row['image_1_path'] ?? '') : '/imagenes/testimonios/testimonio1.PNG';
-        $img2 = is_array($row) ? (string) ($row['image_2_path'] ?? '') : '/imagenes/testimonios/testimonio2.PNG';
-
-        if ($tmp1 !== '') {
-            $new = $this->moveTempToFinal($tmp1);
-            $this->deleteOwned($img1);
-            $img1 = $new;
-        }
-        if ($tmp2 !== '') {
-            $new = $this->moveTempToFinal($tmp2);
-            $this->deleteOwned($img2);
-            $img2 = $new;
-        }
-
         $stmt = $db->prepare(
-            'INSERT INTO tbl_testimonios_config (id_config, title, image_1_path, image_2_path)
-             VALUES (1, :title, :i1, :i2)
+            'INSERT INTO tbl_testimonios_config (id_config, title)
+             VALUES (1, :title)
              ON DUPLICATE KEY UPDATE
                title = VALUES(title),
-               image_1_path = VALUES(image_1_path),
-               image_2_path = VALUES(image_2_path),
                updated_at = CURRENT_TIMESTAMP'
         );
-        $stmt->execute(['title' => $title, 'i1' => $img1, 'i2' => $img2]);
+        $stmt->execute(['title' => $title]);
 
         Response::json(['success' => true]);
     }
@@ -320,4 +301,3 @@ final class TestimoniosController
         return (bool) $st->fetchColumn();
     }
 }
-
