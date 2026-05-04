@@ -6,6 +6,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require __DIR__ . '/config/app.php';
 require __DIR__ . '/src/Core/Database.php';
+require __DIR__ . '/src/Core/Response.php';
 
 use App\Core\Database;
 
