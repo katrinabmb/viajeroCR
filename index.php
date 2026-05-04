@@ -8,6 +8,7 @@ use App\Controllers\AuthController;
 use App\Controllers\AfiliadosController;
 use App\Controllers\HealthController;
 use App\Controllers\Seccion1SliderController;
+use App\Controllers\Seccion3DestinosController;
 use App\Core\Router;
 
 $router = new Router();
@@ -38,5 +39,22 @@ $router->post('/admin/afiliados/logos/update', [AfiliadosController::class, 'upd
 $router->post('/admin/afiliados/logos/active', [AfiliadosController::class, 'setActive']);
 $router->post('/admin/afiliados/logos/delete', [AfiliadosController::class, 'delete']);
 $router->post('/admin/afiliados/logos/reorder', [AfiliadosController::class, 'reorder']);
+
+// Seccion 3 destinos (continentes + destinos)
+$router->get('/seccion3', [Seccion3DestinosController::class, 'publicData']);
+$router->get('/admin/seccion3/continents', [Seccion3DestinosController::class, 'adminContinents']);
+$router->get('/admin/seccion3/destinations', [Seccion3DestinosController::class, 'adminDestinations']);
+$router->post('/admin/seccion3/title', [Seccion3DestinosController::class, 'updateTitle']);
+$router->post('/admin/seccion3/upload-temp', [Seccion3DestinosController::class, 'uploadTemp']);
+$router->post('/admin/seccion3/continents', [Seccion3DestinosController::class, 'continentCreate']);
+$router->post('/admin/seccion3/continents/update', [Seccion3DestinosController::class, 'continentUpdate']);
+$router->post('/admin/seccion3/continents/active', [Seccion3DestinosController::class, 'continentSetActive']);
+$router->post('/admin/seccion3/continents/delete', [Seccion3DestinosController::class, 'continentDelete']);
+$router->post('/admin/seccion3/continents/reorder', [Seccion3DestinosController::class, 'continentReorder']);
+$router->post('/admin/seccion3/destinations', [Seccion3DestinosController::class, 'destinationCreate']);
+$router->post('/admin/seccion3/destinations/update', [Seccion3DestinosController::class, 'destinationUpdate']);
+$router->post('/admin/seccion3/destinations/active', [Seccion3DestinosController::class, 'destinationSetActive']);
+$router->post('/admin/seccion3/destinations/delete', [Seccion3DestinosController::class, 'destinationDelete']);
+$router->post('/admin/seccion3/destinations/reorder', [Seccion3DestinosController::class, 'destinationReorder']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
