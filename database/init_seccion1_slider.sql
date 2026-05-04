@@ -11,6 +11,6 @@ CREATE TABLE IF NOT EXISTS tbl_seccion1_slider (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id_slider),
     KEY idx_tbl_seccion1_slider_active (is_active),
-    KEY idx_tbl_seccion1_slider_sort (sort_order)
+    UNIQUE KEY uq_tbl_seccion1_slider_sort (sort_order),
+    KEY idx_tbl_seccion1_slider_active_sort (is_active, sort_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-

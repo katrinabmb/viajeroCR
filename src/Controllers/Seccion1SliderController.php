@@ -128,6 +128,22 @@ final class Seccion1SliderController
             ], 422);
         }
 
+        if ($sortOrder < 0) {
+            Response::json([
+                'success' => false,
+                'message' => 'El orden no puede ser negativo.',
+                'code' => 'INVALID_SORT_ORDER',
+            ], 422);
+        }
+
+        if ($this->sortOrderExists($sortOrder)) {
+            Response::json([
+                'success' => false,
+                'message' => 'Ese orden ya esta en uso. Elige otro.',
+                'code' => 'SORT_ORDER_TAKEN',
+            ], 422);
+        }
+
         $imagePath = $this->moveTempToFinal($tempKey);
 
         $db = Database::connection();
@@ -167,6 +183,14 @@ final class Seccion1SliderController
             ], 422);
         }
 
+        if ($sortOrder < 0) {
+            Response::json([
+                'success' => false,
+                'message' => 'El orden no puede ser negativo.',
+                'code' => 'INVALID_SORT_ORDER',
+            ], 422);
+        }
+
         $db = Database::connection();
         $existing = $this->findById($id);
 
@@ -179,6 +203,14 @@ final class Seccion1SliderController
         }
 
         $imagePath = $existing['image_path'];
+
+        if ($this->sortOrderExists($sortOrder, $id)) {
+            Response::json([
+                'success' => false,
+                'message' => 'Ese orden ya esta en uso. Elige otro.',
+                'code' => 'SORT_ORDER_TAKEN',
+            ], 422);
+        }
 
         if ($tempKey !== '') {
             $imagePath = $this->moveTempToFinal($tempKey);
@@ -273,5 +305,27 @@ final class Seccion1SliderController
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return is_array($row) ? $row : null;
+    }
+
+    private function sortOrderExists(int $sortOrder, ?int $excludeId = null): bool
+    {
+        $db = Database::connection();
+
+        if ($excludeId !== null) {
+            $stmt = $db->prepare(
+                'SELECT 1 FROM tbl_seccion1_slider WHERE sort_order = :sort_order AND id_slider <> :id LIMIT 1'
+            );
+            $stmt->execute([
+                'sort_order' => $sortOrder,
+                'id' => $excludeId,
+            ]);
+        } else {
+            $stmt = $db->prepare('SELECT 1 FROM tbl_seccion1_slider WHERE sort_order = :sort_order LIMIT 1');
+            $stmt->execute([
+                'sort_order' => $sortOrder,
+            ]);
+        }
+
+        return (bool) $stmt->fetchColumn();
     }
 }
