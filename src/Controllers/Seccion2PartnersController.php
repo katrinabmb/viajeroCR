@@ -79,10 +79,10 @@ final class Seccion2PartnersController
         $original = (string) ($file['name'] ?? 'image');
         $ext = strtolower(pathinfo($original, PATHINFO_EXTENSION));
 
-        if (!Upload::isAllowedImageExtension($ext)) {
+        if (!Upload::isAllowedLogoExtension($ext)) {
             Response::json([
                 'success' => false,
-                'message' => 'Tipo de archivo invalido. Usa jpg, png o webp.',
+                'message' => 'Tipo de archivo invalido. Usa jpg, png, webp o svg.',
                 'code' => 'INVALID_FILE_TYPE',
             ], 422);
         }

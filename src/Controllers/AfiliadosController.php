@@ -116,10 +116,10 @@ final class AfiliadosController
         $original = (string) ($file['name'] ?? 'image');
         $ext = strtolower(pathinfo($original, PATHINFO_EXTENSION));
 
-        if (!Upload::isAllowedImageExtension($ext)) {
+        if (!Upload::isAllowedLogoExtension($ext)) {
             Response::json([
                 'success' => false,
-                'message' => 'Invalid file type. Use jpg, png, webp.',
+                'message' => 'Invalid file type. Use jpg, png, webp, svg.',
                 'code' => 'INVALID_FILE_TYPE',
             ], 422);
         }

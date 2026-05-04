@@ -31,7 +31,12 @@ final class Upload
     public static function isAllowedImageExtension(string $ext): bool
     {
         $ext = strtolower($ext);
-        return in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true);
+        return in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg'], true);
+    }
+
+    public static function isAllowedLogoExtension(string $ext): bool
+    {
+        $ext = strtolower($ext);
+        return in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'svg'], true);
     }
 }
-

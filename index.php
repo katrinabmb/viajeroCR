@@ -17,6 +17,8 @@ use App\Controllers\TestimoniosController;
 use App\Controllers\FooterController;
 use App\Controllers\WhatsappController;
 use App\Controllers\DashboardSummaryController;
+use App\Controllers\CotizacionesController;
+use App\Controllers\ServiciosInteresController;
 use App\Core\Router;
 
 $router = new Router();
@@ -127,5 +129,18 @@ $router->post('/admin/whatsapp/update', [WhatsappController::class, 'update']);
 
 // Dashboard summary
 $router->get('/admin/dashboard/summary', [DashboardSummaryController::class, 'adminSummary']);
+
+// Cotizaciones
+$router->post('/cotizaciones', [CotizacionesController::class, 'createPublic']);
+$router->get('/admin/cotizaciones', [CotizacionesController::class, 'adminList']);
+$router->get('/admin/cotizaciones/detail', [CotizacionesController::class, 'adminDetail']);
+$router->post('/admin/cotizaciones/update', [CotizacionesController::class, 'adminUpdate']);
+
+// Servicios de interes
+$router->get('/servicios-interes', [ServiciosInteresController::class, 'publicData']);
+$router->get('/admin/servicios-interes', [ServiciosInteresController::class, 'adminData']);
+$router->post('/admin/servicios-interes', [ServiciosInteresController::class, 'create']);
+$router->post('/admin/servicios-interes/update', [ServiciosInteresController::class, 'update']);
+$router->post('/admin/servicios-interes/active', [ServiciosInteresController::class, 'setActive']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
