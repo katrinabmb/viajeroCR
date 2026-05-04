@@ -54,7 +54,7 @@ export function Seccion1SliderPage() {
 
   const headerDescription = useMemo(
     () =>
-      'Administra los slides de la Seccion 1 del Home. Puedes subir una imagen (temp) y luego guardarla para moverla a /imagenes/seccion1.',
+      'Gestion administrativa del slider principal (Seccion 1). Carga imagenes y administra el contenido visible en el Home.',
     []
   )
 
