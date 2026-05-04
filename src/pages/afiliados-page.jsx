@@ -351,7 +351,14 @@ export function AfiliadosPage() {
                       </div>
                       <div className="min-w-0">
                         <p className="truncate text-sm font-semibold text-slate-950">URL</p>
-                        <p className="mt-1 truncate text-sm text-slate-600">{item.url}</p>
+                        <a
+                          className="mt-1 block truncate text-sm text-sky-700 underline-offset-4 hover:underline"
+                          href={item.url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {item.url}
+                        </a>
                         <p className="mt-2 text-xs text-slate-400">Orden: {item.sort_order}</p>
                       </div>
                     </div>
