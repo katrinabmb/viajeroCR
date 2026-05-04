@@ -25,5 +25,6 @@ $router->post('/admin/seccion1/slides', [Seccion1SliderController::class, 'creat
 $router->post('/admin/seccion1/slides/update', [Seccion1SliderController::class, 'update']);
 $router->post('/admin/seccion1/slides/active', [Seccion1SliderController::class, 'setActive']);
 $router->post('/admin/seccion1/slides/delete', [Seccion1SliderController::class, 'delete']);
+$router->post('/admin/seccion1/slides/reorder', [Seccion1SliderController::class, 'reorder']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');

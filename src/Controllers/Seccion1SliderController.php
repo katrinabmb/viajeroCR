@@ -128,10 +128,10 @@ final class Seccion1SliderController
             ], 422);
         }
 
-        if ($sortOrder < 0) {
+        if ($sortOrder < 1) {
             Response::json([
                 'success' => false,
-                'message' => 'El orden no puede ser negativo.',
+                'message' => 'El orden debe ser 1 o mayor.',
                 'code' => 'INVALID_SORT_ORDER',
             ], 422);
         }
@@ -183,10 +183,10 @@ final class Seccion1SliderController
             ], 422);
         }
 
-        if ($sortOrder < 0) {
+        if ($sortOrder < 1) {
             Response::json([
                 'success' => false,
-                'message' => 'El orden no puede ser negativo.',
+                'message' => 'El orden debe ser 1 o mayor.',
                 'code' => 'INVALID_SORT_ORDER',
             ], 422);
         }
@@ -298,6 +298,88 @@ final class Seccion1SliderController
         $stmt->execute(['id' => $id]);
 
         $this->deleteFinalImageIfOwned((string) ($existing['image_path'] ?? ''));
+
+        Response::json(['success' => true]);
+    }
+
+    // Admin: reorder slides (JSON: ordered_ids: number[])
+    public function reorder(): void
+    {
+        Auth::requireUser();
+
+        $payload = json_decode(file_get_contents('php://input') ?: '', true);
+        $orderedIds = $payload['ordered_ids'] ?? null;
+
+        if (!is_array($orderedIds) || count($orderedIds) === 0) {
+            Response::json([
+                'success' => false,
+                'message' => 'ordered_ids es requerido.',
+                'code' => 'VALIDATION_ERROR',
+            ], 422);
+        }
+
+        $ids = [];
+        foreach ($orderedIds as $id) {
+            $intId = (int) $id;
+            if ($intId > 0) {
+                $ids[] = $intId;
+            }
+        }
+
+        if (count($ids) !== count($orderedIds)) {
+            Response::json([
+                'success' => false,
+                'message' => 'ordered_ids invalido.',
+                'code' => 'VALIDATION_ERROR',
+            ], 422);
+        }
+
+        $db = Database::connection();
+        $db->beginTransaction();
+
+        try {
+            // Ensure all ids exist
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $check = $db->prepare("SELECT COUNT(*) FROM tbl_seccion1_slider WHERE id_slider IN ($placeholders)");
+            $check->execute($ids);
+            $count = (int) $check->fetchColumn();
+
+            if ($count !== count($ids)) {
+                $db->rollBack();
+                Response::json([
+                    'success' => false,
+                    'message' => 'Uno o mas items no existen.',
+                    'code' => 'NOT_FOUND',
+                ], 404);
+            }
+
+            $update = $db->prepare(
+                'UPDATE tbl_seccion1_slider
+                 SET sort_order = :sort_order,
+                     updated_at = CURRENT_TIMESTAMP
+                 WHERE id_slider = :id'
+            );
+
+            $order = 1;
+            foreach ($ids as $id) {
+                $update->execute([
+                    'sort_order' => $order,
+                    'id' => $id,
+                ]);
+                $order++;
+            }
+
+            $db->commit();
+        } catch (\Throwable $e) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+            Response::json([
+                'success' => false,
+                'message' => 'No se pudo reordenar.',
+                'code' => 'REORDER_FAILED',
+            ], 500);
+        }
 
         Response::json(['success' => true]);
     }
