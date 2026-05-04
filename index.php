@@ -11,6 +11,7 @@ use App\Controllers\Seccion1SliderController;
 use App\Controllers\Seccion3DestinosController;
 use App\Controllers\Seccion4ServiciosController;
 use App\Controllers\Seccion2PartnersController;
+use App\Controllers\Seccion5SalidasController;
 use App\Core\Router;
 
 $router = new Router();
@@ -79,5 +80,16 @@ $router->post('/admin/seccion4/servicios/items/update', [Seccion4ServiciosContro
 $router->post('/admin/seccion4/servicios/items/active', [Seccion4ServiciosController::class, 'setActive']);
 $router->post('/admin/seccion4/servicios/items/delete', [Seccion4ServiciosController::class, 'delete']);
 $router->post('/admin/seccion4/servicios/items/reorder', [Seccion4ServiciosController::class, 'reorder']);
+
+// Seccion 5 salidas grupales
+$router->get('/seccion5/salidas', [Seccion5SalidasController::class, 'publicData']);
+$router->get('/admin/seccion5/salidas', [Seccion5SalidasController::class, 'adminData']);
+$router->post('/admin/seccion5/salidas/title', [Seccion5SalidasController::class, 'updateTitle']);
+$router->post('/admin/seccion5/salidas/upload-temp', [Seccion5SalidasController::class, 'uploadTemp']);
+$router->post('/admin/seccion5/salidas/items', [Seccion5SalidasController::class, 'create']);
+$router->post('/admin/seccion5/salidas/items/update', [Seccion5SalidasController::class, 'update']);
+$router->post('/admin/seccion5/salidas/items/active', [Seccion5SalidasController::class, 'setActive']);
+$router->post('/admin/seccion5/salidas/items/delete', [Seccion5SalidasController::class, 'delete']);
+$router->post('/admin/seccion5/salidas/items/reorder', [Seccion5SalidasController::class, 'reorder']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
