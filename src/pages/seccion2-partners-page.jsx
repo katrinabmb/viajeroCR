@@ -233,7 +233,7 @@ export function Seccion2PartnersPage() {
         </div>
       ) : null}
 
-      <section className="mx-auto w-full max-w-6xl space-y-6 px-4 pb-10 pt-6">
+      <section className="w-full space-y-6 px-0 pb-10 pt-6">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <Card className="border-white/70 bg-white/80 backdrop-blur-xl">
             <CardHeader className="p-6">
@@ -451,4 +451,3 @@ export function Seccion2PartnersPage() {
     </DashboardLayout>
   )
 }
-

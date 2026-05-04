@@ -17,13 +17,13 @@ const navItems = [
     icon: Image,
   },
   {
-    label: 'Seccion 2 (Partners)',
-    path: '/seccion2/partners',
+    label: 'Afiliados',
+    path: '/afiliados',
     icon: Handshake,
   },
   {
-    label: 'Afiliados',
-    path: '/afiliados',
+    label: 'Seccion 2 (Partners)',
+    path: '/seccion2/partners',
     icon: Handshake,
   },
   {
