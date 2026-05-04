@@ -4,3 +4,4 @@
 .env.staging
 /config/database.production.php
 /vendor/
+/imagenes/
