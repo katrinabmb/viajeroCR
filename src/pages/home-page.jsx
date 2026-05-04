@@ -79,7 +79,7 @@ export function HomePage() {
   return (
     <DashboardLayout
       title={`Bienvenido, ${user?.name ?? 'Admin'}`}
-      description="Base administrativa para gestionar contenido del sitio, solicitudes de clientes, servicios turisticos y futuros modulos operativos de ViajeroCR."
+      description=""
     >
       <section className="grid gap-4 2xl:grid-cols-[1.1fr_0.9fr]">
         <article className="overflow-hidden rounded-[2rem] border border-slate-200/70 bg-slate-950 p-6 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)]">
