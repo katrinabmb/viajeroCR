@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useTransition } from 'react'
-import { CheckCircle2, ImagePlus, Pencil, RefreshCw, Upload, XCircle } from 'lucide-react'
+import { CheckCircle2, ImagePlus, Pencil, RefreshCw, Trash2, Upload, XCircle } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -188,6 +188,28 @@ export function Seccion1SliderPage() {
     }
   }
 
+  async function handleDelete(item) {
+    setError(null)
+
+    const title = item?.title ? ` "${item.title}"` : ''
+    const ok = window.confirm(`Eliminar slide${title}? Esta accion tambien elimina la imagen.`)
+
+    if (!ok) return
+
+    try {
+      await apiFetch('/admin/seccion1/slides/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item.id_slider,
+        }),
+      })
+      await load()
+    } catch (err) {
+      setError(err?.message ?? 'No se pudo eliminar.')
+    }
+  }
+
   return (
     <DashboardLayout title="Seccion 1 (Slider)" description={headerDescription}>
       <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
@@ -258,6 +280,14 @@ export function Seccion1SliderPage() {
                       >
                         <Pencil className="mr-2 size-4" />
                         Editar
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="rounded-2xl border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
+                        onClick={() => handleDelete(item)}
+                      >
+                        <Trash2 className="mr-2 size-4" />
+                        Eliminar
                       </Button>
                       <Button
                         variant={isActive ? 'outline' : 'default'}
