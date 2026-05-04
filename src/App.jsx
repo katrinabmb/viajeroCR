@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/protected-route'
+import { AfiliadosPage } from '@/pages/afiliados-page'
 import { HomePage } from '@/pages/home-page'
 import { LoginPage } from '@/pages/login-page'
 import { Seccion1SliderPage } from '@/pages/seccion1-slider-page'
@@ -41,6 +42,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Seccion1SliderPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/afiliados"
+        element={
+          <ProtectedRoute>
+            <AfiliadosPage />
           </ProtectedRoute>
         }
       />

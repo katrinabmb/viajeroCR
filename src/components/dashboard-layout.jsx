@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Home, Image, LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
+import { Handshake, Home, Image, LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { signOut } from '@/store/auth-slice'
@@ -15,6 +15,11 @@ const navItems = [
     label: 'Seccion 1 (Slider)',
     path: '/seccion1/slider',
     icon: Image,
+  },
+  {
+    label: 'Afiliados',
+    path: '/afiliados',
+    icon: Handshake,
   },
 ]
 
