@@ -10,6 +10,7 @@ use App\Controllers\HealthController;
 use App\Controllers\Seccion1SliderController;
 use App\Controllers\Seccion3DestinosController;
 use App\Controllers\Seccion4ServiciosController;
+use App\Controllers\Seccion2PartnersController;
 use App\Core\Router;
 
 $router = new Router();
@@ -40,6 +41,16 @@ $router->post('/admin/afiliados/logos/update', [AfiliadosController::class, 'upd
 $router->post('/admin/afiliados/logos/active', [AfiliadosController::class, 'setActive']);
 $router->post('/admin/afiliados/logos/delete', [AfiliadosController::class, 'delete']);
 $router->post('/admin/afiliados/logos/reorder', [AfiliadosController::class, 'reorder']);
+
+// Seccion 2 partners (logos de proveedores/aliados)
+$router->get('/seccion2/partners', [Seccion2PartnersController::class, 'publicData']);
+$router->get('/admin/seccion2/partners', [Seccion2PartnersController::class, 'adminData']);
+$router->post('/admin/seccion2/partners/upload-temp', [Seccion2PartnersController::class, 'uploadTemp']);
+$router->post('/admin/seccion2/partners/logos', [Seccion2PartnersController::class, 'create']);
+$router->post('/admin/seccion2/partners/logos/update', [Seccion2PartnersController::class, 'update']);
+$router->post('/admin/seccion2/partners/logos/active', [Seccion2PartnersController::class, 'setActive']);
+$router->post('/admin/seccion2/partners/logos/delete', [Seccion2PartnersController::class, 'delete']);
+$router->post('/admin/seccion2/partners/logos/reorder', [Seccion2PartnersController::class, 'reorder']);
 
 // Seccion 3 destinos (continentes + destinos)
 $router->get('/seccion3', [Seccion3DestinosController::class, 'publicData']);
