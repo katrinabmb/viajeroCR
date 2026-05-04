@@ -350,7 +350,11 @@ export function Seccion1SliderPage() {
 
                   {previewUrl ? (
                     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                      <img src={previewUrl} alt="Preview" className="h-44 w-full object-cover" />
+                      <img
+                        src={previewUrl}
+                        alt="Preview"
+                        className="max-h-72 w-full object-contain bg-slate-50"
+                      />
                     </div>
                   ) : null}
                 </div>
@@ -375,4 +379,3 @@ export function Seccion1SliderPage() {
     </DashboardLayout>
   )
 }
-
