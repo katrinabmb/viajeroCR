@@ -14,6 +14,7 @@ use App\Controllers\Seccion2PartnersController;
 use App\Controllers\Seccion5SalidasController;
 use App\Controllers\AcercadeController;
 use App\Controllers\TestimoniosController;
+use App\Controllers\FooterController;
 use App\Core\Router;
 
 $router = new Router();
@@ -111,5 +112,10 @@ $router->post('/admin/testimonios/items/update', [TestimoniosController::class, 
 $router->post('/admin/testimonios/items/active', [TestimoniosController::class, 'setActive']);
 $router->post('/admin/testimonios/items/delete', [TestimoniosController::class, 'delete']);
 $router->post('/admin/testimonios/items/reorder', [TestimoniosController::class, 'reorder']);
+
+// Footer
+$router->get('/footer', [FooterController::class, 'publicData']);
+$router->get('/admin/footer', [FooterController::class, 'adminData']);
+$router->post('/admin/footer/update', [FooterController::class, 'update']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
