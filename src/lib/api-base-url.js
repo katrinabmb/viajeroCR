@@ -1,4 +1,4 @@
-const LOCAL_API_URL = 'http://localhost/ViajeroSistem/api'
+const LOCAL_API_PATH = '/ViajeroSistem/api'
 const PRODUCTION_API_URL = 'https://api.viajerocr.com'
 
 export function getApiBaseUrl() {
@@ -6,7 +6,8 @@ export function getApiBaseUrl() {
     const { hostname } = window.location
 
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return LOCAL_API_URL
+      // Keep host consistent so cookies match (localhost vs 127.0.0.1 are different sites).
+      return `http://${hostname}${LOCAL_API_PATH}`
     }
 
     if (
@@ -18,5 +19,5 @@ export function getApiBaseUrl() {
     }
   }
 
-  return import.meta.env.VITE_API_BASE_URL ?? LOCAL_API_URL
+  return import.meta.env.VITE_API_BASE_URL ?? `http://localhost${LOCAL_API_PATH}`
 }
