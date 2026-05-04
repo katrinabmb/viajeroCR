@@ -13,6 +13,7 @@ use App\Controllers\Seccion4ServiciosController;
 use App\Controllers\Seccion2PartnersController;
 use App\Controllers\Seccion5SalidasController;
 use App\Controllers\AcercadeController;
+use App\Controllers\TestimoniosController;
 use App\Core\Router;
 
 $router = new Router();
@@ -98,5 +99,16 @@ $router->get('/acercade', [AcercadeController::class, 'publicData']);
 $router->get('/admin/acercade', [AcercadeController::class, 'adminData']);
 $router->post('/admin/acercade/upload-temp', [AcercadeController::class, 'uploadTemp']);
 $router->post('/admin/acercade/update', [AcercadeController::class, 'update']);
+
+// Testimonios
+$router->get('/testimonios', [TestimoniosController::class, 'publicData']);
+$router->get('/admin/testimonios', [TestimoniosController::class, 'adminData']);
+$router->post('/admin/testimonios/upload-temp', [TestimoniosController::class, 'uploadTemp']);
+$router->post('/admin/testimonios/config/update', [TestimoniosController::class, 'updateConfig']);
+$router->post('/admin/testimonios/items', [TestimoniosController::class, 'create']);
+$router->post('/admin/testimonios/items/update', [TestimoniosController::class, 'update']);
+$router->post('/admin/testimonios/items/active', [TestimoniosController::class, 'setActive']);
+$router->post('/admin/testimonios/items/delete', [TestimoniosController::class, 'delete']);
+$router->post('/admin/testimonios/items/reorder', [TestimoniosController::class, 'reorder']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
