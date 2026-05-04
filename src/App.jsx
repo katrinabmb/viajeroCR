@@ -5,6 +5,7 @@ import { AfiliadosPage } from '@/pages/afiliados-page'
 import { HomePage } from '@/pages/home-page'
 import { LoginPage } from '@/pages/login-page'
 import { Seccion1SliderPage } from '@/pages/seccion1-slider-page'
+import { Seccion3DestinosPage } from '@/pages/seccion3-destinos-page'
 import { fetchSession } from '@/store/auth-slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
@@ -50,6 +51,14 @@ function App() {
         element={
           <ProtectedRoute>
             <AfiliadosPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/seccion3"
+        element={
+          <ProtectedRoute>
+            <Seccion3DestinosPage />
           </ProtectedRoute>
         }
       />
