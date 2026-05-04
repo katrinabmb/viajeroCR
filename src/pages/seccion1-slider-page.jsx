@@ -52,6 +52,7 @@ export function Seccion1SliderPage() {
   const [selectedFileName, setSelectedFileName] = useState('')
   const [isPending, startTransition] = useTransition()
   const [dragId, setDragId] = useState(null)
+  const [imageModal, setImageModal] = useState({ open: false, url: '', title: '' })
 
   const isEditing = Boolean(editing?.id_slider)
 
@@ -223,6 +224,44 @@ export function Seccion1SliderPage() {
 
   return (
     <DashboardLayout title="Seccion 1 (Slider)" description={headerDescription}>
+      {imageModal.open ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
+          <button
+            type="button"
+            aria-label="Cerrar preview"
+            className="absolute inset-0 bg-slate-950/60"
+            onClick={() => setImageModal({ open: false, url: '', title: '' })}
+          />
+          <div className="relative z-10 w-full max-w-5xl overflow-hidden rounded-[1.6rem] border border-white/15 bg-white shadow-[0_30px_120px_rgba(15,23,42,0.4)]">
+            <div className="flex items-center justify-between gap-3 border-b border-slate-200 bg-white/90 px-4 py-3">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-slate-950">
+                  {imageModal.title || 'Preview'}
+                </p>
+                <p className="truncate text-xs text-slate-500">{imageModal.url}</p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-2xl"
+                onClick={() => setImageModal({ open: false, url: '', title: '' })}
+              >
+                Cerrar
+              </Button>
+            </div>
+            <div className="bg-slate-950/5 p-4">
+              <div className="flex max-h-[75vh] items-center justify-center overflow-auto rounded-2xl bg-white p-3">
+                <img
+                  src={imageModal.url}
+                  alt={imageModal.title || 'Preview'}
+                  className="max-h-[70vh] w-auto max-w-full object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         <Card className="border-white/70 bg-white/80 backdrop-blur-xl">
           <CardHeader className="p-6">
@@ -310,7 +349,20 @@ export function Seccion1SliderPage() {
                       </div>
                       <div className="h-16 w-24 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
                         {imageUrl ? (
-                          <img src={imageUrl} alt={item.title} className="h-full w-full object-cover" />
+                          <button
+                            type="button"
+                            className="h-full w-full"
+                            aria-label="Ver imagen"
+                            onClick={() =>
+                              setImageModal({
+                                open: true,
+                                url: imageUrl,
+                                title: item.title ?? 'Slide',
+                              })
+                            }
+                          >
+                            <img src={imageUrl} alt={item.title} className="h-full w-full object-cover" />
+                          </button>
                         ) : null}
                       </div>
                       <div className="min-w-0">
