@@ -13,6 +13,8 @@ import { AcercadePage } from '@/pages/acercade-page'
 import { TestimoniosPage } from '@/pages/testimonios-page'
 import { FooterPage } from '@/pages/footer-page'
 import { WhatsappPage } from '@/pages/whatsapp-page'
+import { CotizacionesPage } from '@/pages/cotizaciones-page'
+import { ServiciosInteresPage } from '@/pages/servicios-interes-page'
 import { fetchSession } from '@/store/auth-slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
@@ -122,6 +124,22 @@ function App() {
         element={
           <ProtectedRoute>
             <WhatsappPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cotizaciones"
+        element={
+          <ProtectedRoute>
+            <CotizacionesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/servicios-interes"
+        element={
+          <ProtectedRoute>
+            <ServiciosInteresPage />
           </ProtectedRoute>
         }
       />
