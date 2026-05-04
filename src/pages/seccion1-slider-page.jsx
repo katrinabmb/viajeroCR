@@ -320,6 +320,7 @@ export function Seccion1SliderPage() {
                 <Input
                   id="sort_order"
                   type="number"
+                  min={0}
                   value={form.sort_order}
                   onChange={(e) => setForm((c) => ({ ...c, sort_order: e.target.value }))}
                 />
