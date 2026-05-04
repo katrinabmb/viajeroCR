@@ -249,7 +249,11 @@ export function TestimoniosPage() {
                     <div className="flex min-w-0 items-center gap-4">
                       <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500"><GripVertical className="size-4" /></div>
                       <div className="h-12 w-12 overflow-hidden rounded-full border border-slate-200 bg-slate-50">{photoUrl ? <img src={photoUrl} alt={item.author_name} className="h-full w-full object-cover" /> : null}</div>
-                      <div className="min-w-0"><p className="truncate text-sm font-semibold text-slate-950">{item.author_name}</p><p className="mt-1 text-xs text-slate-400">{item.destino} | Orden: {item.sort_order}</p></div>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-slate-950">{item.author_name}</p>
+                        <p className="mt-1 text-xs text-slate-400">{item.destino} | Orden: {item.sort_order}</p>
+                        <p className="mt-2 line-clamp-2 max-w-[560px] text-sm text-slate-600">{item.testimonio}</p>
+                      </div>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 self-end sm:self-auto">
                       <Button variant="outline" className="rounded-2xl" onClick={() => startEdit(item)}><Pencil className="mr-2 size-4" />Editar</Button>
