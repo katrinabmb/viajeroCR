@@ -109,7 +109,7 @@ export function Seccion1SliderPage() {
     const payload = {
       title: form.title?.trim(),
       subtitle: form.subtitle?.trim(),
-      sort_order: Number(form.sort_order ?? 0),
+      sort_order: Math.max(1, Number(form.sort_order || 1)),
     }
 
     try {
@@ -469,8 +469,17 @@ export function Seccion1SliderPage() {
                   value={form.sort_order}
                   onChange={(e) => {
                     const raw = e.target.value
-                    const next = raw === '' ? 1 : Number(raw)
-                    setForm((c) => ({ ...c, sort_order: Number.isFinite(next) ? Math.max(1, next) : 1 }))
+                    if (raw === '') {
+                      setForm((c) => ({ ...c, sort_order: '' }))
+                      return
+                    }
+                    const next = Number(raw)
+                    setForm((c) => ({ ...c, sort_order: Number.isFinite(next) ? next : '' }))
+                  }}
+                  onBlur={() => {
+                    if (form.sort_order === '' || form.sort_order == null) {
+                      setForm((c) => ({ ...c, sort_order: 1 }))
+                    }
                   }}
                 />
               </div>
