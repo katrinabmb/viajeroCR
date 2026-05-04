@@ -389,7 +389,7 @@ export function Seccion2PartnersPage() {
                         {tempKey ? (
                           <span className="font-medium text-slate-900">Temp listo</span>
                         ) : (
-                          <span>Sube una imagen (jpg/png/webp).</span>
+                          <span>Sube una imagen (jpg/png/webp/svg).</span>
                         )}
                         {selectedFileName ? (
                           <div className="mt-1 text-xs text-slate-500">Archivo: {selectedFileName}</div>
