@@ -172,15 +172,15 @@ const Form = ({ onClose }) => {
           }
         }
         if (!response.ok || !responseData?.success) {
-          throw new Error(responseData?.message || `No se pudo enviar la solicitud. HTTP ${response.status}`);
+          throw new Error(responseData?.message || `No se pudo registrar la solicitud. HTTP ${response.status}`);
         }
 
         setOpenSending(false);
         setIsFormVisible(false);
         await showFormAlert({
           icon: "success",
-          title: "Hemos recibido tu solicitud",
-          text: "Gracias por escribirnos. Un agente de Viajero CR web te contactará muy pronto con toda la información.",
+          title: "Solicitud registrada",
+          text: "Tu cotización fue guardada correctamente en el sistema.",
         });
         resetForm();
         handleClose();
@@ -189,8 +189,8 @@ const Form = ({ onClose }) => {
         setIsFormVisible(false);
         await showFormAlert({
           icon: "error",
-          title: "No pudimos completar el envío",
-          text: error.message || "Ocurrió un error al enviar la solicitud.",
+          title: "No pudimos registrar la solicitud",
+          text: error.message || "Ocurrió un error al guardar la cotización.",
         });
         setIsFormVisible(true);
       } finally {
