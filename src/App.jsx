@@ -11,6 +11,7 @@ import { Seccion4ServiciosPage } from '@/pages/seccion4-servicios-page'
 import { Seccion5SalidasPage } from '@/pages/seccion5-salidas-page'
 import { AcercadePage } from '@/pages/acercade-page'
 import { TestimoniosPage } from '@/pages/testimonios-page'
+import { FooterPage } from '@/pages/footer-page'
 import { fetchSession } from '@/store/auth-slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
@@ -104,6 +105,14 @@ function App() {
         element={
           <ProtectedRoute>
             <TestimoniosPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/footer"
+        element={
+          <ProtectedRoute>
+            <FooterPage />
           </ProtectedRoute>
         }
       />

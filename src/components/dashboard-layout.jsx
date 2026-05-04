@@ -51,6 +51,11 @@ const navItems = [
     path: '/testimonios',
     icon: Handshake,
   },
+  {
+    label: 'Footer',
+    path: '/footer',
+    icon: Image,
+  },
 ]
 
 export function DashboardLayout({ title, description, children }) {
