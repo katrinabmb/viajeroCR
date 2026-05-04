@@ -47,7 +47,7 @@ export function TestimoniosPage() {
     setIsLoading(true)
     setError(null)
     try {
-      const data = await apiFetch('/admin/testimonios')
+      const data = await apiFetch('/testimonios')
       const cfg = data.config ?? {}
       setConfig({
         title: cfg.title ?? 'Testimonios',
@@ -56,7 +56,7 @@ export function TestimoniosPage() {
       const one = rs.find((x) => Number(x.slot_no) === 1) ?? { slot_no: 1, image_path: '' }
       const two = rs.find((x) => Number(x.slot_no) === 2) ?? { slot_no: 2, image_path: '' }
       setRecuerdos([one, two])
-      setItems(data.items ?? [])
+      setItems((data.items ?? []).map((x) => ({ ...x, is_active: Number(x.is_active ?? 1) })))
     } catch (err) {
       setError(err?.message ?? 'No se pudo cargar.')
     } finally {
