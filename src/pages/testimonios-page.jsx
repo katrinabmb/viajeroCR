@@ -19,6 +19,12 @@ export function TestimoniosPage() {
   const [dragId, setDragId] = useState(null)
 
   const [config, setConfig] = useState({ title: 'Testimonios' })
+  const [recuerdos, setRecuerdos] = useState([
+    { slot_no: 1, image_path: '' },
+    { slot_no: 2, image_path: '' },
+  ])
+  const [tempRecuerdo1, setTempRecuerdo1] = useState('')
+  const [tempRecuerdo2, setTempRecuerdo2] = useState('')
 
   const [items, setItems] = useState([])
   const [editing, setEditing] = useState(null)
@@ -46,6 +52,10 @@ export function TestimoniosPage() {
       setConfig({
         title: cfg.title ?? 'Testimonios',
       })
+      const rs = Array.isArray(data.recuerdos) ? data.recuerdos : []
+      const one = rs.find((x) => Number(x.slot_no) === 1) ?? { slot_no: 1, image_path: '' }
+      const two = rs.find((x) => Number(x.slot_no) === 2) ?? { slot_no: 2, image_path: '' }
+      setRecuerdos([one, two])
       setItems(data.items ?? [])
     } catch (err) {
       setError(err?.message ?? 'No se pudo cargar.')
@@ -112,6 +122,29 @@ export function TestimoniosPage() {
       await toastSuccess('Configuracion actualizada.')
     } catch (err) {
       const m = err?.message ?? 'No se pudo guardar.'
+      setError(m); showBanner('error', m); await toastError(m)
+    }
+  }
+
+  async function saveRecuerdo(slotNo) {
+    const tempKey = slotNo === 1 ? tempRecuerdo1 : tempRecuerdo2
+    if (!tempKey) {
+      const m = `Primero sube imagen para el slot ${slotNo}.`
+      setError(m); showBanner('error', m); await toastError(m); return
+    }
+    try {
+      await apiFetch('/admin/testimonios/recuerdos/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slot_no: slotNo, temp_image_key: tempKey }),
+      })
+      if (slotNo === 1) setTempRecuerdo1('')
+      if (slotNo === 2) setTempRecuerdo2('')
+      await load()
+      showBanner('success', `Recuerdo ${slotNo} actualizado.`)
+      await toastSuccess(`Recuerdo ${slotNo} actualizado.`)
+    } catch (err) {
+      const m = err?.message ?? 'No se pudo guardar el recuerdo.'
       setError(m); showBanner('error', m); await toastError(m)
     }
   }
@@ -224,6 +257,60 @@ export function TestimoniosPage() {
             <Separator className="bg-slate-200/80" />
             <div className="space-y-2"><Label>Titulo</Label><Input value={config.title} onChange={(e) => setConfig((c) => ({ ...c, title: e.target.value }))} /></div>
             <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={saveConfig}>Guardar configuracion</Button>
+          </CardContent>
+        </Card>
+
+        <Card className="border-white/70 bg-white/80 backdrop-blur-xl">
+          <CardHeader className="p-6">
+            <CardTitle className="text-2xl">Recuerdos (2 imagenes fijas)</CardTitle>
+            <CardDescription className="mt-2">Solo se permiten dos imagenes: slot 1 y slot 2.</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 pt-0">
+            <Separator className="mb-5 bg-slate-200/80" />
+            <div className="grid gap-4 md:grid-cols-2">
+              {[1, 2].map((slotNo) => {
+                const item = recuerdos.find((x) => Number(x.slot_no) === slotNo) ?? { slot_no: slotNo, image_path: '' }
+                const tempKey = slotNo === 1 ? tempRecuerdo1 : tempRecuerdo2
+                const imageSrc = item.image_path ? `${API_BASE_URL}${item.image_path}` : ''
+                return (
+                  <div key={slotNo} className="space-y-3 rounded-[1.4rem] border border-slate-200 bg-white/70 p-4">
+                    <p className="text-sm font-semibold text-slate-900">Imagen {slotNo}</p>
+                    <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm">
+                      <Upload className="size-4" />
+                      Subir
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const f = e.target.files?.[0]
+                          e.target.value = ''
+                          const u = await uploadAny(f, slotNo === 1 ? setTempRecuerdo1 : setTempRecuerdo2)
+                          if (u) {
+                            setRecuerdos((prev) => prev.map((r) => Number(r.slot_no) === slotNo ? { ...r, image_path: u } : r))
+                          }
+                        }}
+                      />
+                    </label>
+                    {tempKey ? <p className="text-xs text-slate-500">Imagen temporal lista para guardar.</p> : null}
+                    {imageSrc ? (
+                      <img
+                        src={item.image_path.startsWith('blob:') ? item.image_path : imageSrc}
+                        alt={`Recuerdo ${slotNo}`}
+                        className="max-h-48 w-full rounded-2xl border border-slate-200 object-contain bg-slate-50"
+                      />
+                    ) : (
+                      <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-500">
+                        Sin imagen en este slot.
+                      </div>
+                    )}
+                    <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={() => saveRecuerdo(slotNo)}>
+                      Guardar imagen {slotNo}
+                    </Button>
+                  </div>
+                )
+              })}
+            </div>
           </CardContent>
         </Card>
 
