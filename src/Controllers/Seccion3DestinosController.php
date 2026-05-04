@@ -422,6 +422,17 @@ final class Seccion3DestinosController
                 ], 404);
             }
 
+            // Avoid UNIQUE(sort_order) collisions while reordering.
+            // Step 1: move all involved rows to a high offset, then assign 1..N.
+            $offset = 100000;
+            $bump = $db->prepare(
+                "UPDATE tbl_seccion3_continent
+                 SET sort_order = sort_order + $offset,
+                     updated_at = CURRENT_TIMESTAMP
+                 WHERE id_continent IN ($placeholders)"
+            );
+            $bump->execute($ids);
+
             $update = $db->prepare(
                 'UPDATE tbl_seccion3_continent
                  SET sort_order = :sort_order, updated_at = CURRENT_TIMESTAMP
@@ -667,6 +678,17 @@ final class Seccion3DestinosController
                 ], 404);
             }
 
+            // Avoid UNIQUE(sort_order) collisions while reordering (unique per continent).
+            // Step 1: move all involved rows to a high offset, then assign 1..N.
+            $offset = 100000;
+            $bump = $db->prepare(
+                "UPDATE tbl_seccion3_destination
+                 SET sort_order = sort_order + $offset,
+                     updated_at = CURRENT_TIMESTAMP
+                 WHERE id_continent = ? AND id_destination IN ($placeholders)"
+            );
+            $bump->execute(array_merge([$continentId], $ids));
+
             $update = $db->prepare(
                 'UPDATE tbl_seccion3_destination
                  SET sort_order = :sort_order, updated_at = CURRENT_TIMESTAMP
@@ -795,4 +817,3 @@ final class Seccion3DestinosController
         return (bool) $stmt->fetchColumn();
     }
 }
-
