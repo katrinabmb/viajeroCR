@@ -8,6 +8,7 @@ import { Seccion2PartnersPage } from '@/pages/seccion2-partners-page'
 import { Seccion1SliderPage } from '@/pages/seccion1-slider-page'
 import { Seccion3DestinosPage } from '@/pages/seccion3-destinos-page'
 import { Seccion4ServiciosPage } from '@/pages/seccion4-servicios-page'
+import { Seccion5SalidasPage } from '@/pages/seccion5-salidas-page'
 import { fetchSession } from '@/store/auth-slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
@@ -77,6 +78,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Seccion4ServiciosPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/seccion5/salidas"
+        element={
+          <ProtectedRoute>
+            <Seccion5SalidasPage />
           </ProtectedRoute>
         }
       />
