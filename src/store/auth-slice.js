@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { getApiBaseUrl } from '@/lib/api-base-url'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost/ViajeroSistem/api'
+const API_BASE_URL = getApiBaseUrl()
 
 async function parseApiResponse(response) {
   const text = await response.text()
