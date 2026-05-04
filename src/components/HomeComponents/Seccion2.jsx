@@ -1,119 +1,55 @@
-import { Stack, Typography } from "@mui/material"
-import PropTypes from "prop-types";
-
+import { Stack } from '@mui/material'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
+import { fetchSeccion2Data } from '../../store/seccion2Slice'
 
 const Seccion2 = ({ id }) => {
-    const logos = [
-        {
-            id: 1,
-            image: '/images/partners/aeromexico.svg'
-        },
-        {
-            id: 2,
-            image: '/images/partners/airfrance.svg'
-        },
-        {
-            id: 3,
-            image: '/images/partners/american.svg'
-        },
-        {
-            id: 4,
-            image: '/images/partners/avianca.svg'
-        },
-        {
-            id: 5,
-            image: '/images/partners/barcelo.svg'
-        },
-        
-        {
-            id: 7,
-            image: '/images/partners/copa.svg'
-        },
-        {
-            id: 8,
-            image: '/images/partners/decameron.svg'
-        },
-        {
-            id: 9,
-            image: '/images/partners/delta.svg'
-        },
-        {
-            id: 10,
-            image: '/images/partners/etihad.svg'
-        },
-        {
-            id: 11,
-            image: '/images/partners/flyemirates.svg'
-        },
-        {
-            id: 12,
-            image: '/images/partners/hamptoninn.svg'
-        },
-        {
-            id: 13,
-            image: '/images/partners/holidayinn.svg'
-        },
-        {
-            id: 14,
-            image: '/images/partners/iberia.svg'
-        },
-        {
-            id: 15,
-            image: '/images/partners/KLM.svg'
-        },
-        {
-            id: 16,
-            image: '/images/partners/ins.svg'
-        },
-        {
-            id: 17,
-            image: '/images/partners/qantas.svg'
-        },
-        {
-            id: 18,
-            image: '/images/partners/united.svg'
-        },
-        {
-            id: 19,
-            image: '/images/partners/usairways.svg'
-        },
-        {
-            id: 20,
-            image: '/images/partners/meic.svg'
-        },
-        {
-            id: 21,
-            image: '/images/partners/ict.svg'
-        },
-        
-    ]
+  const dispatch = useDispatch()
+  const logos = useSelector((state) => state.seccion2.logos)
+  const shouldAnimate = logos.length > 2
+  const loopCopies = shouldAnimate ? [0, 1] : [0]
+
+  useEffect(() => {
+    dispatch(fetchSeccion2Data())
+  }, [dispatch])
+
+  if (!Array.isArray(logos) || logos.length === 0) {
+    return null
+  }
 
   return (
-    <Stack id={id} direction="column" alignItems="flex-start" justifyContent="center" spacing={4} style={{width: "100%", padding: "2% 0", backgroundColor: "#000"}}>
-
-{/* <Typography className="seccion2-title">Proveedores y afiliados</Typography> */}
-<div style={{width: "100%", height: "2px", backgroundColor: "#C39D65"}}></div>
- <Stack className="seccion2-marquee" direction="row" alignItems="center">
-        <Stack className="seccion2-track" direction="row" alignItems="center">
-            {[0, 1].map((dup) => (
-                <Stack className="seccion2-group" direction="row" alignItems="center" key={`partners-group-${dup}`}>
-                    {logos.map((logo) => (
-                        <Stack className="seccion2-item" key={`${logo.id}-${dup}`}>
-                            <img className="seccion2-logo" src={logo.image} alt={`logo-${logo.id}`} loading="lazy" />
-                        </Stack>
-                    ))}
+    <Stack id={id} direction="column" alignItems="flex-start" justifyContent="center" spacing={4} style={{ width: '100%', padding: '2% 0', backgroundColor: '#000' }}>
+      <div style={{ width: '100%', height: '2px', backgroundColor: '#C39D65' }} />
+      <Stack
+        className={`seccion2-marquee ${!shouldAnimate ? 'seccion2-marquee-static' : ''}`}
+        direction="row"
+        alignItems="center"
+      >
+        <Stack
+          className={`seccion2-track ${!shouldAnimate ? 'seccion2-track-static' : ''}`}
+          direction="row"
+          alignItems="center"
+        >
+          {loopCopies.map((dup) => (
+            <Stack className="seccion2-group" direction="row" alignItems="center" key={`partners-group-${dup}`}>
+              {logos.map((logo) => (
+                <Stack className="seccion2-item" key={`${logo.id}-${dup}`}>
+                  <img className="seccion2-logo" src={logo.image} alt={`logo-${logo.id}`} loading="lazy" />
                 </Stack>
-            ))}
+              ))}
+            </Stack>
+          ))}
         </Stack>
+      </Stack>
+      <div style={{ width: '100%', height: '2px', backgroundColor: '#C39D65' }} />
     </Stack>
-    <div style={{width: "100%", height: "2px", backgroundColor: "#C39D65"}}></div>
-    </Stack>
-   
   )
 }
 
 Seccion2.propTypes = {
   id: PropTypes.string,
-};
+}
 
 export default Seccion2
+

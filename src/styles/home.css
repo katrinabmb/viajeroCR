@@ -129,6 +129,15 @@
     will-change: transform;
     -webkit-animation: seccion2-scroll 55s linear infinite;
 }
+.seccion2-marquee-static{
+    display: flex !important;
+    justify-content: center;
+}
+.seccion2-track-static{
+    animation: none !important;
+    -webkit-animation: none !important;
+    width: auto;
+}
 
 .seccion2-group{
     display: inline-flex;

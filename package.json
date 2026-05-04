@@ -14,9 +14,11 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
+    "@reduxjs/toolkit": "^2.11.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-phone-input-2": "^2.15.1",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.0",
     "sweetalert2": "^11.26.21"
   },

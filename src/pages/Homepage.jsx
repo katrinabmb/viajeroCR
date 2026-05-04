@@ -12,9 +12,11 @@ import Footer from "../components/global/Footer";
 import { useLocation } from "react-router-dom";
 import Testimonios from "../components/HomeComponents/Testimonios";
 import Acercade from "../components/HomeComponents/Acercade";
+import { getApiBaseUrl } from "../store/apiBase";
 
 const Homepage = () => {
   const [formOpen, setFormOpen] = useState(false);
+  const [waHref, setWaHref] = useState("https://wa.me/50683429727");
   const location = useLocation();
 
   useEffect(() => {
@@ -28,13 +30,46 @@ const Homepage = () => {
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [location.hash]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadWhatsappConfig = async () => {
+      try {
+        const apiBase = getApiBaseUrl();
+        const response = await fetch(`${apiBase}/whatsapp`);
+        const data = await response.json();
+
+        if (!response.ok || data?.success === false || !data?.item?.phone) return;
+
+        const rawPhone = String(data.item.phone);
+        const phone = rawPhone.replace(/[^\d]/g, "");
+        if (!phone) return;
+
+        const rawMessage = String(data.item.default_message ?? "").trim();
+        const href = rawMessage
+          ? `https://wa.me/${phone}?text=${encodeURIComponent(rawMessage)}`
+          : `https://wa.me/${phone}`;
+
+        if (isMounted) setWaHref(href);
+      } catch {
+        // Mantiene fallback local si falla API
+      }
+    };
+
+    loadWhatsappConfig();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <>
       <Navbar onContactClick={() => setFormOpen((prev) => !prev)} />
       {formOpen && <Form onClose={() => setFormOpen(false)} />}
       <a
         className="btnWA"
-        href="https://wa.me/50683429727"
+        href={waHref}
         target="_blank"
         rel="noopener noreferrer"
       >

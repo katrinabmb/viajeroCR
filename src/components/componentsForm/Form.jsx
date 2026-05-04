@@ -1,25 +1,11 @@
 import { Backdrop, Button, CircularProgress, Stack, Typography, useMediaQuery } from "@mui/material"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import CountryCode from "./CountryCode";
 import "./form.css";
+import { getApiBaseUrl } from "../../store/apiBase";
 // import { sendFormApi } from "../../store/thunks";
-
-const SERVICES_OPTIONS = [
-  "salidas grupales",
-  "circuitos regulares",
-  "viajes personalizados",
-  "viajes familiares",
-  "boletos",
-  "hoteles",
-  "traslados",
-  "tours",
-  "seguros",
-  "visas",
-];
-
-const CONTACT_API_URL = "https://send-form.viajerocr.com/send-form.php";
 
 const showFormAlert = ({ icon, title, text }) =>
   Swal.fire({
@@ -43,6 +29,7 @@ const Form = ({ onClose }) => {
     const computer = useMediaQuery('(min-width: 1025px) and (max-width: 1599px)');
     const [openSending, setOpenSending] = useState(false);
     const [isFormVisible, setIsFormVisible] = useState(true);
+    const [servicesOptions, setServicesOptions] = useState([]);
     const [formData, setFormData] = useState({
       name: "",
       email: "",
@@ -54,6 +41,25 @@ const Form = ({ onClose }) => {
       inquiry: "",
     });
     const navigate = useNavigate();
+    const apiBase = getApiBaseUrl();
+
+    const loadServices = async () => {
+      try {
+        const response = await fetch(`${apiBase}/servicios-interes`);
+        const data = await response.json();
+        if (!response.ok || data?.success === false) {
+          throw new Error("No se pudo cargar servicios.");
+        }
+        setServicesOptions(Array.isArray(data?.items) ? data.items : []);
+      } catch {
+        setServicesOptions([]);
+      }
+    };
+
+    useEffect(() => {
+      loadServices();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const handleClose = () => {
       if (typeof onClose === "function") {
         onClose();
@@ -137,12 +143,18 @@ const Form = ({ onClose }) => {
       setOpenSending(true);
       try {
         const payload = {
-          ...formData,
-          daysQuantity: String(formData.daysQuantity ?? "").trim() || "0",
-          approximateTravelDates: String(formData.approximateTravelDates ?? "").trim(),
+          nombre_completo: formData.name,
+          correo: formData.email,
+          telefono: formData.phone,
+          fechas_aproximadas: String(formData.approximateTravelDates ?? "").trim() || "Pendiente por definir",
+          cantidad_personas: Number(formData.peopleQuantity),
+          cantidad_dias: String(formData.daysQuantity ?? "").trim() ? Number(formData.daysQuantity) : null,
+          id_servicio_interes: Number(formData.serviceInterest),
+          servicio_interes_id: Number(formData.serviceInterest),
+          destino_detalles: formData.inquiry,
         };
 
-        const response = await fetch(CONTACT_API_URL, {
+        const response = await fetch(`${apiBase}/cotizaciones`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -447,9 +459,9 @@ const Form = ({ onClose }) => {
                     <option value="" disabled>
                       Servicios de interés
                     </option>
-                    {SERVICES_OPTIONS.map((service) => (
-                      <option key={service} value={service}>
-                        {service}
+                    {servicesOptions.map((service) => (
+                      <option key={service.id_servicio_interes} value={service.id_servicio_interes}>
+                        {service.nombre}
                       </option>
                     ))}
                   </select>
