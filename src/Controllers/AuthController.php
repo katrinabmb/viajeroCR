@@ -344,7 +344,24 @@ final class AuthController
     private function findUserByEmail(string $email): ?array
     {
         $connection = Database::connection();
-        $statement = $connection->prepare('SELECT * FROM tbl_usuario WHERE correo = :correo LIMIT 1');
+        $canJoinPermiso = $this->hasTable($connection, 'tbl_permiso') && $this->hasColumn($connection, 'tbl_usuario', 'id_permiso');
+        $sql = $canJoinPermiso
+            ? 'SELECT
+                u.*,
+                p.codigo AS permiso_codigo,
+                p.nombre AS permiso_nombre
+             FROM tbl_usuario u
+             LEFT JOIN tbl_permiso p ON p.id_permiso = u.id_permiso
+             WHERE u.correo = :correo
+             LIMIT 1'
+            : 'SELECT
+                u.*,
+                "admin" AS permiso_codigo,
+                "Administrador" AS permiso_nombre
+             FROM tbl_usuario u
+             WHERE u.correo = :correo
+             LIMIT 1';
+        $statement = $connection->prepare($sql);
         $statement->execute([
             'correo' => $email,
         ]);
@@ -357,7 +374,24 @@ final class AuthController
     private function findUserById(int $userId): ?array
     {
         $connection = Database::connection();
-        $statement = $connection->prepare('SELECT * FROM tbl_usuario WHERE id_usuario = :id_usuario LIMIT 1');
+        $canJoinPermiso = $this->hasTable($connection, 'tbl_permiso') && $this->hasColumn($connection, 'tbl_usuario', 'id_permiso');
+        $sql = $canJoinPermiso
+            ? 'SELECT
+                u.*,
+                p.codigo AS permiso_codigo,
+                p.nombre AS permiso_nombre
+             FROM tbl_usuario u
+             LEFT JOIN tbl_permiso p ON p.id_permiso = u.id_permiso
+             WHERE u.id_usuario = :id_usuario
+             LIMIT 1'
+            : 'SELECT
+                u.*,
+                "admin" AS permiso_codigo,
+                "Administrador" AS permiso_nombre
+             FROM tbl_usuario u
+             WHERE u.id_usuario = :id_usuario
+             LIMIT 1';
+        $statement = $connection->prepare($sql);
         $statement->execute([
             'id_usuario' => $userId,
         ]);
@@ -493,11 +527,35 @@ final class AuthController
 
     private function mapSessionUser(array $user): array
     {
+        $role = (string) ($user['permiso_codigo'] ?? '');
+        if ($role === '') {
+            $role = 'admin';
+        }
+
         return [
             'id' => (int) $user['id_usuario'],
             'name' => (string) $user['nombre'],
             'email' => (string) $user['correo'],
             'status' => (string) $user['estado'],
+            'role' => $role,
+            'permission_name' => (string) ($user['permiso_nombre'] ?? ''),
         ];
+    }
+
+    private function hasTable(PDO $db, string $table): bool
+    {
+        $safeTable = str_replace(['\\', "'"], ['\\\\', "\\'"], $table);
+        $sql = "SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{$safeTable}' LIMIT 1";
+        $stmt = $db->query($sql);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    private function hasColumn(PDO $db, string $table, string $column): bool
+    {
+        $safeTable = str_replace(['\\', "'"], ['\\\\', "\\'"], $table);
+        $safeColumn = str_replace(['\\', "'"], ['\\\\', "\\'"], $column);
+        $sql = "SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '{$safeTable}' AND COLUMN_NAME = '{$safeColumn}' LIMIT 1";
+        $stmt = $db->query($sql);
+        return (bool) $stmt->fetchColumn();
     }
 }

@@ -19,6 +19,7 @@ use App\Controllers\WhatsappController;
 use App\Controllers\DashboardSummaryController;
 use App\Controllers\CotizacionesController;
 use App\Controllers\ServiciosInteresController;
+use App\Controllers\UsuariosController;
 use App\Core\Router;
 
 $router = new Router();
@@ -142,5 +143,13 @@ $router->get('/admin/servicios-interes', [ServiciosInteresController::class, 'ad
 $router->post('/admin/servicios-interes', [ServiciosInteresController::class, 'create']);
 $router->post('/admin/servicios-interes/update', [ServiciosInteresController::class, 'update']);
 $router->post('/admin/servicios-interes/active', [ServiciosInteresController::class, 'setActive']);
+
+// Usuarios + permisos
+$router->get('/admin/permisos', [UsuariosController::class, 'permisos']);
+$router->get('/admin/usuarios', [UsuariosController::class, 'list']);
+$router->post('/admin/usuarios', [UsuariosController::class, 'create']);
+$router->post('/admin/usuarios/update', [UsuariosController::class, 'update']);
+$router->post('/admin/usuarios/active', [UsuariosController::class, 'setActive']);
+$router->post('/admin/usuarios/password', [UsuariosController::class, 'changePassword']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
