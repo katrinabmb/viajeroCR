@@ -15,6 +15,7 @@ use App\Controllers\Seccion5SalidasController;
 use App\Controllers\AcercadeController;
 use App\Controllers\TestimoniosController;
 use App\Controllers\FooterController;
+use App\Controllers\WhatsappController;
 use App\Core\Router;
 
 $router = new Router();
@@ -117,5 +118,10 @@ $router->post('/admin/testimonios/items/reorder', [TestimoniosController::class,
 $router->get('/footer', [FooterController::class, 'publicData']);
 $router->get('/admin/footer', [FooterController::class, 'adminData']);
 $router->post('/admin/footer/update', [FooterController::class, 'update']);
+
+// WhatsApp
+$router->get('/whatsapp', [WhatsappController::class, 'publicData']);
+$router->get('/admin/whatsapp', [WhatsappController::class, 'adminData']);
+$router->post('/admin/whatsapp/update', [WhatsappController::class, 'update']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
