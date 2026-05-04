@@ -10,6 +10,7 @@ import { Seccion3DestinosPage } from '@/pages/seccion3-destinos-page'
 import { Seccion4ServiciosPage } from '@/pages/seccion4-servicios-page'
 import { Seccion5SalidasPage } from '@/pages/seccion5-salidas-page'
 import { AcercadePage } from '@/pages/acercade-page'
+import { TestimoniosPage } from '@/pages/testimonios-page'
 import { fetchSession } from '@/store/auth-slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
@@ -95,6 +96,14 @@ function App() {
         element={
           <ProtectedRoute>
             <AcercadePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/testimonios"
+        element={
+          <ProtectedRoute>
+            <TestimoniosPage />
           </ProtectedRoute>
         }
       />
