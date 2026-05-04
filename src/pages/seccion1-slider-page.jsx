@@ -44,10 +44,12 @@ export function Seccion1SliderPage() {
   const [items, setItems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState({ title: '', subtitle: '', sort_order: 0 })
   const [tempKey, setTempKey] = useState('')
   const [previewUrl, setPreviewUrl] = useState('')
+  const [selectedFileName, setSelectedFileName] = useState('')
   const [isPending, startTransition] = useTransition()
 
   const isEditing = Boolean(editing?.id_slider)
@@ -81,6 +83,7 @@ export function Seccion1SliderPage() {
     setForm({ title: '', subtitle: '', sort_order: 0 })
     setTempKey('')
     setPreviewUrl('')
+    setSelectedFileName('')
     setError(null)
   }
 
@@ -103,6 +106,8 @@ export function Seccion1SliderPage() {
   async function handleUpload(file) {
     if (!file) return
     setError(null)
+    setIsUploading(true)
+    setSelectedFileName(file.name ?? '')
 
     const formData = new FormData()
     formData.append('file', file)
@@ -123,6 +128,11 @@ export function Seccion1SliderPage() {
       setPreviewUrl(URL.createObjectURL(file))
     } catch (err) {
       setError(err?.message ?? 'No se pudo subir la imagen.')
+      setTempKey('')
+      setPreviewUrl('')
+    }
+    finally {
+      setIsUploading(false)
     }
   }
 
@@ -324,6 +334,12 @@ export function Seccion1SliderPage() {
           <CardContent className="p-6 pt-0">
             <Separator className="mb-5 bg-slate-200/80" />
 
+            {error ? (
+              <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {error}
+              </div>
+            ) : null}
+
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Titulo</Label>
@@ -352,7 +368,11 @@ export function Seccion1SliderPage() {
                   type="number"
                   min={0}
                   value={form.sort_order}
-                  onChange={(e) => setForm((c) => ({ ...c, sort_order: e.target.value }))}
+                  onChange={(e) => {
+                    const raw = e.target.value
+                    const next = raw === '' ? 0 : Number(raw)
+                    setForm((c) => ({ ...c, sort_order: Number.isFinite(next) ? Math.max(0, next) : 0 }))
+                  }}
                 />
               </div>
 
@@ -366,15 +386,23 @@ export function Seccion1SliderPage() {
                       ) : (
                         <span>Sube una imagen (jpg/png/webp).</span>
                       )}
+                      {selectedFileName ? (
+                        <div className="mt-1 text-xs text-slate-500">Archivo: {selectedFileName}</div>
+                      ) : null}
                     </div>
                     <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50">
                       <Upload className="size-4" />
-                      Subir
+                      {isUploading ? 'Subiendo...' : 'Subir'}
                       <input
                         type="file"
                         accept="image/*"
                         className="hidden"
-                        onChange={(e) => handleUpload(e.target.files?.[0])}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          // allow re-picking the same file
+                          e.target.value = ''
+                          handleUpload(file)
+                        }}
                       />
                     </label>
                   </div>
