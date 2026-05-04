@@ -196,6 +196,32 @@ export function CotizacionesPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    if (!detail || !Array.isArray(serviciosInteres) || serviciosInteres.length === 0) return
+
+    const currentId = Number(detail.id_servicio_interes ?? 0)
+    if (currentId > 0) return
+
+    const currentName = String(detail.servicio_interes ?? '').trim().toLowerCase()
+    if (!currentName) return
+
+    const match = serviciosInteres.find(
+      (item) => String(item?.nombre ?? '').trim().toLowerCase() === currentName
+    )
+    if (!match) return
+
+    setDetail((prev) => {
+      if (!prev) return prev
+      const prevId = Number(prev.id_servicio_interes ?? 0)
+      if (prevId > 0) return prev
+      return {
+        ...prev,
+        id_servicio_interes: match.id_servicio_interes,
+        servicio_interes: match.nombre,
+      }
+    })
+  }, [detail, serviciosInteres])
+
   async function handleSaveDetail() {
     if (!detail?.id_cotizacion) return
 
