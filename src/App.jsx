@@ -9,6 +9,7 @@ import { Seccion1SliderPage } from '@/pages/seccion1-slider-page'
 import { Seccion3DestinosPage } from '@/pages/seccion3-destinos-page'
 import { Seccion4ServiciosPage } from '@/pages/seccion4-servicios-page'
 import { Seccion5SalidasPage } from '@/pages/seccion5-salidas-page'
+import { AcercadePage } from '@/pages/acercade-page'
 import { fetchSession } from '@/store/auth-slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
@@ -86,6 +87,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Seccion5SalidasPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/acercade"
+        element={
+          <ProtectedRoute>
+            <AcercadePage />
           </ProtectedRoute>
         }
       />

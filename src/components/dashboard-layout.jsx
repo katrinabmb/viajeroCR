@@ -41,6 +41,11 @@ const navItems = [
     path: '/seccion5/salidas',
     icon: Compass,
   },
+  {
+    label: 'Acerca de',
+    path: '/acercade',
+    icon: Image,
+  },
 ]
 
 export function DashboardLayout({ title, description, children }) {
