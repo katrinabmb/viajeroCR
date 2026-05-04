@@ -13,6 +13,7 @@ $router = new Router();
 $router->get('/health', [HealthController::class, 'index']);
 $router->get('/auth/me', [AuthController::class, 'me']);
 $router->post('/auth/login', [AuthController::class, 'login']);
+$router->post('/auth/refresh', [AuthController::class, 'refresh']);
 $router->post('/auth/logout', [AuthController::class, 'logout']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');

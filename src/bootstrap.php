@@ -27,17 +27,6 @@ $isHttps = (
     || (int) ($_SERVER['SERVER_PORT'] ?? 0) === 443
 );
 
-session_name('viajero_session');
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path' => '/',
-    'domain' => '',
-    'secure' => $isHttps,
-    'httponly' => true,
-    'samesite' => 'Lax',
-]);
-session_start();
-
 header('Content-Type: application/json; charset=utf-8');
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';

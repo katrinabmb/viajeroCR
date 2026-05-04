@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS tbl_usuario_refresh_token (
     token_hash VARCHAR(255) NOT NULL,
     expires_at DATETIME NOT NULL,
     revoked_at DATETIME NULL,
+    last_used_at DATETIME NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id_refresh_token),

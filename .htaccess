@@ -1,5 +1,16 @@
 RewriteEngine On
 
+# Allow trusted dashboard/frontend origins to call the API.
+SetEnvIfNoCase Origin "^https?://(localhost:5173|localhost:5174|dashboard\.viajerocr\.com|send-form\.viajerocr\.com|api\.viajerocr\.com)$" ORIGIN_ALLOWED=$0
+
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin %{ORIGIN_ALLOWED}e env=ORIGIN_ALLOWED
+    Header always set Access-Control-Allow-Credentials "true"
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+    Header always set Vary "Origin"
+</IfModule>
+
 # Let existing files and directories resolve normally.
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
