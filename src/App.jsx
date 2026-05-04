@@ -15,6 +15,7 @@ import { FooterPage } from '@/pages/footer-page'
 import { WhatsappPage } from '@/pages/whatsapp-page'
 import { CotizacionesPage } from '@/pages/cotizaciones-page'
 import { ServiciosInteresPage } from '@/pages/servicios-interes-page'
+import { UsuariosPage } from '@/pages/usuarios-page'
 import { fetchSession } from '@/store/auth-slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
@@ -140,6 +141,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ServiciosInteresPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/usuarios"
+        element={
+          <ProtectedRoute requireAdmin>
+            <UsuariosPage />
           </ProtectedRoute>
         }
       />

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ClipboardList, Compass, Handshake, Home, Image, ImagePlus, LogOut, Menu, MessageCircle, PanelLeftClose, PanelLeftOpen, Tags, X } from 'lucide-react'
+import { ClipboardList, Compass, Handshake, Home, Image, ImagePlus, LogOut, Menu, MessageCircle, PanelLeftClose, PanelLeftOpen, Tags, UserCog, X } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { signOut } from '@/store/auth-slice'
@@ -71,6 +71,12 @@ const navItems = [
     path: '/servicios-interes',
     icon: Tags,
   },
+  {
+    label: 'Usuarios',
+    path: '/usuarios',
+    icon: UserCog,
+    onlyAdmin: true,
+  },
 ]
 
 export function DashboardLayout({ title, description, children }) {
@@ -88,6 +94,8 @@ export function DashboardLayout({ title, description, children }) {
   function closeMobileMenu() {
     setIsMobileMenuOpen(false)
   }
+
+  const visibleNavItems = navItems.filter((item) => !(item.onlyAdmin && user?.role !== 'admin'))
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(245,158,11,0.18),_transparent_30%),linear-gradient(135deg,_#f8fafc_0%,_#fff7ed_45%,_#eff6ff_100%)] text-slate-950">
@@ -139,7 +147,7 @@ export function DashboardLayout({ title, description, children }) {
 
           <nav className="flex-1 px-3 py-4">
             <div className="space-y-2">
-              {navItems.map(({ label, path, icon: Icon }) => (
+              {visibleNavItems.map(({ label, path, icon: Icon }) => (
                 <NavLink
                   key={path}
                   to={path}
