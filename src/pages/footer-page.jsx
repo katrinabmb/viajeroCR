@@ -36,7 +36,7 @@ export function FooterPage() {
     setIsLoading(true)
     setError(null)
     try {
-      const data = await apiFetch('/admin/footer')
+      const data = await apiFetch('/footer')
       const item = data.item ?? null
       if (item) {
         setForm({
@@ -157,4 +157,3 @@ export function FooterPage() {
     </DashboardLayout>
   )
 }
-
