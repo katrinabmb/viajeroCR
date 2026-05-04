@@ -16,6 +16,7 @@ use App\Controllers\AcercadeController;
 use App\Controllers\TestimoniosController;
 use App\Controllers\FooterController;
 use App\Controllers\WhatsappController;
+use App\Controllers\DashboardSummaryController;
 use App\Core\Router;
 
 $router = new Router();
@@ -123,5 +124,8 @@ $router->post('/admin/footer/update', [FooterController::class, 'update']);
 $router->get('/whatsapp', [WhatsappController::class, 'publicData']);
 $router->get('/admin/whatsapp', [WhatsappController::class, 'adminData']);
 $router->post('/admin/whatsapp/update', [WhatsappController::class, 'update']);
+
+// Dashboard summary
+$router->get('/admin/dashboard/summary', [DashboardSummaryController::class, 'adminSummary']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
