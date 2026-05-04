@@ -4,6 +4,7 @@ import { ProtectedRoute } from '@/components/protected-route'
 import { AfiliadosPage } from '@/pages/afiliados-page'
 import { HomePage } from '@/pages/home-page'
 import { LoginPage } from '@/pages/login-page'
+import { Seccion2PartnersPage } from '@/pages/seccion2-partners-page'
 import { Seccion1SliderPage } from '@/pages/seccion1-slider-page'
 import { Seccion3DestinosPage } from '@/pages/seccion3-destinos-page'
 import { Seccion4ServiciosPage } from '@/pages/seccion4-servicios-page'
@@ -44,6 +45,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Seccion1SliderPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/seccion2/partners"
+        element={
+          <ProtectedRoute>
+            <Seccion2PartnersPage />
           </ProtectedRoute>
         }
       />
