@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useTransition } from 'react'
 import { CheckCircle2, GripVertical, ImagePlus, Pencil, RefreshCw, Trash2, Upload, XCircle } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { Button } from '@/components/ui/button'
@@ -15,6 +15,9 @@ export function Seccion4ServiciosPage() {
   const [banner, setBanner] = useState(null)
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [selectedFileName, setSelectedFileName] = useState('')
+  const [isPending, startTransition] = useTransition()
 
   const [sectionTitle, setSectionTitle] = useState('Servicios')
   const [items, setItems] = useState([])
@@ -80,6 +83,7 @@ export function Seccion4ServiciosPage() {
     setForm({ title: '', title2: '', description: '', sort_order: '' })
     setTempKey('')
     setPreviewUrl('')
+    setSelectedFileName('')
   }
 
   function startEdit(item) {
@@ -92,11 +96,14 @@ export function Seccion4ServiciosPage() {
     })
     setTempKey('')
     setPreviewUrl(item.image_path ? `${API_BASE_URL}${item.image_path}` : '')
+    setSelectedFileName('')
   }
 
   async function uploadImage(file) {
     if (!file) return
     setError(null)
+    setIsUploading(true)
+    setSelectedFileName(file.name ?? '')
     try {
       const data = await uploadTemp('/admin/seccion4/servicios/upload-temp', file)
       setTempKey(data.temp_key ?? '')
@@ -107,6 +114,11 @@ export function Seccion4ServiciosPage() {
       setError(message)
       showBanner('error', message)
       await toastError(message)
+      setTempKey('')
+      setPreviewUrl('')
+      setSelectedFileName('')
+    } finally {
+      setIsUploading(false)
     }
   }
 
@@ -138,8 +150,8 @@ export function Seccion4ServiciosPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...payload, id_service: editing.id_service }),
         })
-        showBanner('success', 'Item actualizado.')
-        await toastSuccess('Item actualizado.')
+        showBanner('success', 'Servicio actualizado.')
+        await toastSuccess('Servicio actualizado.')
       } else {
         if (!payload.temp_key) {
           showBanner('error', 'Debes subir una imagen.')
@@ -151,10 +163,12 @@ export function Seccion4ServiciosPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
-        showBanner('success', 'Item creado.')
-        await toastSuccess('Item creado.')
+        showBanner('success', 'Servicio creado.')
+        await toastSuccess('Servicio creado.')
       }
-      resetEditor()
+      startTransition(() => {
+        resetEditor()
+      })
       await loadAll()
     } catch (err) {
       const message = err?.message ?? 'No se pudo guardar.'
@@ -198,8 +212,8 @@ export function Seccion4ServiciosPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id_service: item.id_service }),
       })
-      showBanner('success', 'Item eliminado.')
-      await toastSuccess('Item eliminado.')
+      showBanner('success', 'Servicio eliminado.')
+      await toastSuccess('Servicio eliminado.')
       if (editing?.id_service === item.id_service) resetEditor()
       await loadAll()
     } catch (err) {
@@ -370,7 +384,9 @@ export function Seccion4ServiciosPage() {
           <Card className="border-white/70 bg-white/80 backdrop-blur-xl">
             <CardHeader className="p-6">
               <CardTitle className="text-2xl">{editing ? 'Editar servicio' : 'Crear servicio'}</CardTitle>
-              <CardDescription className="mt-2">Sube una imagen (temp) y guarda para moverla a /imagenes/seccion4.</CardDescription>
+              <CardDescription className="mt-2">
+                Sube una imagen primero (temp), luego guarda para moverla a <span className="font-medium text-slate-700">/imagenes/seccion4</span>.
+              </CardDescription>
             </CardHeader>
             <CardContent className="p-6 pt-0">
               <Separator className="mb-5 bg-slate-200/80" />
@@ -394,29 +410,44 @@ export function Seccion4ServiciosPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Imagen</Label>
-                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50">
-                    <Upload className="size-4" />
-                    Subir
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0]
-                        e.target.value = ''
-                        uploadImage(f)
-                      }}
-                    />
-                  </label>
-                  {previewUrl ? (
-                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                      <img src={previewUrl} alt="Preview" className="max-h-56 w-full object-contain bg-slate-50" />
+                  <div className="flex flex-col gap-3 rounded-[1.6rem] border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-sm text-slate-600">
+                        {tempKey ? (
+                          <span className="font-medium text-slate-900">Temp listo</span>
+                        ) : (
+                          <span>Sube una imagen (jpg/png/webp).</span>
+                        )}
+                        {selectedFileName ? (
+                          <div className="mt-1 text-xs text-slate-500">Archivo: {selectedFileName}</div>
+                        ) : null}
+                      </div>
+                      <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50">
+                        <Upload className="size-4" />
+                        {isUploading ? 'Subiendo...' : 'Subir'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const f = e.target.files?.[0]
+                            e.target.value = ''
+                            uploadImage(f)
+                          }}
+                        />
+                      </label>
                     </div>
-                  ) : null}
+
+                    {previewUrl ? (
+                      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                        <img src={previewUrl} alt="Preview" className="max-h-72 w-full object-contain bg-slate-50" />
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={saveItem}>
+                  <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={saveItem} disabled={isPending}>
                     Guardar
                   </Button>
                   <Button variant="outline" className="rounded-2xl" onClick={resetEditor}>
@@ -447,4 +478,3 @@ export function Seccion4ServiciosPage() {
     </DashboardLayout>
   )
 }
-
