@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from '@/components/protected-route'
 import { HomePage } from '@/pages/home-page'
 import { LoginPage } from '@/pages/login-page'
+import { Seccion1SliderPage } from '@/pages/seccion1-slider-page'
 import { fetchSession } from '@/store/auth-slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
@@ -32,6 +33,14 @@ function App() {
         element={
           <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/seccion1/slider"
+        element={
+          <ProtectedRoute>
+            <Seccion1SliderPage />
           </ProtectedRoute>
         }
       />
