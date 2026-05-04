@@ -88,7 +88,7 @@ export function DashboardLayout({ title, description, children }) {
 
         <aside
           className={[
-            'fixed inset-y-0 left-0 z-40 flex flex-col border-r border-white/40 bg-slate-950 text-white shadow-[0_20px_60px_rgba(15,23,42,0.3)] transition-all duration-300 lg:static lg:z-auto lg:translate-x-0 lg:shadow-[0_20px_60px_rgba(15,23,42,0.18)]',
+            'fixed inset-y-0 left-0 z-40 flex flex-col border-r border-white/40 bg-slate-950 text-white shadow-[0_20px_60px_rgba(15,23,42,0.3)] transition-all duration-300 lg:translate-x-0 lg:shadow-[0_20px_60px_rgba(15,23,42,0.18)]',
             isSidebarOpen ? 'w-[280px]' : 'w-[96px]',
             isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full',
             'lg:shrink-0',
@@ -172,7 +172,12 @@ export function DashboardLayout({ title, description, children }) {
           </div>
         </aside>
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div
+          className={[
+            'flex min-w-0 flex-1 flex-col transition-[padding] duration-300',
+            isSidebarOpen ? 'lg:pl-[280px]' : 'lg:pl-[96px]',
+          ].join(' ')}
+        >
           <header className="sticky top-0 z-20 border-b border-black/5 bg-white/50 backdrop-blur-xl">
             <div className="flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
               <div className="flex items-center gap-3">
