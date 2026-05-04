@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useTransition } from 'react'
-import { CheckCircle2, ImagePlus, Pencil, RefreshCw, Trash2, Upload, XCircle } from 'lucide-react'
+import { CheckCircle2, GripVertical, ImagePlus, Pencil, RefreshCw, Trash2, Upload, XCircle } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -51,6 +51,7 @@ export function Seccion1SliderPage() {
   const [previewUrl, setPreviewUrl] = useState('')
   const [selectedFileName, setSelectedFileName] = useState('')
   const [isPending, startTransition] = useTransition()
+  const [dragId, setDragId] = useState(null)
 
   const isEditing = Boolean(editing?.id_slider)
 
@@ -267,9 +268,46 @@ export function Seccion1SliderPage() {
                 return (
                   <div
                     key={item.id_slider}
+                    draggable
+                    onDragStart={() => setDragId(item.id_slider)}
+                    onDragEnd={() => setDragId(null)}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={async () => {
+                      if (!dragId || dragId === item.id_slider) return
+                      const fromIndex = items.findIndex((x) => x.id_slider === dragId)
+                      const toIndex = items.findIndex((x) => x.id_slider === item.id_slider)
+                      if (fromIndex < 0 || toIndex < 0) return
+
+                      const next = items.slice()
+                      const [moved] = next.splice(fromIndex, 1)
+                      next.splice(toIndex, 0, moved)
+                      setItems(next)
+
+                      try {
+                        await apiFetch('/admin/seccion1/slides/reorder', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            ordered_ids: next.map((x) => x.id_slider),
+                          }),
+                        })
+                        await load()
+                      } catch (err) {
+                        setError(err?.message ?? 'No se pudo reordenar.')
+                      }
+                    }}
                     className="flex flex-col gap-3 rounded-[1.6rem] border border-slate-200/80 bg-white/70 p-4 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="flex min-w-0 items-center gap-4">
+                      <div
+                        className={[
+                          'flex size-10 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500',
+                          dragId === item.id_slider ? 'ring-2 ring-sky-200' : '',
+                        ].join(' ')}
+                        title="Arrastrar para reordenar"
+                      >
+                        <GripVertical className="size-4" />
+                      </div>
                       <div className="h-16 w-24 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
                         {imageUrl ? (
                           <img src={imageUrl} alt={item.title} className="h-full w-full object-cover" />
@@ -366,12 +404,12 @@ export function Seccion1SliderPage() {
                 <Input
                   id="sort_order"
                   type="number"
-                  min={0}
+                  min={1}
                   value={form.sort_order}
                   onChange={(e) => {
                     const raw = e.target.value
-                    const next = raw === '' ? 0 : Number(raw)
-                    setForm((c) => ({ ...c, sort_order: Number.isFinite(next) ? Math.max(0, next) : 0 }))
+                    const next = raw === '' ? 1 : Number(raw)
+                    setForm((c) => ({ ...c, sort_order: Number.isFinite(next) ? Math.max(1, next) : 1 }))
                   }}
                 />
               </div>
