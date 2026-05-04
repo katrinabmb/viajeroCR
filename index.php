@@ -24,5 +24,6 @@ $router->post('/admin/seccion1/upload-temp', [Seccion1SliderController::class, '
 $router->post('/admin/seccion1/slides', [Seccion1SliderController::class, 'create']);
 $router->post('/admin/seccion1/slides/update', [Seccion1SliderController::class, 'update']);
 $router->post('/admin/seccion1/slides/active', [Seccion1SliderController::class, 'setActive']);
+$router->post('/admin/seccion1/slides/delete', [Seccion1SliderController::class, 'delete']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');

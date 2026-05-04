@@ -267,6 +267,41 @@ final class Seccion1SliderController
         Response::json(['success' => true]);
     }
 
+    // Admin: delete slide and its image (JSON: id)
+    public function delete(): void
+    {
+        Auth::requireUser();
+
+        $payload = json_decode(file_get_contents('php://input') ?: '', true);
+        $id = (int) ($payload['id'] ?? 0);
+
+        if ($id <= 0) {
+            Response::json([
+                'success' => false,
+                'message' => 'id es requerido.',
+                'code' => 'VALIDATION_ERROR',
+            ], 422);
+        }
+
+        $existing = $this->findById($id);
+
+        if ($existing === null) {
+            Response::json([
+                'success' => false,
+                'message' => 'Item no encontrado.',
+                'code' => 'NOT_FOUND',
+            ], 404);
+        }
+
+        $db = Database::connection();
+        $stmt = $db->prepare('DELETE FROM tbl_seccion1_slider WHERE id_slider = :id');
+        $stmt->execute(['id' => $id]);
+
+        $this->deleteFinalImageIfOwned((string) ($existing['image_path'] ?? ''));
+
+        Response::json(['success' => true]);
+    }
+
     private function moveTempToFinal(string $tempKey): string
     {
         $tempPath = $this->tempDir . '/' . basename($tempKey);
@@ -295,6 +330,27 @@ final class Seccion1SliderController
 
         // Public path that frontend can request via the API host
         return '/imagenes/seccion1/' . $finalName;
+    }
+
+    private function deleteFinalImageIfOwned(string $imagePath): void
+    {
+        $imagePath = trim($imagePath);
+
+        if ($imagePath === '' || !str_starts_with($imagePath, '/imagenes/seccion1/')) {
+            return;
+        }
+
+        $fileName = basename($imagePath);
+
+        if ($fileName === '' || $fileName === '.' || $fileName === '..') {
+            return;
+        }
+
+        $fullPath = $this->finalDir . '/' . $fileName;
+
+        if (is_file($fullPath)) {
+            @unlink($fullPath);
+        }
     }
 
     private function findById(int $id): ?array
