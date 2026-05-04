@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { apiFetch, getApiBase, uploadTemp } from '@/lib/api-client'
+import { confirmDanger, toastError, toastSuccess } from '@/lib/swal'
 
 const API_BASE_URL = getApiBase()
 
@@ -159,10 +160,12 @@ export function Seccion1SliderPage() {
 
   async function handleDelete(item) {
     setError(null)
-
-    const title = item?.title ? ` "${item.title}"` : ''
-    const ok = window.confirm(`Eliminar slide${title}? Esta accion tambien elimina la imagen.`)
-
+    const itemTitle = item?.title ? `Slide: ${item.title}` : 'Eliminar slide'
+    const ok = await confirmDanger({
+      title: itemTitle,
+      text: 'Esta accion tambien elimina la imagen.',
+      confirmButtonText: 'Eliminar',
+    })
     if (!ok) return
 
     try {
@@ -174,8 +177,11 @@ export function Seccion1SliderPage() {
         }),
       })
       await load()
+      await toastSuccess('Slide eliminado.')
     } catch (err) {
-      setError(err?.message ?? 'No se pudo eliminar.')
+      const message = err?.message ?? 'No se pudo eliminar.'
+      setError(message)
+      await toastError(message)
     }
   }
 
