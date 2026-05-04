@@ -18,9 +18,7 @@ export function TestimoniosPage() {
   const [isPending, startTransition] = useTransition()
   const [dragId, setDragId] = useState(null)
 
-  const [config, setConfig] = useState({ title: 'Testimonios', image_1_path: '', image_2_path: '' })
-  const [tempConfigImage1, setTempConfigImage1] = useState('')
-  const [tempConfigImage2, setTempConfigImage2] = useState('')
+  const [config, setConfig] = useState({ title: 'Testimonios' })
 
   const [items, setItems] = useState([])
   const [editing, setEditing] = useState(null)
@@ -47,8 +45,6 @@ export function TestimoniosPage() {
       const cfg = data.config ?? {}
       setConfig({
         title: cfg.title ?? 'Testimonios',
-        image_1_path: cfg.image_1_path ?? '',
-        image_2_path: cfg.image_2_path ?? '',
       })
       setItems(data.items ?? [])
     } catch (err) {
@@ -109,12 +105,8 @@ export function TestimoniosPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: config.title.trim(),
-          temp_image_1_key: tempConfigImage1 || undefined,
-          temp_image_2_key: tempConfigImage2 || undefined,
         }),
       })
-      setTempConfigImage1('')
-      setTempConfigImage2('')
       await load()
       showBanner('success', 'Configuracion actualizada.')
       await toastSuccess('Configuracion actualizada.')
@@ -223,7 +215,7 @@ export function TestimoniosPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-2xl">Configuracion</CardTitle>
-                <CardDescription className="mt-2">Titulo e imagenes inferiores.</CardDescription>
+            <CardDescription className="mt-2">Titulo de la seccion de testimonios.</CardDescription>
               </div>
               <Button variant="outline" className="rounded-2xl" onClick={load} disabled={isLoading}><RefreshCw className="mr-2 size-4" />Actualizar</Button>
             </div>
@@ -231,18 +223,6 @@ export function TestimoniosPage() {
           <CardContent className="p-6 pt-0 space-y-4">
             <Separator className="bg-slate-200/80" />
             <div className="space-y-2"><Label>Titulo</Label><Input value={config.title} onChange={(e) => setConfig((c) => ({ ...c, title: e.target.value }))} /></div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label>Imagen inferior 1</Label>
-                <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm"><Upload className="size-4" />Subir<input type="file" accept="image/*" className="hidden" onChange={async (e) => { const f = e.target.files?.[0]; e.target.value = ''; const u = await uploadAny(f, setTempConfigImage1); if (u) setConfig((c) => ({ ...c, image_1_path: u })) }} /></label>
-                {config.image_1_path ? <img src={config.image_1_path.startsWith('blob:') ? config.image_1_path : `${API_BASE_URL}${config.image_1_path}`} alt="img1" className="max-h-44 w-full rounded-2xl border border-slate-200 object-contain bg-white" /> : null}
-              </div>
-              <div className="space-y-2">
-                <Label>Imagen inferior 2</Label>
-                <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm"><Upload className="size-4" />Subir<input type="file" accept="image/*" className="hidden" onChange={async (e) => { const f = e.target.files?.[0]; e.target.value = ''; const u = await uploadAny(f, setTempConfigImage2); if (u) setConfig((c) => ({ ...c, image_2_path: u })) }} /></label>
-                {config.image_2_path ? <img src={config.image_2_path.startsWith('blob:') ? config.image_2_path : `${API_BASE_URL}${config.image_2_path}`} alt="img2" className="max-h-44 w-full rounded-2xl border border-slate-200 object-contain bg-white" /> : null}
-              </div>
-            </div>
             <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={saveConfig}>Guardar configuracion</Button>
           </CardContent>
         </Card>
@@ -305,4 +285,3 @@ export function TestimoniosPage() {
     </DashboardLayout>
   )
 }
-
