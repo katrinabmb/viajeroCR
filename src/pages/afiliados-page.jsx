@@ -26,6 +26,7 @@ export function AfiliadosPage() {
   const [items, setItems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [banner, setBanner] = useState(null)
   const [isUploading, setIsUploading] = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState({ url: '', sort_order: 1 })
@@ -62,6 +63,12 @@ export function AfiliadosPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  function showBanner(type, message) {
+    setBanner({ type, message })
+    window.clearTimeout(showBanner._t)
+    showBanner._t = window.setTimeout(() => setBanner(null), 3500)
+  }
+
   function resetEditor() {
     setEditing(null)
     setForm({ url: '', sort_order: 1 })
@@ -96,8 +103,13 @@ export function AfiliadosPage() {
         body: JSON.stringify({ title: title.trim() }),
       })
       await load()
+      showBanner('success', 'Titulo actualizado correctamente.')
+      await toastSuccess('Titulo actualizado.')
     } catch (err) {
-      setError(err?.message ?? 'No se pudo guardar el titulo.')
+      const message = err?.message ?? 'No se pudo guardar el titulo.'
+      setError(message)
+      showBanner('error', message)
+      await toastError(message)
     }
   }
 
@@ -162,8 +174,13 @@ export function AfiliadosPage() {
         resetEditor()
       })
       await load()
+      showBanner('success', isEditing ? 'Logo actualizado correctamente.' : 'Logo creado correctamente.')
+      await toastSuccess(isEditing ? 'Logo actualizado.' : 'Logo creado.')
     } catch (err) {
-      setError(err?.message ?? 'No se pudo guardar.')
+      const message = err?.message ?? 'No se pudo guardar.'
+      setError(message)
+      showBanner('error', message)
+      await toastError(message)
     }
   }
 
@@ -179,8 +196,13 @@ export function AfiliadosPage() {
         }),
       })
       await load()
+      showBanner('success', 'Estado actualizado.')
+      await toastSuccess('Estado actualizado.')
     } catch (err) {
-      setError(err?.message ?? 'No se pudo actualizar el estado.')
+      const message = err?.message ?? 'No se pudo actualizar el estado.'
+      setError(message)
+      showBanner('error', message)
+      await toastError(message)
     }
   }
 
@@ -201,15 +223,39 @@ export function AfiliadosPage() {
       })
       await load()
       await toastSuccess('Logo eliminado.')
+      showBanner('success', 'Logo eliminado correctamente.')
     } catch (err) {
       const message = err?.message ?? 'No se pudo eliminar.'
       setError(message)
       await toastError(message)
+      showBanner('error', message)
     }
   }
 
   return (
     <DashboardLayout title="Afiliados" description={headerDescription}>
+      {banner ? (
+        <div
+          className={[
+            'sticky top-[76px] z-30 mb-4 rounded-2xl border px-4 py-3 text-sm shadow-sm backdrop-blur',
+            banner.type === 'success'
+              ? 'border-emerald-200 bg-emerald-50/90 text-emerald-800'
+              : 'border-red-200 bg-red-50/90 text-red-700',
+          ].join(' ')}
+        >
+          <div className="flex items-center justify-between gap-3">
+            <p className="font-medium">{banner.message}</p>
+            <button
+              type="button"
+              className="rounded-xl px-3 py-1 text-xs font-semibold hover:bg-black/5"
+              onClick={() => setBanner(null)}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {imageModal.open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
           <button
@@ -329,8 +375,13 @@ export function AfiliadosPage() {
                           body: JSON.stringify({ ordered_ids: next.map((x) => x.id_logo) }),
                         })
                         await load()
+                        showBanner('success', 'Orden actualizado.')
+                        await toastSuccess('Orden actualizado.')
                       } catch (err) {
-                        setError(err?.message ?? 'No se pudo reordenar.')
+                        const message = err?.message ?? 'No se pudo reordenar.'
+                        setError(message)
+                        showBanner('error', message)
+                        await toastError(message)
                       }
                     }}
                     className="flex flex-col gap-3 rounded-[1.6rem] border border-slate-200/80 bg-white/70 p-4 sm:flex-row sm:items-center sm:justify-between"
