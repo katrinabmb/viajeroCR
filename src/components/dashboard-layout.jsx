@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Compass, Handshake, Home, Image, LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
+import { Compass, Handshake, Home, Image, ImagePlus, LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { signOut } from '@/store/auth-slice'
