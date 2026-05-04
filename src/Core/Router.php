@@ -34,14 +34,33 @@ final class Router
             ], 404);
         }
 
-        if (is_array($handler) && count($handler) === 2) {
-            [$class, $action] = $handler;
-            $controller = new $class();
-            $controller->{$action}();
-            return;
-        }
+        try {
+            if (is_array($handler) && count($handler) === 2) {
+                [$class, $action] = $handler;
+                $controller = new $class();
+                $controller->{$action}();
+                return;
+            }
 
-        $handler();
+            $handler();
+        } catch (\Throwable $e) {
+            // In production we still want a JSON response (not a blank 500 page).
+            error_log(sprintf(
+                '[API_ERROR] %s %s | %s: %s in %s:%d',
+                $method,
+                $path,
+                get_class($e),
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            ));
+
+            Response::json([
+                'success' => false,
+                'message' => 'Error interno del servidor.',
+                'code' => 'SERVER_ERROR',
+            ], 500);
+        }
     }
 
     private function addRoute(string $method, string $path, callable|array $handler): void
