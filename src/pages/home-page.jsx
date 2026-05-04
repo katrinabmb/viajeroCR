@@ -1,141 +1,212 @@
-import { ArrowUpRight, CalendarClock, LogOut, ShieldCheck, Sparkles, Users } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
+import {
+  ArrowUpRight,
+  Compass,
+  Globe2,
+  LayoutTemplate,
+  Mail,
+  MessageSquareMore,
+  Plane,
+  Route,
+  Star,
+  Users,
+} from 'lucide-react'
+import { DashboardLayout } from '@/components/dashboard-layout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { signOut } from '@/store/auth-slice'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { useAppSelector } from '@/store/hooks'
 
-const metrics = [
-  { label: 'Sessions today', value: '128', detail: '+14% from yesterday', icon: Users },
-  { label: 'Access checks', value: '96%', detail: 'Healthy auth response', icon: ShieldCheck },
-  { label: 'Pending tasks', value: '07', detail: 'Modules queued for setup', icon: CalendarClock },
+const overviewCards = [
+  {
+    title: 'Frontend actual',
+    description: 'Landing publica con enfoque comercial para captar clientes y solicitudes de viaje.',
+    icon: LayoutTemplate,
+  },
+  {
+    title: 'Canal principal',
+    description: 'Formulario web conectado a envio de correo para consultas y cotizaciones.',
+    icon: Mail,
+  },
+  {
+    title: 'Experiencia de marca',
+    description: 'Sitio orientado a destinos, servicios, testimonios, aliados y salidas grupales.',
+    icon: Star,
+  },
 ]
 
-const modules = [
-  'Login and session validation',
-  'User roles and permissions',
-  'Reservations and trip management',
-  'Activity logs and alerts',
+const publicSections = [
+  {
+    title: 'Destinos',
+    description: 'Catalogo visual por continentes: America, Europa, Africa y Asia/Oceania.',
+    icon: Globe2,
+    hint: 'Contenido visual',
+  },
+  {
+    title: 'Servicios',
+    description: 'Paquetes a la medida, boletos, hoteles, tours, seguros, eventos y asesoria.',
+    icon: Plane,
+    hint: 'Oferta comercial',
+  },
+  {
+    title: 'Salidas grupales',
+    description: 'Viajes programados con itinerarios descargables y fechas visibles para venta.',
+    icon: Route,
+    hint: 'Calendario de viajes',
+  },
+  {
+    title: 'Aliados y reservas',
+    description: 'Integracion comercial con Booking, Klook, TripAdvisor, Holafly y mas.',
+    icon: Compass,
+    hint: 'Canales externos',
+  },
+  {
+    title: 'Solicitudes',
+    description: 'Consultas recibidas desde el formulario web para cotizacion y seguimiento.',
+    icon: MessageSquareMore,
+    hint: 'Leads del sitio',
+  },
+]
+
+const adminPriorities = [
+  'Administrar paquetes, servicios y salidas grupales desde panel interno.',
+  'Centralizar solicitudes del formulario y seguimiento comercial.',
+  'Gestionar contenido del home: destinos, aliados, testimonios y secciones.',
+  'Preparar modulos de usuarios, permisos y reportes operativos.',
 ]
 
 export function HomePage() {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.auth.user)
 
-  async function handleLogout() {
-    await dispatch(signOut())
-    navigate('/login', { replace: true })
-  }
-
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(245,158,11,0.18),_transparent_30%),linear-gradient(135deg,_#f8fafc_0%,_#fff7ed_45%,_#eff6ff_100%)] text-slate-950">
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-6 lg:px-10">
-        <header className="mb-6 flex flex-col gap-4 rounded-[2rem] border border-white/60 bg-white/70 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-600">
-              Viajero Control Center
-            </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
-              Bienvenido, {user?.name ?? 'Administrador'}
-            </h1>
-            <p className="mt-2 max-w-2xl text-sm text-slate-600">
-              Esta es la base privada del dashboard. Desde aqui vamos a conectar login,
-              roles, modulos y reportes del sistema.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="rounded-2xl border border-slate-200/80 bg-slate-50 px-4 py-3 text-right">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Cuenta activa</p>
-              <p className="mt-1 text-sm font-medium text-slate-900">{user?.email}</p>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              className="h-12 rounded-2xl border-slate-200 bg-white px-4"
-              onClick={handleLogout}
-            >
-              <LogOut className="size-4" />
-              Cerrar sesion
-            </Button>
-          </div>
-        </header>
-
-        <section className="grid gap-4 lg:grid-cols-[1.35fr_0.9fr]">
-          <article className="overflow-hidden rounded-[2rem] border border-slate-200/70 bg-slate-950 px-6 py-6 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)]">
+    <DashboardLayout
+      title={`Bienvenido, ${user?.name ?? 'Admin'}`}
+      description="Base administrativa para gestionar contenido del sitio, solicitudes de clientes, servicios turisticos y futuros modulos operativos de ViajeroCR."
+    >
+      <section className="grid gap-4 2xl:grid-cols-[1.1fr_0.9fr]">
+        <article className="overflow-hidden rounded-[2rem] border border-slate-200/70 bg-slate-950 p-6 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)]">
+          <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-amber-300">
-              <Sparkles className="size-4" />
               <span className="text-xs font-semibold uppercase tracking-[0.3em]">
-                Dashboard base listo
+                Resumen del sistema actual
               </span>
             </div>
-            <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight">
-              Tu area privada ya esta protegida y preparada para crecer modulo por modulo.
-            </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300">
-              La navegacion ya distingue entre usuarios autenticados y visitantes. En el
-              siguiente paso podemos conectar el formulario al API PHP y reemplazar el acceso
-              local por autenticacion real.
-            </p>
+            <div className="rounded-full bg-white/10 p-3 text-amber-300">
+              <ArrowUpRight className="size-4" />
+            </div>
+          </div>
 
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {metrics.map(({ label, value, detail, icon: Icon }) => (
+          <div className="mt-5 grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+            <div>
+              <h2 className="max-w-3xl text-3xl font-semibold tracking-tight">
+                Plataforma comercial enfocada en captar solicitudes y convertir interes en viajes.
+              </h2>
+
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300">
+                El sitio publico funciona como vitrina de destinos, servicios, salidas grupales,
+                aliados y testimonios. El punto de conversion principal es el formulario de
+                contacto, desde donde llegan las solicitudes para cotizacion.
+              </p>
+            </div>
+
+            <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-300">
+                Estado del negocio digital
+              </p>
+              <div className="mt-4 space-y-3">
+                <div className="rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3">
+                  <p className="text-sm font-medium text-white">Frontend publico activo</p>
+                  <p className="mt-1 text-sm text-slate-300">Landing comercial y captacion de leads.</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3">
+                  <p className="text-sm font-medium text-white">Formulario como canal principal</p>
+                  <p className="mt-1 text-sm text-slate-300">Solicitudes enviadas para atencion personalizada.</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3">
+                  <p className="text-sm font-medium text-white">Dashboard en construccion</p>
+                  <p className="mt-1 text-sm text-slate-300">Base lista para administracion interna.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {overviewCards.map(({ title, description, icon: Icon }) => (
+              <div
+                key={title}
+                className="rounded-[1.6rem] border border-white/10 bg-white/8 p-4 backdrop-blur"
+              >
+                <Icon className="size-5 text-amber-300" />
+                <p className="mt-5 text-lg font-semibold text-white">{title}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <Card className="border-white/70 bg-white/80 backdrop-blur-xl">
+          <CardHeader className="p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">
+              Primera etapa
+            </p>
+            <CardTitle className="mt-2 text-2xl text-slate-950">Prioridades del dashboard</CardTitle>
+            <CardDescription className="mt-2 text-slate-500">
+              Lo siguiente que conviene construir dentro del panel.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 pt-0">
+            <Separator className="mb-6 bg-slate-200/80" />
+            <div className="space-y-3">
+              {adminPriorities.map((item, index) => (
                 <div
-                  key={label}
-                  className="rounded-[1.6rem] border border-white/10 bg-white/8 p-4 backdrop-blur"
+                  key={item}
+                  className="flex items-start gap-4 rounded-[1.4rem] border border-slate-200/80 bg-slate-50 px-4 py-4"
                 >
-                  <Icon className="size-5 text-amber-300" />
-                  <p className="mt-6 text-3xl font-semibold">{value}</p>
-                  <p className="mt-2 text-sm text-white">{label}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">
-                    {detail}
-                  </p>
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white">
+                    0{index + 1}
+                  </div>
+                  <p className="text-sm leading-6 text-slate-700">{item}</p>
                 </div>
               ))}
             </div>
-          </article>
+          </CardContent>
+        </Card>
+      </section>
 
-          <Card className="border-white/70 bg-white/80 backdrop-blur-xl">
-            <CardHeader className="p-6">
+      <section className="mt-4">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">
+              Modulos base
+            </p>
+            <h3 className="mt-1 text-2xl font-semibold tracking-tight text-slate-950">
+              Areas que este panel va a administrar
+            </h3>
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+          {publicSections.map(({ title, description, icon: Icon, hint }) => (
+            <Card
+              key={title}
+              className="border-white/70 bg-white/82 transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-[0_24px_60px_rgba(59,130,246,0.12)] backdrop-blur-xl"
+            >
+            <CardHeader className="p-5">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">
-                    Siguientes modulos
-                  </p>
-                  <CardTitle className="mt-2 text-2xl text-slate-950">Roadmap inicial</CardTitle>
-                  <CardDescription className="mt-2 text-slate-500">
-                    Base de trabajo para lo que sigue dentro del sistema.
-                  </CardDescription>
+                <div className="rounded-2xl bg-sky-100 p-3 text-sky-700">
+                  <Icon className="size-5" />
                 </div>
-                <div className="rounded-full bg-sky-100 p-3 text-sky-700">
-                  <ArrowUpRight className="size-5" />
-                </div>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  {hint}
+                </span>
               </div>
+              <CardTitle className="pt-4 text-xl text-slate-950">{title}</CardTitle>
+              <CardDescription className="text-sm leading-6 text-slate-500">
+                {description}
+              </CardDescription>
             </CardHeader>
-            <CardContent className="p-6 pt-0">
-              <Separator className="mb-6 bg-slate-200/80" />
-              <div className="space-y-3">
-                {modules.map((module, index) => (
-                  <div
-                    key={module}
-                    className="flex items-center gap-4 rounded-[1.4rem] border border-slate-200/80 bg-slate-50 px-4 py-4"
-                  >
-                    <div className="flex size-10 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white">
-                      0{index + 1}
-                    </div>
-                    <div>
-                      <p className="font-medium text-slate-900">{module}</p>
-                      <p className="text-sm text-slate-500">Pendiente de implementacion</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
           </Card>
-        </section>
-      </div>
-    </main>
+          ))}
+        </div>
+      </section>
+    </DashboardLayout>
   )
 }

@@ -2,28 +2,72 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost/ViajeroSistem/api'
 
-export const fetchSession = createAsyncThunk('auth/fetchSession', async (_, { rejectWithValue }) => {
+async function parseApiResponse(response) {
+  const text = await response.text()
+
+  if (!text) {
+    return {}
+  }
+
+  try {
+    return JSON.parse(text)
+  } catch {
+    return {}
+  }
+}
+
+async function fetchCurrentSession() {
   const response = await fetch(`${API_BASE_URL}/auth/me`, {
     credentials: 'include',
   })
 
+  return {
+    response,
+    data: await parseApiResponse(response),
+  }
+}
+
+export const fetchSession = createAsyncThunk('auth/fetchSession', async (_, { rejectWithValue }) => {
+  let { response, data } = await fetchCurrentSession()
+
+  if (response.ok) {
+    return data.user
+  }
+
   if (response.status === 401) {
-    return rejectWithValue('Unauthenticated')
+    const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+
+    if (refreshResponse.ok) {
+      ;({ response, data } = await fetchCurrentSession())
+
+      if (response.ok) {
+        return data.user
+      }
+    }
+
+    return rejectWithValue({
+      code: data.code ?? 'UNAUTHENTICATED',
+      message: 'Unauthenticated',
+    })
   }
 
-  if (!response.ok) {
-    return rejectWithValue('No se pudo validar la sesion.')
-  }
-
-  const data = await response.json()
-  return data.user
+  return rejectWithValue({
+    code: data.code ?? 'SESSION_CHECK_FAILED',
+    message: data.message ?? 'No se pudo validar la sesion.',
+  })
 })
 
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async ({ email, password }, { rejectWithValue }) => {
     if (!email?.trim() || !password?.trim()) {
-      return rejectWithValue('Debes completar el formulario.')
+      return rejectWithValue({
+        code: 'VALIDATION_ERROR',
+        message: 'Debes completar el formulario.',
+      })
     }
 
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -38,23 +82,32 @@ export const signIn = createAsyncThunk(
       }),
     })
 
-    const data = await response.json()
+    const data = await parseApiResponse(response)
 
     if (!response.ok) {
-      return rejectWithValue(data.message ?? 'No se pudo iniciar sesion.')
+      return rejectWithValue({
+        code: data.code ?? 'LOGIN_FAILED',
+        message: data.message ?? 'No se pudo iniciar sesion.',
+      })
     }
 
     return data.user
   }
 )
+
 export const signOut = createAsyncThunk('auth/signOut', async (_, { rejectWithValue }) => {
   const response = await fetch(`${API_BASE_URL}/auth/logout`, {
     method: 'POST',
     credentials: 'include',
   })
 
+  const data = await parseApiResponse(response)
+
   if (!response.ok) {
-    return rejectWithValue('No se pudo cerrar sesion.')
+    return rejectWithValue({
+      code: data.code ?? 'LOGOUT_FAILED',
+      message: data.message ?? 'No se pudo cerrar sesion.',
+    })
   }
 
   return null
@@ -68,10 +121,12 @@ const authSlice = createSlice({
     isLoading: false,
     isCheckingSession: true,
     error: null,
+    errorCode: null,
   },
   reducers: {
     clearAuthError(state) {
       state.error = null
+      state.errorCode = null
     },
   },
   extraReducers: (builder) => {
@@ -84,26 +139,31 @@ const authSlice = createSlice({
         state.isAuthenticated = true
         state.isCheckingSession = false
         state.error = null
+        state.errorCode = null
       })
       .addCase(fetchSession.rejected, (state, action) => {
         state.user = null
         state.isAuthenticated = false
         state.isCheckingSession = false
-        state.error = action.payload === 'Unauthenticated' ? null : action.payload
+        state.error = action.payload?.message === 'Unauthenticated' ? null : (action.payload?.message ?? null)
+        state.errorCode = action.payload?.message === 'Unauthenticated' ? null : (action.payload?.code ?? null)
       })
       .addCase(signIn.pending, (state) => {
         state.isLoading = true
         state.error = null
+        state.errorCode = null
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.user = action.payload
         state.isAuthenticated = true
         state.isLoading = false
         state.error = null
+        state.errorCode = null
       })
       .addCase(signIn.rejected, (state, action) => {
         state.isLoading = false
-        state.error = action.payload ?? 'No se pudo iniciar sesion.'
+        state.error = action.payload?.message ?? 'No se pudo iniciar sesion.'
+        state.errorCode = action.payload?.code ?? 'LOGIN_FAILED'
       })
       .addCase(signOut.pending, (state) => {
         state.isLoading = true
@@ -113,10 +173,12 @@ const authSlice = createSlice({
         state.isAuthenticated = false
         state.isLoading = false
         state.error = null
+        state.errorCode = null
       })
       .addCase(signOut.rejected, (state, action) => {
         state.isLoading = false
-        state.error = action.payload ?? 'No se pudo cerrar sesion.'
+        state.error = action.payload?.message ?? 'No se pudo cerrar sesion.'
+        state.errorCode = action.payload?.code ?? 'LOGOUT_FAILED'
       })
   },
 })
