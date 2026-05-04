@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS tbl_testimonios_config (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO tbl_testimonios_config (id_config, title, image_1_path, image_2_path)
-VALUES (1, 'Testimonios', '/imagenes/testimonios/testimonio1.PNG', '/imagenes/testimonios/testimonio2.PNG')
+VALUES (1, 'Testimonios', '', '')
 ON DUPLICATE KEY UPDATE
     title = VALUES(title),
     image_1_path = VALUES(image_1_path),
@@ -33,4 +33,3 @@ CREATE TABLE IF NOT EXISTS tbl_testimonio_item (
     UNIQUE KEY uq_tbl_testimonio_item_sort (sort_order),
     KEY idx_tbl_testimonio_item_active_sort (is_active, sort_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
