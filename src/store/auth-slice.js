@@ -29,20 +29,46 @@ async function fetchCurrentSession() {
 }
 
 export const fetchSession = createAsyncThunk('auth/fetchSession', async (_, { rejectWithValue }) => {
-  let { response, data } = await fetchCurrentSession()
+  let response
+  let data
+
+  try {
+    ;({ response, data } = await fetchCurrentSession())
+  } catch {
+    return rejectWithValue({
+      code: 'NETWORK_ERROR',
+      message: 'No se pudo conectar con el API.',
+    })
+  }
 
   if (response.ok) {
     return data.user
   }
 
   if (response.status === 401) {
-    const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
-      method: 'POST',
-      credentials: 'include',
-    })
+    let refreshResponse
+
+    try {
+      refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+    } catch {
+      return rejectWithValue({
+        code: 'NETWORK_ERROR',
+        message: 'No se pudo conectar con el API.',
+      })
+    }
 
     if (refreshResponse.ok) {
-      ;({ response, data } = await fetchCurrentSession())
+      try {
+        ;({ response, data } = await fetchCurrentSession())
+      } catch {
+        return rejectWithValue({
+          code: 'NETWORK_ERROR',
+          message: 'No se pudo conectar con el API.',
+        })
+      }
 
       if (response.ok) {
         return data.user
@@ -71,17 +97,26 @@ export const signIn = createAsyncThunk(
       })
     }
 
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email.trim(),
-        password: password.trim(),
-      }),
-    })
+    let response
+
+    try {
+      response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim(),
+        }),
+      })
+    } catch {
+      return rejectWithValue({
+        code: 'NETWORK_ERROR',
+        message: 'No se pudo conectar con el API.',
+      })
+    }
 
     const data = await parseApiResponse(response)
 
@@ -97,10 +132,19 @@ export const signIn = createAsyncThunk(
 )
 
 export const signOut = createAsyncThunk('auth/signOut', async (_, { rejectWithValue }) => {
-  const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-    method: 'POST',
-    credentials: 'include',
-  })
+  let response
+
+  try {
+    response = await fetch(`${API_BASE_URL}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+  } catch {
+    return rejectWithValue({
+      code: 'NETWORK_ERROR',
+      message: 'No se pudo conectar con el API.',
+    })
+  }
 
   const data = await parseApiResponse(response)
 
