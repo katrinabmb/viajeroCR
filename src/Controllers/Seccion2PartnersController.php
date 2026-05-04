@@ -326,6 +326,17 @@ final class Seccion2PartnersController
                 ], 404);
             }
 
+            // Avoid UNIQUE(sort_order) collisions while reordering.
+            // Step 1: move all involved rows to a high offset, then assign 1..N.
+            $offset = 100000;
+            $bump = $db->prepare(
+                "UPDATE tbl_seccion2_partners_logo
+                 SET sort_order = sort_order + $offset,
+                     updated_at = CURRENT_TIMESTAMP
+                 WHERE id_logo IN ($placeholders)"
+            );
+            $bump->execute($ids);
+
             $update = $db->prepare(
                 'UPDATE tbl_seccion2_partners_logo
                  SET sort_order = :sort_order,
@@ -432,4 +443,3 @@ final class Seccion2PartnersController
         return (bool) $stmt->fetchColumn();
     }
 }
-
