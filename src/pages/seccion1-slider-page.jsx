@@ -6,39 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { getApiBaseUrl } from '@/lib/api-base-url'
+import { apiFetch, getApiBase, uploadTemp } from '@/lib/api-client'
 
-const API_BASE_URL = getApiBaseUrl()
-
-async function parseJson(response) {
-  const text = await response.text()
-  if (!text) return {}
-  try {
-    return JSON.parse(text)
-  } catch {
-    return {}
-  }
-}
-
-async function apiFetch(path, init) {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    credentials: 'include',
-    ...init,
-  })
-
-  const data = await parseJson(response)
-
-  if (!response.ok) {
-    const message = data?.message ?? 'Error en la solicitud.'
-    const code = data?.code ?? 'REQUEST_FAILED'
-    const error = new Error(message)
-    error.code = code
-    error.status = response.status
-    throw error
-  }
-
-  return data
-}
+const API_BASE_URL = getApiBase()
 
 export function Seccion1SliderPage() {
   const [items, setItems] = useState([])
@@ -111,21 +81,8 @@ export function Seccion1SliderPage() {
     setIsUploading(true)
     setSelectedFileName(file.name ?? '')
 
-    const formData = new FormData()
-    formData.append('file', file)
-
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/seccion1/upload-temp`, {
-        method: 'POST',
-        credentials: 'include',
-        body: formData,
-      })
-      const data = await parseJson(response)
-
-      if (!response.ok) {
-        throw new Error(data?.message ?? 'No se pudo subir la imagen.')
-      }
-
+      const data = await uploadTemp('/admin/seccion1/upload-temp', file)
       setTempKey(data.temp_key ?? '')
       setPreviewUrl(URL.createObjectURL(file))
     } catch (err) {
