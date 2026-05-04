@@ -26,6 +26,12 @@ final class TestimoniosController
     {
         $db = Database::connection();
         $config = $db->query('SELECT title FROM tbl_testimonios_config WHERE id_config = 1 LIMIT 1')->fetch(PDO::FETCH_ASSOC);
+        $recuerdos = $db->query(
+            'SELECT slot_no, image_path
+             FROM tbl_testimonio_recuerdo
+             WHERE slot_no IN (1,2)
+             ORDER BY slot_no ASC'
+        )->fetchAll(PDO::FETCH_ASSOC);
         $items = $db->query(
             'SELECT id_testimonio, destino, author_name, testimonio, photo_path, sort_order
              FROM tbl_testimonio_item
@@ -36,6 +42,7 @@ final class TestimoniosController
         Response::json([
             'success' => true,
             'config' => $config ?: null,
+            'recuerdos' => $recuerdos,
             'items' => $items,
         ]);
     }
@@ -45,6 +52,12 @@ final class TestimoniosController
         Auth::requireUser();
         $db = Database::connection();
         $config = $db->query('SELECT title FROM tbl_testimonios_config WHERE id_config = 1 LIMIT 1')->fetch(PDO::FETCH_ASSOC);
+        $recuerdos = $db->query(
+            'SELECT slot_no, image_path
+             FROM tbl_testimonio_recuerdo
+             WHERE slot_no IN (1,2)
+             ORDER BY slot_no ASC'
+        )->fetchAll(PDO::FETCH_ASSOC);
         $items = $db->query(
             'SELECT id_testimonio, destino, author_name, testimonio, photo_path, is_active, sort_order, created_at, updated_at
              FROM tbl_testimonio_item
@@ -54,6 +67,7 @@ final class TestimoniosController
         Response::json([
             'success' => true,
             'config' => $config ?: null,
+            'recuerdos' => $recuerdos,
             'items' => $items,
         ]);
     }
@@ -99,6 +113,45 @@ final class TestimoniosController
                updated_at = CURRENT_TIMESTAMP'
         );
         $stmt->execute(['title' => $title]);
+
+        Response::json(['success' => true]);
+    }
+
+    public function saveRecuerdo(): void
+    {
+        Auth::requireUser();
+        $payload = json_decode(file_get_contents('php://input') ?: '', true);
+        $slot = (int) ($payload['slot_no'] ?? 0);
+        $tempKey = trim((string) ($payload['temp_image_key'] ?? ''));
+
+        if (!in_array($slot, [1, 2], true) || $tempKey === '') {
+            Response::json([
+                'success' => false,
+                'message' => 'Debes indicar slot 1 o 2 y subir una imagen.',
+                'code' => 'VALIDATION_ERROR',
+            ], 422);
+        }
+
+        $db = Database::connection();
+        $stmt = $db->prepare('SELECT image_path FROM tbl_testimonio_recuerdo WHERE slot_no = :slot LIMIT 1');
+        $stmt->execute(['slot' => $slot]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $currentPath = is_array($row) ? (string) ($row['image_path'] ?? '') : '';
+        $newPath = $this->moveTempToFinal($tempKey);
+        $this->deleteOwned($currentPath);
+
+        $up = $db->prepare(
+            'INSERT INTO tbl_testimonio_recuerdo (slot_no, image_path)
+             VALUES (:slot, :image_path)
+             ON DUPLICATE KEY UPDATE
+               image_path = VALUES(image_path),
+               updated_at = CURRENT_TIMESTAMP'
+        );
+        $up->execute([
+            'slot' => $slot,
+            'image_path' => $newPath,
+        ]);
 
         Response::json(['success' => true]);
     }

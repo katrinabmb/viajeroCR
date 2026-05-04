@@ -105,6 +105,7 @@ $router->get('/testimonios', [TestimoniosController::class, 'publicData']);
 $router->get('/admin/testimonios', [TestimoniosController::class, 'adminData']);
 $router->post('/admin/testimonios/upload-temp', [TestimoniosController::class, 'uploadTemp']);
 $router->post('/admin/testimonios/config/update', [TestimoniosController::class, 'updateConfig']);
+$router->post('/admin/testimonios/recuerdos/save', [TestimoniosController::class, 'saveRecuerdo']);
 $router->post('/admin/testimonios/items', [TestimoniosController::class, 'create']);
 $router->post('/admin/testimonios/items/update', [TestimoniosController::class, 'update']);
 $router->post('/admin/testimonios/items/active', [TestimoniosController::class, 'setActive']);

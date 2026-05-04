@@ -30,5 +30,20 @@ CREATE TABLE IF NOT EXISTS tbl_testimonio_item (
     KEY idx_tbl_testimonio_item_active_sort (is_active, sort_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS tbl_testimonio_recuerdo (
+    id_recuerdo BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    slot_no TINYINT UNSIGNED NOT NULL,
+    image_path VARCHAR(255) NOT NULL DEFAULT '',
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_recuerdo),
+    UNIQUE KEY uq_tbl_testimonio_recuerdo_slot (slot_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO tbl_testimonio_recuerdo (slot_no, image_path)
+VALUES (1, ''), (2, '')
+ON DUPLICATE KEY UPDATE
+    image_path = VALUES(image_path);
+
 -- Optional migration for existing DBs:
 -- ALTER TABLE tbl_testimonios_config DROP COLUMN image_1_path, DROP COLUMN image_2_path;
