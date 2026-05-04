@@ -54,6 +54,11 @@ export function Seccion3DestinosPage() {
     []
   )
 
+  const selectedContinent = useMemo(
+    () => continents.find((c) => c.id_continent === selectedContinentId) ?? null,
+    [continents, selectedContinentId]
+  )
+
   function showBanner(type, message) {
     setBanner({ type, message })
     window.clearTimeout(showBanner._t)
@@ -605,12 +610,19 @@ export function Seccion3DestinosPage() {
         <Card className="border-white/70 bg-white/80 backdrop-blur-xl">
           <CardHeader className="p-6">
             <CardTitle className="text-2xl">Editor</CardTitle>
-            <CardDescription className="mt-2">Continente seleccionado: {selectedContinentId ?? 'Ninguno'}</CardDescription>
+            <CardDescription className="mt-2">
+              Continente seleccionado:{' '}
+              {selectedContinent ? (
+                <span className="font-semibold text-slate-950">{selectedContinent.title}</span>
+              ) : (
+                'Ninguno'
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-6 pt-0">
             <Separator className="mb-5 bg-slate-200/80" />
 
-            <div className={['grid gap-4', showDestinationsEditor ? 'lg:grid-cols-2' : 'lg:grid-cols-1'].join(' ')}>
+            <div className="grid gap-4 lg:grid-cols-1">
               {!showDestinationsEditor ? (
                 <div className="space-y-3 rounded-[1.6rem] border border-slate-200 bg-white/70 p-4">
                   <p className="text-sm font-semibold text-slate-950">{continentEditing ? 'Editar continente' : 'Crear continente'}</p>
@@ -665,7 +677,15 @@ export function Seccion3DestinosPage() {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <p className="text-sm font-semibold text-slate-950">Destinos</p>
-                      <p className="mt-1 text-xs text-slate-500">Selecciona un continente y administra sus destinos.</p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        {selectedContinent ? (
+                          <>
+                            Administrando destinos de <span className="font-semibold text-slate-700">{selectedContinent.title}</span>.
+                          </>
+                        ) : (
+                          'Selecciona un continente y administra sus destinos.'
+                        )}
+                      </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                       <Button className="rounded-2xl" onClick={startCreateDestination} disabled={!selectedContinentId}>
