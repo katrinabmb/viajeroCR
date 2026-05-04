@@ -40,6 +40,7 @@ export function Seccion3DestinosPage() {
   const [continentForm, setContinentForm] = useState({ title: '', sort_order: '' })
   const [continentTempKey, setContinentTempKey] = useState('')
   const [continentPreviewUrl, setContinentPreviewUrl] = useState('')
+  const [showContinentEditor, setShowContinentEditor] = useState(true)
 
   const [destinationEditing, setDestinationEditing] = useState(null)
   const [destinationForm, setDestinationForm] = useState({ title: '', sort_order: '' })
@@ -137,10 +138,14 @@ export function Seccion3DestinosPage() {
   }
 
   function startCreateContinent() {
+    setShowDestinationsEditor(false)
+    setShowContinentEditor(true)
     resetContinentEditor()
   }
 
   function startEditContinent(item) {
+    setShowDestinationsEditor(false)
+    setShowContinentEditor(true)
     setContinentEditing(item)
     setContinentForm({ title: item.title ?? '', sort_order: String(item.sort_order ?? '') })
     setContinentTempKey('')
@@ -148,6 +153,20 @@ export function Seccion3DestinosPage() {
   }
 
   function startCreateDestination() {
+    resetDestinationEditor()
+  }
+
+  function openDestinationsForContinent(continentId) {
+    setSelectedContinentId(continentId)
+    setShowDestinationsEditor(true)
+    setShowContinentEditor(false)
+    resetDestinationEditor()
+    loadDestinations(continentId)
+  }
+
+  function closeDestinationsEditor() {
+    setShowDestinationsEditor(false)
+    setShowContinentEditor(true)
     resetDestinationEditor()
   }
 
@@ -505,6 +524,7 @@ export function Seccion3DestinosPage() {
                     onClick={() => {
                       setSelectedContinentId(item.id_continent)
                       setShowDestinationsEditor(false)
+                      setShowContinentEditor(true)
                       resetDestinationEditor()
                     }}
                     role="button"
@@ -535,7 +555,16 @@ export function Seccion3DestinosPage() {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 self-end sm:self-auto" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex flex-wrap items-center gap-2 self-end sm:self-auto" onClick={(e) => e.stopPropagation()}>
+                      <Button
+                        variant="outline"
+                        className="rounded-2xl"
+                        onClick={async () => {
+                          openDestinationsForContinent(item.id_continent)
+                        }}
+                      >
+                        Agregar destinos
+                      </Button>
                       <Button variant="outline" className="rounded-2xl" onClick={() => startEditContinent(item)}>
                         <Pencil className="mr-2 size-4" />
                         Editar
@@ -581,220 +610,211 @@ export function Seccion3DestinosPage() {
           <CardContent className="p-6 pt-0">
             <Separator className="mb-5 bg-slate-200/80" />
 
-            <div className="grid gap-4 lg:grid-cols-2">
-              <div className="space-y-3 rounded-[1.6rem] border border-slate-200 bg-white/70 p-4">
-                <p className="text-sm font-semibold text-slate-950">{continentEditing ? 'Editar continente' : 'Crear continente'}</p>
-                <div className="space-y-2">
-                  <Label>Titulo</Label>
-                  <Input value={continentForm.title} onChange={(e) => setContinentForm((c) => ({ ...c, title: e.target.value }))} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Orden</Label>
-                  <Input
-                    type="number"
-                    min={1}
-                    value={continentForm.sort_order}
-                    onChange={(e) => setContinentForm((c) => ({ ...c, sort_order: e.target.value }))}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Imagen</Label>
-                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50">
-                    <Upload className="size-4" />
-                    Subir
-                    <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value=''; uploadContinentImage(f) }} />
-                  </label>
-                  {continentPreviewUrl ? (
-                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                      <img src={continentPreviewUrl} alt="Preview" className="max-h-56 w-full object-contain bg-slate-50" />
-                    </div>
-                  ) : null}
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={saveContinent}>
-                    Guardar
-                  </Button>
-                  <Button variant="outline" className="rounded-2xl" onClick={resetContinentEditor}>
-                    Limpiar
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="rounded-2xl"
-                    disabled={!selectedContinentId}
-                    onClick={() => {
-                      setShowDestinationsEditor(true)
-                      resetDestinationEditor()
-                      loadDestinations(selectedContinentId)
-                    }}
-                  >
-                    Agregar destinos
-                  </Button>
-                </div>
-              </div>
-
-              <div className="space-y-3 rounded-[1.6rem] border border-slate-200 bg-white/70 p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-semibold text-slate-950">Destinos</p>
-                  {showDestinationsEditor ? (
-                    <Button className="rounded-2xl" onClick={startCreateDestination} disabled={!selectedContinentId}>
-                      <ImagePlus className="mr-2 size-4" />
-                      Nuevo
-                    </Button>
-                  ) : null}
-                  {showDestinationsEditor ? (
-                    <Button
-                      variant="outline"
-                      className="rounded-2xl"
-                      onClick={() => {
-                        setShowDestinationsEditor(false)
-                        resetDestinationEditor()
-                      }}
-                    >
-                      Ocultar
-                    </Button>
-                  ) : null}
-                </div>
-
-                {!showDestinationsEditor ? (
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-600">
-                    Selecciona un continente y pulsa <span className="font-semibold">Agregar destinos</span>.
+            <div className={['grid gap-4', showDestinationsEditor ? 'lg:grid-cols-2' : 'lg:grid-cols-1'].join(' ')}>
+              {!showDestinationsEditor ? (
+                <div className="space-y-3 rounded-[1.6rem] border border-slate-200 bg-white/70 p-4">
+                  <p className="text-sm font-semibold text-slate-950">{continentEditing ? 'Editar continente' : 'Crear continente'}</p>
+                  <div className="space-y-2">
+                    <Label>Titulo</Label>
+                    <Input value={continentForm.title} onChange={(e) => setContinentForm((c) => ({ ...c, title: e.target.value }))} />
                   </div>
-                ) : null}
-
-                {showDestinationsEditor ? (
-                  <div className="space-y-3">
-                  {destinations.map((item) => {
-                    const isActive = Boolean(Number(item.is_active))
-                    const imageUrl = item.image_path ? `${API_BASE_URL}${item.image_path}` : ''
-
-                    return (
-                      <div
-                        key={item.id_destination}
-                        draggable
-                        onDragStart={() => setDragDestinationId(item.id_destination)}
-                        onDragEnd={() => setDragDestinationId(null)}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={async () => {
-                          if (!dragDestinationId || dragDestinationId === item.id_destination) return
-                          const fromIndex = destinations.findIndex((x) => x.id_destination === dragDestinationId)
-                          const toIndex = destinations.findIndex((x) => x.id_destination === item.id_destination)
-                          if (fromIndex < 0 || toIndex < 0) return
-                          const next = destinations.slice()
-                          const [moved] = next.splice(fromIndex, 1)
-                          next.splice(toIndex, 0, moved)
-                          setDestinations(next)
-                          try {
-                            await apiFetch('/admin/seccion3/destinations/reorder', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({ continent_id: selectedContinentId, ordered_ids: next.map((x) => x.id_destination) }),
-                            })
-                            await loadDestinations(selectedContinentId)
-                            showBanner('success', 'Orden actualizado.')
-                            await toastSuccess('Orden actualizado.')
-                          } catch (err) {
-                            const message = err?.message ?? 'No se pudo reordenar.'
-                            setError(message)
-                            showBanner('error', message)
-                            await toastError(message)
-                          }
+                  <div className="space-y-2">
+                    <Label>Orden</Label>
+                    <Input
+                      type="number"
+                      min={1}
+                      value={continentForm.sort_order}
+                      onChange={(e) => setContinentForm((c) => ({ ...c, sort_order: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Imagen</Label>
+                    <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50">
+                      <Upload className="size-4" />
+                      Subir
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0]
+                          e.target.value = ''
+                          uploadContinentImage(f)
                         }}
-                        className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-3"
-                      >
-                        <div className="flex min-w-0 items-center gap-3">
-                          <div className="flex size-9 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500">
-                            <GripVertical className="size-4" />
-                          </div>
-                          <div className="h-12 w-16 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
-                            {imageUrl ? (
-                              <button
-                                type="button"
-                                className="h-full w-full"
-                                onClick={() => setImageModal({ open: true, url: imageUrl, title: item.title ?? 'Destino' })}
-                              >
-                                <img src={imageUrl} alt={item.title} className="h-full w-full object-cover" />
-                              </button>
-                            ) : null}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="truncate text-sm font-semibold text-slate-950">{item.title}</p>
-                            <p className="mt-1 text-xs text-slate-400">Orden: {item.sort_order}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Button variant="outline" className="rounded-2xl" onClick={() => startEditDestination(item)}>
-                            <Pencil className="mr-2 size-4" />
-                            Editar
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="rounded-2xl border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
-                            onClick={() => deleteDestination(item)}
-                          >
-                            <Trash2 className="mr-2 size-4" />
-                            Eliminar
-                          </Button>
-                          <Button
-                            variant={isActive ? 'outline' : 'default'}
-                            className={['rounded-2xl', isActive ? '' : 'bg-slate-950 text-white hover:bg-slate-800'].join(' ')}
-                            onClick={() => toggleDestination(item)}
-                          >
-                            {isActive ? (
-                              <>
-                                <XCircle className="mr-2 size-4" />
-                                Off
-                              </>
-                            ) : (
-                              <>
-                                <CheckCircle2 className="mr-2 size-4" />
-                                On
-                              </>
-                            )}
-                          </Button>
-                        </div>
+                      />
+                    </label>
+                    {continentPreviewUrl ? (
+                      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                        <img src={continentPreviewUrl} alt="Preview" className="max-h-56 w-full object-contain bg-slate-50" />
                       </div>
-                    )
-                  })}
+                    ) : null}
                   </div>
-                ) : null}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={saveContinent}>
+                      Guardar
+                    </Button>
+                    <Button variant="outline" className="rounded-2xl" onClick={resetContinentEditor}>
+                      Limpiar
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
 
-                {showDestinationsEditor ? <Separator className="my-4 bg-slate-200/80" /> : null}
-
-                {showDestinationsEditor ? (
-                  <>
-                    <p className="text-sm font-semibold text-slate-950">{destinationEditing ? 'Editar destino' : 'Crear destino'}</p>
-                    <div className="space-y-2">
-                      <Label>Titulo</Label>
-                      <Input value={destinationForm.title} onChange={(e) => setDestinationForm((c) => ({ ...c, title: e.target.value }))} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Orden</Label>
-                      <Input type="number" min={1} value={destinationForm.sort_order} onChange={(e) => setDestinationForm((c) => ({ ...c, sort_order: e.target.value }))} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Imagen</Label>
-                      <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50">
-                        <Upload className="size-4" />
-                        Subir
-                        <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value=''; uploadDestinationImage(f) }} />
-                      </label>
-                      {destinationPreviewUrl ? (
-                        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                          <img src={destinationPreviewUrl} alt="Preview" className="max-h-56 w-full object-contain bg-slate-50" />
-                        </div>
-                      ) : null}
+              {showDestinationsEditor ? (
+                <div className="space-y-3 rounded-[1.6rem] border border-slate-200 bg-white/70 p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-950">Destinos</p>
+                      <p className="mt-1 text-xs text-slate-500">Selecciona un continente y administra sus destinos.</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={saveDestination} disabled={!selectedContinentId}>
-                        Guardar
+                      <Button className="rounded-2xl" onClick={startCreateDestination} disabled={!selectedContinentId}>
+                        <ImagePlus className="mr-2 size-4" />
+                        Nuevo
                       </Button>
-                      <Button variant="outline" className="rounded-2xl" onClick={resetDestinationEditor}>
-                        Limpiar
+                      <Button variant="outline" className="rounded-2xl" onClick={closeDestinationsEditor}>
+                        Volver
                       </Button>
                     </div>
-                  </>
-                ) : null}
-              </div>
+                  </div>
+
+                  {!selectedContinentId ? (
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-600">
+                      Selecciona un continente y pulsa <span className="font-semibold">Agregar destinos</span>.
+                    </div>
+                  ) : (
+                    <>
+                      <div className="space-y-3">
+                        {destinations.map((item) => {
+                          const isActive = Boolean(Number(item.is_active))
+                          const imageUrl = item.image_path ? `${API_BASE_URL}${item.image_path}` : ''
+
+                          return (
+                            <div
+                              key={item.id_destination}
+                              draggable
+                              onDragStart={() => setDragDestinationId(item.id_destination)}
+                              onDragEnd={() => setDragDestinationId(null)}
+                              onDragOver={(e) => e.preventDefault()}
+                              onDrop={async () => {
+                                if (!dragDestinationId || dragDestinationId === item.id_destination) return
+                                const fromIndex = destinations.findIndex((x) => x.id_destination === dragDestinationId)
+                                const toIndex = destinations.findIndex((x) => x.id_destination === item.id_destination)
+                                if (fromIndex < 0 || toIndex < 0) return
+                                const next = destinations.slice()
+                                const [moved] = next.splice(fromIndex, 1)
+                                next.splice(toIndex, 0, moved)
+                                setDestinations(next)
+                                try {
+                                  await apiFetch('/admin/seccion3/destinations/reorder', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ continent_id: selectedContinentId, ordered_ids: next.map((x) => x.id_destination) }),
+                                  })
+                                  await loadDestinations(selectedContinentId)
+                                  showBanner('success', 'Orden actualizado.')
+                                  await toastSuccess('Orden actualizado.')
+                                } catch (err) {
+                                  const message = err?.message ?? 'No se pudo reordenar.'
+                                  setError(message)
+                                  showBanner('error', message)
+                                  await toastError(message)
+                                }
+                              }}
+                              className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-3"
+                            >
+                              <div className="flex min-w-0 items-center gap-3">
+                                <div className="flex size-9 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500">
+                                  <GripVertical className="size-4" />
+                                </div>
+                                <div className="h-12 w-16 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+                                  {imageUrl ? (
+                                    <button
+                                      type="button"
+                                      className="h-full w-full"
+                                      onClick={() => setImageModal({ open: true, url: imageUrl, title: item.title ?? 'Destino' })}
+                                    >
+                                      <img src={imageUrl} alt={item.title} className="h-full w-full object-cover" />
+                                    </button>
+                                  ) : null}
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="truncate text-sm font-semibold text-slate-950">{item.title}</p>
+                                  <p className="mt-1 text-xs text-slate-400">Orden: {item.sort_order}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Button variant="outline" className="rounded-2xl" onClick={() => startEditDestination(item)}>
+                                  <Pencil className="mr-2 size-4" />
+                                  Editar
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  className="rounded-2xl border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
+                                  onClick={() => deleteDestination(item)}
+                                >
+                                  <Trash2 className="mr-2 size-4" />
+                                  Eliminar
+                                </Button>
+                                <Button
+                                  variant={isActive ? 'outline' : 'default'}
+                                  className={['rounded-2xl', isActive ? '' : 'bg-slate-950 text-white hover:bg-slate-800'].join(' ')}
+                                  onClick={() => toggleDestination(item)}
+                                >
+                                  {isActive ? (
+                                    <>
+                                      <XCircle className="mr-2 size-4" />
+                                      Off
+                                    </>
+                                  ) : (
+                                    <>
+                                      <CheckCircle2 className="mr-2 size-4" />
+                                      On
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+
+                      <Separator className="my-4 bg-slate-200/80" />
+
+                      <p className="text-sm font-semibold text-slate-950">{destinationEditing ? 'Editar destino' : 'Crear destino'}</p>
+                      <div className="space-y-2">
+                        <Label>Titulo</Label>
+                        <Input value={destinationForm.title} onChange={(e) => setDestinationForm((c) => ({ ...c, title: e.target.value }))} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Orden</Label>
+                        <Input type="number" min={1} value={destinationForm.sort_order} onChange={(e) => setDestinationForm((c) => ({ ...c, sort_order: e.target.value }))} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Imagen</Label>
+                        <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50">
+                          <Upload className="size-4" />
+                          Subir
+                          <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value=''; uploadDestinationImage(f) }} />
+                        </label>
+                        {destinationPreviewUrl ? (
+                          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                            <img src={destinationPreviewUrl} alt="Preview" className="max-h-56 w-full object-contain bg-slate-50" />
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Button className="rounded-2xl bg-slate-950 text-white hover:bg-slate-800" onClick={saveDestination} disabled={!selectedContinentId}>
+                          Guardar
+                        </Button>
+                        <Button variant="outline" className="rounded-2xl" onClick={resetDestinationEditor}>
+                          Limpiar
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : null}
             </div>
           </CardContent>
         </Card>
