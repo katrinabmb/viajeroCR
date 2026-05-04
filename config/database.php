@@ -14,7 +14,7 @@ $productionConnection = [
     'port' => 3306,
     'database' => 'u768363471_viajerocr',
     'username' => 'u768363471_viajerocr',
-    'password' => '',
+    'password' => '!o7Eq5>H?',
     'charset' => 'utf8mb4',
 ];
 
