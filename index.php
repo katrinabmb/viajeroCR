@@ -12,6 +12,7 @@ use App\Controllers\Seccion3DestinosController;
 use App\Controllers\Seccion4ServiciosController;
 use App\Controllers\Seccion2PartnersController;
 use App\Controllers\Seccion5SalidasController;
+use App\Controllers\AcercadeController;
 use App\Core\Router;
 
 $router = new Router();
@@ -91,5 +92,11 @@ $router->post('/admin/seccion5/salidas/items/update', [Seccion5SalidasController
 $router->post('/admin/seccion5/salidas/items/active', [Seccion5SalidasController::class, 'setActive']);
 $router->post('/admin/seccion5/salidas/items/delete', [Seccion5SalidasController::class, 'delete']);
 $router->post('/admin/seccion5/salidas/items/reorder', [Seccion5SalidasController::class, 'reorder']);
+
+// Acerca de
+$router->get('/acercade', [AcercadeController::class, 'publicData']);
+$router->get('/admin/acercade', [AcercadeController::class, 'adminData']);
+$router->post('/admin/acercade/upload-temp', [AcercadeController::class, 'uploadTemp']);
+$router->post('/admin/acercade/update', [AcercadeController::class, 'update']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');
