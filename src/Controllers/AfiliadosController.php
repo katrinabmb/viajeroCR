@@ -83,7 +83,7 @@ final class AfiliadosController
         $stmt = $db->prepare(
             'INSERT INTO tbl_afiliados_config (id_config, title)
              VALUES (1, :title)
-             ON DUPLICATE KEY UPDATE title = :title, updated_at = CURRENT_TIMESTAMP'
+             ON DUPLICATE KEY UPDATE title = VALUES(title), updated_at = CURRENT_TIMESTAMP'
         );
         $stmt->execute(['title' => $title]);
 
@@ -506,4 +506,3 @@ final class AfiliadosController
         return (bool) $stmt->fetchColumn();
     }
 }
-
