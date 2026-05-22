@@ -18,6 +18,10 @@ return [
     'allowed_origins' => [
         'http://localhost:5173',
         'http://localhost:5174',
+        'http://viajerocr.com',
+        'https://viajerocr.com',
+        'http://www.viajerocr.com',
+        'https://www.viajerocr.com',
         'http://dashboard.viajerocr.com',
         'https://dashboard.viajerocr.com',
         'http://send-form.viajerocr.com',
