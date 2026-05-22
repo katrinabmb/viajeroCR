@@ -3,7 +3,7 @@ import { getApiBaseUrl, normalizeAssetPath } from './apiBase'
 
 const fallback = {
   title: 'Acerca de VIAJERO CR',
-  image: '/images/viajerocr2.jpeg',
+  image: 'https://api.viajerocr.com/imagenes/acercade/acercade_f6fd12d547933c91efc79247983ac780.jpeg',
   paragraph_1: 'ViajeroCR nace de una pasion autentica por descubrir el mundo y de la experiencia personal de Edgar Leiva, quien durante mas de 15 anos ha recorrido mas de 80 paises y una gran diversidad de ciudades y pueblos. Cada destino ha sido una fuente de aprendizaje y cada viaje una experiencia que hoy se transforma en asesoria cercana, honesta y estrategica para quienes confian en este proyecto.',
   paragraph_2: 'En ViajeroCR cada viaje se disena como si fuera propio. Mas alla de reservar vuelos, trenes y hoteles, el enfoque esta en comprender lo que cada viajero suena vivir y convertirlo en una experiencia bien planificada, segura y memorable. Con conocimiento directo de los destinos, atencion personalizada y cuidado en cada detalle, el objetivo es que cada cliente viaje con confianza, ilusion y respaldo en todo momento, porque viajar no es solo trasladarse, es cumplir suenos con proposito.',
 }
