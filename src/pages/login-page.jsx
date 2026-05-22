@@ -15,8 +15,8 @@ export function LoginPage() {
   const dispatch = useAppDispatch()
   const { isAuthenticated, isLoading, error, errorCode } = useAppSelector((state) => state.auth)
   const [form, setForm] = useState({
-    email: 'admin@viajero.com',
-    password: 'Admin123*',
+    email: '',
+    password: '',
   })
 
   const redirectTo = location.state?.from?.pathname ?? '/'
@@ -141,7 +141,7 @@ export function LoginPage() {
                       name="email"
                       type="email"
                       autoComplete="email"
-                      placeholder="admin@viajero.com"
+                      placeholder="correo@dominio.com"
                       value={form.email}
                       onChange={updateField('email')}
                       className="bg-white"
@@ -172,12 +172,7 @@ export function LoginPage() {
                         </div>
                       </div>
                     </div>
-                  ) : (
-                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-500">
-                      Usuario demo cargado para desarrollo. En produccion este formulario usara
-                      credenciales reales y sesion segura con refresh token.
-                    </div>
-                  )}
+                  ) : null}
 
                   <Button
                     type="submit"
