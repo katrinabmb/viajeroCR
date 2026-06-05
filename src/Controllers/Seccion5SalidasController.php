@@ -361,9 +361,10 @@ final class Seccion5SalidasController
         Upload::ensureDir($dir);
 
         $ext = strtolower(pathinfo($tempPath, PATHINFO_EXTENSION));
-        $prefix = $type === 'pdf' ? 'itinerario' : 'salida';
         $fallback = $type === 'pdf' ? 'pdf' : 'jpg';
-        $finalName = Upload::randomKey($prefix) . '.' . ($ext === '' ? $fallback : $ext);
+        $finalName = $type === 'pdf'
+            ? $this->uniqueFinalName($dir, $this->originalNameFromTempKey($tempKey, $fallback))
+            : Upload::randomKey('salida') . '.' . ($ext === '' ? $fallback : $ext);
         $finalPath = $dir . '/' . $finalName;
 
         if (!rename($tempPath, $finalPath)) {
@@ -371,6 +372,31 @@ final class Seccion5SalidasController
         }
 
         return $type === 'pdf' ? '/docs/seccion5/' . $finalName : '/imagenes/seccion5/' . $finalName;
+    }
+
+    private function originalNameFromTempKey(string $tempKey, string $fallbackExt): string
+    {
+        $name = basename($tempKey);
+        $name = preg_replace('/^(pdf|img)_[a-f0-9]{32}_/i', '', $name) ?? $name;
+        $base = Upload::safeBasename(pathinfo($name, PATHINFO_FILENAME));
+        $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION)) ?: $fallbackExt;
+
+        return $base . '.' . $ext;
+    }
+
+    private function uniqueFinalName(string $dir, string $fileName): string
+    {
+        $base = Upload::safeBasename(pathinfo($fileName, PATHINFO_FILENAME));
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $candidate = $base . ($ext === '' ? '' : '.' . $ext);
+        $counter = 2;
+
+        while (is_file($dir . '/' . $candidate)) {
+            $candidate = $base . '_' . $counter . ($ext === '' ? '' : '.' . $ext);
+            $counter++;
+        }
+
+        return $candidate;
     }
 
     private function deleteOwnedFile(string $path, string $type): void
@@ -418,4 +444,3 @@ final class Seccion5SalidasController
         return (bool) $stmt->fetchColumn();
     }
 }
-
