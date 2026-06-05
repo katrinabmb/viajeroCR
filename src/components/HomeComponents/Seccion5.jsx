@@ -9,13 +9,13 @@ const CardSalidaGrupal = ({ title, description, fechas, precio, image, itinerari
   return (
     <Stack direction="column" alignItems="center" justifyContent="space-between" spacing={3} className="card-salida-grupal">
       <img src={image} alt={title} className="card-salida-grupal-image" />
-      <Stack direction="column" alignItems="center" justifyContent={isMobile ? 'center' : 'space-between'} spacing={isMobile ? 2 : 3} style={{ height: isMobile ? '10rem' : '15rem', padding: '0 1rem' }}>
+      <Stack direction="column" alignItems="center" justifyContent="flex-start" spacing={isMobile ? 2 : 3} className="card-salida-grupal-content">
         <Typography className="card-salida-grupal-title">{title}</Typography>
         <Typography className="card-salida-grupal-description">{description}</Typography>
         <Typography className="card-salida-grupal-fechas">{fechas}</Typography>
         <Typography className="card-salida-grupal-precio">{precio}</Typography>
       </Stack>
-      <Stack alignItems="center" justifyContent="center" style={{ height: '3rem', width: '100%' }}>
+      <Stack alignItems="center" justifyContent="center" className="card-salida-grupal-actions">
         <a href={itinerario} className="card-salida-grupal-button" download>
           Descargar itinerario
         </a>

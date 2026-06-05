@@ -316,18 +316,31 @@
     position: relative;
     width: 30%;
     min-width: 260px;
-    height: 35rem;
-    border-radius: 10px;
+    min-height: 35rem;
     border-radius: 2rem;
     overflow: hidden;
     padding-bottom: 2rem;
     background-color: #5050507c;
-    
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box;
 }
 .card-salida-grupal-image{
     width: 100%;
     height: 16rem;
     object-fit: cover;
+    border-radius: 2rem 2rem 0 0;
+}
+.card-salida-grupal-content{
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+.card-salida-grupal-actions{
+    width: 100%;
+    padding: 0 1.25rem;
+    box-sizing: border-box;
+    margin-top: auto;
 }
 .card-salida-grupal-title{
     font-family: "bukra" !important;
@@ -336,6 +349,7 @@
     color: #fff !important;
     text-align: center;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
 }
 .card-salida-grupal-description{
     font-family: "bukra" !important;
@@ -343,6 +357,8 @@
     font-weight: 400 !important;    
     color: #fff !important;
     text-align: center;
+    line-height: 1.35 !important;
+    overflow-wrap: anywhere;
 }
 .card-salida-grupal-fechas{
     font-family: "bukra" !important;
@@ -350,6 +366,8 @@
     font-weight: 900 !important;
     color: #fff !important;
     text-align: center;
+    line-height: 1.35 !important;
+    overflow-wrap: anywhere;
 }
 .card-salida-grupal-precio{
     font-family: "bukra" !important;
@@ -357,6 +375,7 @@
     font-weight: 400 !important;
     color: #fff !important;
     text-align: center;
+    line-height: 1.25 !important;
 }
 .card-salida-grupal-button{
     background-color: transparent !important;
@@ -370,6 +389,12 @@
     border: 1px solid #ffffff !important;
     text-decoration: none !important;
     text-transform: uppercase !important;
+    display: block !important;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    line-height: 1.2 !important;
+    white-space: normal;
 }
 
 .card-salida-grupal-button:hover{
@@ -576,12 +601,11 @@
         position: relative;
         width: 30%;
         min-width: 300px;
-        height: 26rem;
+        min-height: 26rem;
         border-radius: 2rem;
         overflow: hidden;
-        padding-bottom: 4rem;
+        padding-bottom: 2rem;
         background-color: #5050507c;
-        
     }
     .card-salida-grupal-image{
         width: 100%;
