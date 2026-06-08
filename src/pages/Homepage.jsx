@@ -24,10 +24,27 @@ const Homepage = () => {
     if (!hash) return;
 
     const targetId = hash.replace("#", "");
-    const el = document.getElementById(targetId);
-    if (!el) return;
+    let attempts = 0;
+    let timeoutId;
 
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    const scrollToHash = () => {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      attempts += 1;
+      if (attempts < 30) {
+        timeoutId = window.setTimeout(scrollToHash, 150);
+      }
+    };
+
+    scrollToHash();
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, [location.hash]);
 
   useEffect(() => {

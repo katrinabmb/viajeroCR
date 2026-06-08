@@ -58,7 +58,13 @@ const Seccion5 = ({ id }) => {
     >
       <Typography className="seccion3-title">{title}</Typography>
 
-      <Stack direction={isMobile ? 'column' : 'row'} spacing={4} alignItems="center" justifyContent="center" style={{ width: '80%' }}>
+      <Stack
+        direction={isMobile ? 'column' : 'row'}
+        spacing={0}
+        alignItems="stretch"
+        justifyContent="center"
+        className="salidas-grupales-grid"
+      >
         {salidasGrupales.map((salida) => (
           <CardSalidaGrupal
             key={salida.id}

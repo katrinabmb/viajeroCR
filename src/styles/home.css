@@ -312,10 +312,16 @@
         transform: translateX(-50%);
     }
 }
+.salidas-grupales-grid{
+    width: min(90%, 1400px);
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 2rem;
+}
 .card-salida-grupal{
     position: relative;
-    width: 30%;
-    min-width: 260px;
+    width: calc((100% - 6rem) / 4);
+    min-width: 0;
     min-height: 35rem;
     border-radius: 2rem;
     overflow: hidden;
@@ -400,6 +406,12 @@
 .card-salida-grupal-button:hover{
     background-color: #ffffff !important;
     color: #1A1A1A !important;
+}
+
+@media (max-width: 1200px){
+    .card-salida-grupal{
+        width: calc((100% - 2rem) / 2);
+    }
 }
 
 .card-testimonio{
@@ -599,7 +611,7 @@
     }
     .card-salida-grupal{
         position: relative;
-        width: 30%;
+        width: 100%;
         min-width: 300px;
         min-height: 26rem;
         border-radius: 2rem;
